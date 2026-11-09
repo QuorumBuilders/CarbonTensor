@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  /* Primary Green Scale (Anchor #0B4D25 = 700) */
+  --primary-green-50: #EAF3ED;
+  --primary-green-100: #C9E2D2;
+  --primary-green-200: #9CC9AB;
+  --primary-green-300: #6DAB6C; /* Secondary Sage - paths/lines */
+  --primary-green-400: #3F8851; /* Tertiary Bright - nodes/accents */
+  --primary-green-500: #296F3B;
+  --primary-green-600: #1B5C2D;
+  --primary-green-700: #0B4D25; /* Base Green - ground/containers */
+  --primary-green-800: #07381A;
+  --primary-green-900: #03200E;
+
+  /* Accent Orange Scale (Anchor #F15A24 = 500) */
+  --accent-orange-50: #FDF0EB;
+  --accent-orange-100: #FADAD0;
+  --accent-orange-200: #F5B09A;
+  --accent-orange-300: #F18563;
+  --accent-orange-400: #EE6A3B;
+  --accent-orange-500: #F15A24; /* Base Orange - primary conversion buttons only */
+  --accent-orange-600: #CE4312; /* High-contrast small text */
+  --accent-orange-700: #A2310B;
+  --accent-orange-800: #762105;
+  --accent-orange-900: #4B1201;
+
+  /* Neutral Purple Scale (Anchor #E2DFEA = 200) */
+  --neutral-purple-50: #F8F7FA;
+  --neutral-purple-100: #F0EEF4;
+  --neutral-purple-200: #E2DFEA; /* Canvas panels & borders - NEVER primary button background */
+  --neutral-purple-300: #C7C1D7;
+  --neutral-purple-400: #ABA0C0;
+  --neutral-purple-500: #887FA6;
+  --neutral-purple-600: #685E8A;
+  --neutral-purple-700: #484368;
+  --neutral-purple-800: #2F2A43;
+  --neutral-purple-900: #161321;
+
+  /* Semantic Status Tokens */
+  --status-success-bg: #EAF3ED;
+  --status-success-text: #0B4D25;
+
+  --status-warning-bg: #FDF5E6;
+  --status-warning-text: #7A4D05;
+
+  --status-error-bg: #FDF0ED;
+  --status-error-text: #7A1C18;
+
+  --status-info-bg: #EEF4F8;
+  --status-info-text: #0B4D25;
+
+  /* Base Canvas tokens */
+  --background: #FFFFFF;
+  --foreground: #03200E;
+}
+
+@theme {
+  --color-primary-green-50: #EAF3ED;
+  --color-primary-green-100: #C9E2D2;
+  --color-primary-green-200: #9CC9AB;
+  --color-primary-green-300: #6DAB6C;
+  --color-primary-green-400: #3F8851;
+  --color-primary-green-500: #296F3B;
+  --color-primary-green-600: #1B5C2D;
+  --color-primary-green-700: #0B4D25;
+  --color-primary-green-800: #07381A;
+  --color-primary-green-900: #03200E;
+
+  --color-accent-orange-50: #FDF0EB;
+  --color-accent-orange-100: #FADAD0;
+  --color-accent-orange-200: #F5B09A;
+  --color-accent-orange-300: #F18563;
+  --color-accent-orange-400: #EE6A3B;
+  --color-accent-orange-500: #F15A24;
+  --color-accent-orange-600: #CE4312;
+  --color-accent-orange-700: #A2310B;
+  --color-accent-orange-800: #762105;
+  --color-accent-orange-900: #4B1201;
+
+  --color-neutral-purple-50: #F8F7FA;
+  --color-neutral-purple-100: #F0EEF4;
+  --color-neutral-purple-200: #E2DFEA;
+  --color-neutral-purple-300: #C7C1D7;
+  --color-neutral-purple-400: #ABA0C0;
+  --color-neutral-purple-500: #887FA6;
+  --color-neutral-purple-600: #685E8A;
+  --color-neutral-purple-700: #484368;
+  --color-neutral-purple-800: #2F2A43;
+  --color-neutral-purple-900: #161321;
+
+  --color-status-success-bg: #EAF3ED;
+  --color-status-success-text: #0B4D25;
+  --color-status-warning-bg: #FDF5E6;
+  --color-status-warning-text: #7A4D05;
+  --color-status-error-bg: #FDF0ED;
+  --color-status-error-text: #7A1C18;
+  --color-status-info-bg: #EEF4F8;
+  --color-status-info-text: #0B4D25;
+
+  --font-sans: "Google Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Google Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

@@ -18,7 +18,7 @@ export function LandingFooter() {
                 TensorCarbon
               </span>
             </div>
-            <p className="text-sm text-primary-green-200 max-w-sm leading-relaxed">
+            <p className="text-sm text-primary-green-200 max-w-sm leading-relaxed font-normal">
               Supply-side data and payout layer aggregating Nigerian rice cooperatives to verify methane avoidance from Alternate Wetting and Drying (AWD) farming.
             </p>
             <div className="mt-2 inline-flex items-center gap-2 text-xs font-mono text-primary-green-300">
@@ -28,43 +28,37 @@ export function LandingFooter() {
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             <span className="text-xs font-mono uppercase tracking-wider text-primary-green-300 font-bold">
-              Navigation
+              Architecture
             </span>
-            <a href="#problem" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              The Methane Problem
+            <a href="#platform" className="text-sm text-primary-green-100 hover:text-white transition-colors">
+              Platform Overview
             </a>
-            <a href="#how-it-works" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              Operational Pipeline
-            </a>
-            <a href="#value-chain" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              Value Chain Distribution
+            <a href="#mrv-engine" className="text-sm text-primary-green-100 hover:text-white transition-colors">
+              MRV Engine Pillars
             </a>
             <a href="#payout-split" className="text-sm text-primary-green-100 hover:text-white transition-colors">
               Revenue Split Model
             </a>
-            <a href="#roadmap" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              2026 Roadmap
-            </a>
-            <a href="#claims" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              Claims Transparency FAQ
+            <a href="#governance" className="text-sm text-primary-green-100 hover:text-white transition-colors">
+              Governance Boundaries
             </a>
           </div>
 
           {/* Prototype Systems & Environments */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             <span className="text-xs font-mono uppercase tracking-wider text-primary-green-300 font-bold">
               Environments & Auditing
             </span>
             <Link href="/dashboard" className="text-sm text-primary-green-100 hover:text-white transition-colors">
-              Cooperative Dashboard
+              Enter Cooperative App
             </Link>
             <Link href="/verifier" className="text-sm text-primary-green-100 hover:text-white transition-colors">
               Independent Verifier Portal
             </Link>
             <span className="text-xs text-primary-green-300 pt-2 font-mono">
-              Pilot Basins: Kano, Niger & Kebbi
+              Basins: Kano, Niger & Kebbi
             </span>
             <span className="text-xs text-primary-green-300 font-mono">
               Protocol: Verra VM0042 / IPCC AWD

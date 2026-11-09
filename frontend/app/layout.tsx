@@ -2,9 +2,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TensorCarbon | AWD Methane Avoidance & Payout Layer",
+  title: "TensorCarbon | Scalable AWD Methane Avoidance & Payout Layer",
   description:
-    "Supply-side data and payout layer aggregating Nigerian rice cooperatives to verify methane avoidance from Alternate Wetting and Drying (AWD) farming.",
+    "Aggregating Nigerian rice cooperatives to verify AWD water cycles, package registry-ready MRV evidence, and disburse carbon dividends to smallholders.",
+  keywords: [
+    "AWD",
+    "Methane Avoidance",
+    "Carbon MRV",
+    "Rice Farming",
+    "Nigeria",
+    "Climate Finance",
+  ],
+  openGraph: {
+    title: "TensorCarbon — AWD Methane Avoidance Layer",
+    description:
+      "Supply-side data and payout infrastructure for Nigerian rice cooperatives.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased scroll-smooth">
       <body className="min-h-full flex flex-col font-sans bg-white text-primary-green-900 selection:bg-primary-green-100 selection:text-primary-green-900">
         {children}
       </body>

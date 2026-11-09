@@ -1,52 +1,46 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Activity } from "lucide-react";
+import { ArrowRight, Menu, X, Activity } from "lucide-react";
 
 export function LandingNavbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-none border-b border-neutral-purple-200">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-neutral-purple-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Identity */}
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          
+          {/* Brand Identity with small pill badge AWD MRV */}
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded bg-primary-green-700 flex items-center justify-center text-white">
-                <Activity className="w-5 h-5 text-primary-green-100" />
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-8 h-8 rounded bg-primary-green-700 flex items-center justify-center text-white shadow-xs">
+                <Activity className="w-4 h-4 text-primary-green-100" />
               </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors">
-                  TensorCarbon
-                </span>
-                <span className="text-[11px] font-medium text-primary-green-600 tracking-wide uppercase">
-                  AWD Aggregation & MRV Layer
-                </span>
-              </div>
+              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors">
+                TensorCarbon
+              </span>
             </Link>
 
-            <span className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold text-primary-green-800 bg-primary-green-50 border border-primary-green-200 rounded">
-              <ShieldCheck className="w-3 h-3 text-primary-green-600" />
-              Access Bank Sandbox (Simulated)
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
+              AWD MRV
             </span>
           </div>
 
-          {/* Navigation Anchors */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-purple-900">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-purple-900">
             <a
-              href="#problem"
+              href="#platform"
               className="hover:text-primary-green-700 transition-colors"
             >
-              Problem
+              Platform
             </a>
             <a
-              href="#how-it-works"
+              href="#mrv-engine"
               className="hover:text-primary-green-700 transition-colors"
             >
-              How It Works
-            </a>
-            <a
-              href="#value-chain"
-              className="hover:text-primary-green-700 transition-colors"
-            >
-              Value Chain
+              MRV Engine
             </a>
             <a
               href="#payout-split"
@@ -54,32 +48,78 @@ export function LandingNavbar() {
             >
               Payout Split
             </a>
-            <a
-              href="#roadmap"
-              className="hover:text-primary-green-700 transition-colors"
+          </nav>
+
+          {/* Desktop Right CTA: Single Bold Button */}
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-200 shadow-xs hover:shadow-sm"
             >
-              Roadmap
+              <span>Launch Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Mobile Menu Trigger (< 768px) */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-md text-neutral-purple-800 hover:text-primary-green-900 hover:bg-neutral-purple-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-green-600"
+              aria-label="Toggle Navigation Menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Mobile Accessible Drawer / Sheet */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-neutral-purple-200 bg-white px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200 shadow-lg">
+          <nav className="flex flex-col space-y-3 pt-2 text-base font-semibold text-neutral-purple-900">
+            <a
+              href="#platform"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-2 py-2 rounded-md hover:bg-neutral-purple-50 hover:text-primary-green-700 transition-colors"
+            >
+              Platform
             </a>
             <a
-              href="#claims"
-              className="hover:text-primary-green-700 transition-colors"
+              href="#mrv-engine"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-2 py-2 rounded-md hover:bg-neutral-purple-50 hover:text-primary-green-700 transition-colors"
             >
-              Transparency FAQ
+              MRV Engine
+            </a>
+            <a
+              href="#payout-split"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-2 py-2 rounded-md hover:bg-neutral-purple-50 hover:text-primary-green-700 transition-colors"
+            >
+              Payout Split
             </a>
           </nav>
 
-          {/* Right Action */}
-          <div className="flex items-center gap-3">
+          <div className="pt-2 border-t border-neutral-purple-200 flex flex-col gap-2">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-colors shadow-sm"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-colors shadow-sm"
             >
-              <span>View Dashboard</span>
+              <span>Launch Dashboard</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

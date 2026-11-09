@@ -111,3 +111,27 @@ body {
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+/* AWD Water Level Oscillation Motion */
+@keyframes awdOscillation {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(48px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-awd-oscillate {
+  animation: awdOscillation 10s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-awd-oscillate {
+    animation: none !important;
+    transform: none !important;
+  }
+}

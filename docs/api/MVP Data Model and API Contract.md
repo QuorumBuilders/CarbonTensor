@@ -1,5 +1,5 @@
 
-TensorCarbon — MVP Data Model & API Contract
+CarbonTensor — MVP Data Model & API Contract
 
 Status: Initial implementation specification
 Backend: Django + Django REST Framework

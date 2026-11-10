@@ -4,6 +4,9 @@ A digital platform for managing aggregated smallholder rice farming projects, im
 
 The platform provides an integrated system for farmer onboarding, agricultural project management, digital Measurement, Reporting and Verification (MRV), and carbon-credit financial management.
 
+Product naming and retained technical identifiers are documented in
+[Project Naming](docs/Project%20Naming.md).
+
 ## Overview
 
 Traditional rice cultivation under continuous flooding produces methane emissions. Alternate Wetting and Drying (AWD) reduces these emissions by periodically draining rice fields and allowing the soil to dry before reflooding.
@@ -27,7 +30,7 @@ It connects farmers, cooperatives, field agents, project administrators, MRV ope
 The project is organized as a monorepo containing independently maintained backend and frontend applications.
 
 ```text
-awd-carbon-platform/
+CarbonTensor/
 │
 ├── backend/
 │   ├── ...

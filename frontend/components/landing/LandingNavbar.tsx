@@ -26,11 +26,11 @@ export function LandingNavbar() {
                 <Activity className="w-4 h-4 text-primary-green-100" />
               </div>
               <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors duration-150">
-                AgriTensor
+                CarbonTensor
               </span>
             </Link>
 
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold tracking-wider uppercase bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
               AWD MRV Layer
             </span>
           </div>
@@ -51,8 +51,8 @@ export function LandingNavbar() {
           {/* Desktop Right CTA: Single Bold Button */}
           <div className="hidden md:flex items-center gap-4">
             <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-xs hover:shadow-sm"
+              href="/auth/register"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-xs hover:shadow-sm"
             >
               <span>Register</span>
               <ArrowRight className="w-4 h-4" />
@@ -97,9 +97,9 @@ export function LandingNavbar() {
 
           <div className="pt-2 border-t border-neutral-purple-200 flex flex-col gap-2">
             <Link
-              href="/dashboard"
+              href="/auth/register"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-sm"
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-sm"
             >
               <span>Register</span>
               <ArrowRight className="w-4 h-4" />

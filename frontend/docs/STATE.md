@@ -1,8 +1,8 @@
 # CarbonTensor Frontend State Ledger
-- Current Phase: PR #3 (`feat/auth-domain-types-and-mock-data`)
-- Active Branch: `feat/auth-domain-types-and-mock-data`
+- Current Phase: PR #4 (`feat/coop-dashboard-and-map`)
+- Active Branch: `feat/coop-dashboard-and-map`
 - Status: Complete
 - Active Working Directory: frontend/
 - Package Manager: pnpm
-- Immediate Next Step: PR #4 (`feat/coop-dashboard-overview`)
+- Immediate Next Step: PR #5 (`feat/water-level-chart-and-simulator`)
 - Blockers: None

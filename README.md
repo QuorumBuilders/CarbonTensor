@@ -1,4 +1,4 @@
-# TensorCarbon
+# CarbonTensor
 
 A digital platform for managing aggregated smallholder rice farming projects, implementing Alternate Wetting and Drying (AWD), monitoring methane avoidance, and managing carbon-credit revenue and farmer bonus distributions.
 

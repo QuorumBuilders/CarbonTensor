@@ -129,8 +129,45 @@ body {
   animation: awdOscillation 10s ease-in-out infinite;
 }
 
+/* Infinite Marquee Motion */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Purposeful Brand Motion Tokens (150ms - 250ms ease-out) */
+.transition-brand {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-brand-slow {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-awd-oscillate {
+    animation: none !important;
+    transform: none !important;
+  }
+  .animate-marquee {
     animation: none !important;
     transform: none !important;
   }

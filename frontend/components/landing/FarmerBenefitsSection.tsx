@@ -47,7 +47,7 @@ export function FarmerBenefitsSection() {
           </h2>
 
           <p className="mt-3 text-base sm:text-lg text-neutral-purple-800 leading-relaxed font-normal">
-            AgriTensor turns climate-smart water management into tangible economic gains, reduced labor, and lower operational expenses for smallholder rice growers.
+            CarbonTensor turns climate-smart water management into tangible economic gains, reduced labor, and lower operational expenses for smallholder rice growers.
           </p>
         </div>
 
@@ -117,4 +117,3 @@ export function FarmerBenefitsSection() {
     </section>
   );
 }
-

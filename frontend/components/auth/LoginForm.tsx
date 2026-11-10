@@ -47,24 +47,24 @@ export function LoginForm() {
       {/* Demo Quick-Fill Bar */}
       <div className="p-3 bg-primary-green-50/70 border border-primary-green-200 rounded-lg">
         <div className="flex items-center justify-between gap-2 mb-2">
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary-green-900 flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-primary-green-600" />
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary-green-900 flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-primary-green-600" />
             Rapid Judging Presets
           </span>
-          <span className="text-[10px] font-mono text-primary-green-700">1-click login</span>
+          <span className="text-xs font-mono text-primary-green-700">1-click demo fill</span>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => handleQuickFill("admin")}
-            className="text-xs font-mono font-medium px-2.5 py-1 rounded bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
+            className="text-xs font-medium py-1 px-3 rounded-md bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
           >
             [Demo: Cooperative Admin]
           </button>
           <button
             type="button"
             onClick={() => handleQuickFill("verifier")}
-            className="text-xs font-mono font-medium px-2.5 py-1 rounded bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
+            className="text-xs font-medium py-1 px-3 rounded-md bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
           >
             [Demo: Field Verifier]
           </button>
@@ -73,7 +73,7 @@ export function LoginForm() {
 
       {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-lg text-xs font-mono flex items-center gap-2">
+        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-md text-xs font-mono flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -81,11 +81,11 @@ export function LoginForm() {
 
       {/* Email Field */}
       <div>
-        <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-2">
+        <label htmlFor="email" className="block text-sm font-medium text-neutral-800 mb-2">
           Email Address
         </label>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-purple-500">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-purple-500">
             <Mail className="w-4 h-4" />
           </div>
           <input
@@ -95,7 +95,7 @@ export function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="admin@kebbigreenrice.org"
-            className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm placeholder:text-neutral-purple-400 focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+            className="w-full h-11 pl-10 pr-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
           />
         </div>
       </div>
@@ -103,7 +103,7 @@ export function LoginForm() {
       {/* Password Field */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900">
+          <label htmlFor="password" className="block text-sm font-medium text-neutral-800">
             Password
           </label>
           <Link
@@ -118,7 +118,7 @@ export function LoginForm() {
           </Link>
         </div>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-purple-500">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-purple-500">
             <Lock className="w-4 h-4" />
           </div>
           <input
@@ -128,12 +128,12 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full pl-9 pr-10 py-2.5 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm placeholder:text-neutral-purple-400 focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+            className="w-full h-11 pl-10 pr-10 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-purple-500 hover:text-neutral-purple-800"
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-neutral-purple-500 hover:text-neutral-purple-800"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -150,16 +150,21 @@ export function LoginForm() {
           onChange={(e) => setRememberMe(e.target.checked)}
           className="h-4 w-4 rounded border-neutral-purple-300 text-primary-green-700 focus:ring-primary-green-600"
         />
-        <label htmlFor="remember-me" className="ml-2 block text-xs font-mono text-neutral-purple-700 select-none">
+        <label htmlFor="remember-me" className="ml-2.5 block text-xs font-mono text-neutral-purple-700 select-none">
           Remember session credentials on this device
         </label>
       </div>
+
+      {/* Single Crisp Consent Line */}
+      <p className="text-xs text-neutral-purple-600 leading-relaxed font-normal">
+        By continuing, you agree to CarbonTensor AWD telemetry monitoring and cooperative dividend rules.
+      </p>
 
       {/* Submit Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 px-4 rounded-lg text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
+        className="w-full h-11 px-4 rounded-md text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
       >
         <span>{loading ? "Authenticating..." : "Sign In to Portal"}</span>
         <ArrowRight className="w-4 h-4" />
@@ -167,11 +172,11 @@ export function LoginForm() {
 
       {/* Switch to Register */}
       <div className="pt-4 border-t border-neutral-purple-200 text-center">
-        <p className="text-xs text-neutral-purple-700">
-          New to AgriTensor?{" "}
+        <p className="text-sm text-neutral-purple-700">
+          New to CarbonTensor?{" "}
           <Link
             href="/auth/register"
-            className="font-bold text-primary-green-700 hover:text-primary-green-900 hover:underline"
+            className="font-semibold text-primary-green-700 hover:text-primary-green-900 hover:underline"
           >
             Register your plot or cooperative
           </Link>

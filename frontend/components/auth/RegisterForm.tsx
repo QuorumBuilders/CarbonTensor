@@ -32,16 +32,9 @@ export function RegisterForm() {
   const [coopPassword, setCoopPassword] = useState("");
   const [coopConfirmPassword, setCoopConfirmPassword] = useState("");
 
-  const [agreeTerms, setAgreeTerms] = useState(true);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (!agreeTerms) {
-      setError("Please agree to the AWD measurement terms and carbon dividend allocation policy.");
-      return;
-    }
 
     if (accountType === "farmer") {
       if (farmerPassword !== farmerConfirmPassword) {
@@ -102,7 +95,7 @@ export function RegisterForm() {
             setAccountType("farmer");
             setError(null);
           }}
-          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-xs font-bold transition-all duration-150 ${
+          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-semibold transition-all duration-150 ${
             accountType === "farmer"
               ? "bg-white text-primary-green-900 shadow-xs border border-neutral-purple-200"
               : "text-neutral-purple-700 hover:text-neutral-purple-900"
@@ -118,7 +111,7 @@ export function RegisterForm() {
             setAccountType("cooperative");
             setError(null);
           }}
-          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-xs font-bold transition-all duration-150 ${
+          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-semibold transition-all duration-150 ${
             accountType === "cooperative"
               ? "bg-white text-primary-green-900 shadow-xs border border-neutral-purple-200"
               : "text-neutral-purple-700 hover:text-neutral-purple-900"
@@ -131,7 +124,7 @@ export function RegisterForm() {
 
       {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-lg text-xs font-mono flex items-center gap-2">
+        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-md text-xs font-mono flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -144,7 +137,7 @@ export function RegisterForm() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   First Name
                 </label>
                 <input
@@ -153,11 +146,11 @@ export function RegisterForm() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Aminu"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Last Name
                 </label>
                 <input
@@ -166,13 +159,13 @@ export function RegisterForm() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Bello"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                 Phone Number
               </label>
               <input
@@ -181,26 +174,26 @@ export function RegisterForm() {
                 value={farmerPhone}
                 onChange={(e) => setFarmerPhone(e.target.value)}
                 placeholder="+234 802 345 6789"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   ID Type
                 </label>
                 <select
                   value={idType}
                   onChange={(e) => setIdType(e.target.value as "NIN" | "VOTER_ID")}
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 >
                   <option value="NIN">NIN</option>
                   <option value="VOTER_ID">Voter ID</option>
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Identity Number
                 </label>
                 <input
@@ -209,14 +202,14 @@ export function RegisterForm() {
                   value={idNumber}
                   onChange={(e) => setIdNumber(e.target.value)}
                   placeholder="NIN-98765432101"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Password
                 </label>
                 <input
@@ -225,11 +218,11 @@ export function RegisterForm() {
                   value={farmerPassword}
                   onChange={(e) => setFarmerPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Confirm Password
                 </label>
                 <input
@@ -238,7 +231,7 @@ export function RegisterForm() {
                   value={farmerConfirmPassword}
                   onChange={(e) => setFarmerConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
             </div>
@@ -247,7 +240,7 @@ export function RegisterForm() {
           // ==================== Cooperative Form Fields ====================
           <>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                 Cooperative Union Name
               </label>
               <input
@@ -256,13 +249,13 @@ export function RegisterForm() {
                 value={coopName}
                 onChange={(e) => setCoopName(e.target.value)}
                 placeholder="Kebbi Green Rice Growers Cooperative Union"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Registration Number
                 </label>
                 <input
@@ -271,11 +264,11 @@ export function RegisterForm() {
                   value={regNumber}
                   onChange={(e) => setRegNumber(e.target.value)}
                   placeholder="KGG-COOP-2024-NG-049"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Contact Phone
                 </label>
                 <input
@@ -284,13 +277,13 @@ export function RegisterForm() {
                   value={coopPhone}
                   onChange={(e) => setCoopPhone(e.target.value)}
                   placeholder="+234 803 123 4567"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                 Official Contact Email
               </label>
               <input
@@ -299,12 +292,12 @@ export function RegisterForm() {
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
                 placeholder="info@kebbigreenrice.org"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                 Cooperative Head Office Address
               </label>
               <input
@@ -313,13 +306,13 @@ export function RegisterForm() {
                 value={coopAddress}
                 onChange={(e) => setCoopAddress(e.target.value)}
                 placeholder="Argungu Cluster, Rima River Basin, Kebbi State, Nigeria"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Password
                 </label>
                 <input
@@ -328,11 +321,11 @@ export function RegisterForm() {
                   value={coopPassword}
                   onChange={(e) => setCoopPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-purple-900 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
                   Confirm Password
                 </label>
                 <input
@@ -341,34 +334,23 @@ export function RegisterForm() {
                   value={coopConfirmPassword}
                   onChange={(e) => setCoopConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-purple-300 bg-white text-neutral-purple-900 text-sm focus:outline-none focus:border-primary-green-600 focus:ring-1 focus:ring-primary-green-600 transition-colors duration-150"
+                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
                 />
               </div>
             </div>
           </>
         )}
 
-        {/* Clear Terms Notice */}
-        <div className="pt-2">
-          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-neutral-purple-100/60 border border-neutral-purple-200 text-xs text-neutral-purple-800">
-            <input
-              id="agree-terms"
-              type="checkbox"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-neutral-purple-300 text-primary-green-700 focus:ring-primary-green-600"
-            />
-            <label htmlFor="agree-terms" className="leading-relaxed select-none">
-              I agree to AgriTensor&apos;s Alternate Wetting and Drying (AWD) telemetry verification protocols, automated soil depth logging, and the transparent 70/15/15 carbon dividend allocation terms.
-            </label>
-          </div>
-        </div>
+        {/* Single Crisp Consent Line */}
+        <p className="text-xs text-neutral-purple-600 leading-relaxed font-normal pt-1">
+          By continuing, you agree to CarbonTensor AWD telemetry monitoring and cooperative dividend rules.
+        </p>
 
         {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-4 rounded-lg text-sm font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
+          className="w-full h-11 px-4 rounded-md text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
         >
           <span>{loading ? "Creating Account..." : "Create Account"}</span>
           <ArrowRight className="w-4 h-4" />
@@ -376,11 +358,11 @@ export function RegisterForm() {
 
         {/* Switch to Login */}
         <div className="pt-4 border-t border-neutral-purple-200 text-center">
-          <p className="text-xs text-neutral-purple-700">
-            Already registered on AgriTensor?{" "}
+          <p className="text-sm text-neutral-purple-700">
+            Already registered on CarbonTensor?{" "}
             <Link
               href="/auth/login"
-              className="font-bold text-primary-green-700 hover:text-primary-green-900 hover:underline"
+              className="font-semibold text-primary-green-700 hover:text-primary-green-900 hover:underline"
             >
               Sign In to Portal
             </Link>

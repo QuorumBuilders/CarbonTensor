@@ -72,7 +72,7 @@ export function AuthCarousel() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       role="region"
-      aria-label="AgriTensor Key Capabilities Carousel"
+      aria-label="CarbonTensor Key Capabilities Carousel"
     >
       {/* Background Images with 400ms cross-fade */}
       <div className="absolute inset-0 z-0">
@@ -113,7 +113,7 @@ export function AuthCarousel() {
           </div>
           <div>
             <span className="font-extrabold text-xl tracking-tight text-white block">
-              AgriTensor
+              CarbonTensor
             </span>
             <span className="text-[10px] font-mono uppercase tracking-wider text-primary-green-200 font-bold">
               MRV &amp; Dividend Disbursal
@@ -146,11 +146,11 @@ export function AuthCarousel() {
                   <span>{slide.tag}</span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                <h2 className="text-2xl font-bold text-white tracking-tight leading-tight">
                   {slide.title}
                 </h2>
 
-                <p className="text-sm sm:text-base text-primary-green-100 font-normal max-w-lg leading-relaxed">
+                <p className="text-base text-neutral-100/90 leading-relaxed font-normal max-w-lg">
                   {slide.caption}
                 </p>
               </div>

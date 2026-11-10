@@ -27,7 +27,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
             </div>
             <div>
               <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors duration-150">
-                AgriTensor
+                CarbonTensor
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
                 AWD MRV Layer
@@ -50,7 +50,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
               {title}
             </h1>
-            <p className="mt-2 text-sm text-neutral-purple-800 font-normal leading-relaxed">
+            <p className="mt-2 text-base text-neutral-purple-800 font-normal leading-relaxed">
               {subtitle}
             </p>
           </div>
@@ -68,7 +68,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
             <span>Access Bank Sandbox (Simulated Settlement)</span>
           </div>
           <div>
-            <span>© 2026 AgriTensor • Kebbi State AWD Cohort</span>
+            <span>© 2026 CarbonTensor • Kebbi State AWD Cohort</span>
           </div>
         </div>
 

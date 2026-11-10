@@ -15,7 +15,7 @@ export function LandingFooter() {
                 <Activity className="w-5 h-5 text-primary-green-100" />
               </div>
               <span className="font-extrabold text-xl text-white">
-                AgriTensor
+                CarbonTensor
               </span>
             </div>
             <p className="text-sm text-primary-green-200 leading-relaxed font-normal">
@@ -32,13 +32,13 @@ export function LandingFooter() {
             <span className="text-xs font-mono uppercase tracking-wider text-primary-green-300 font-bold">
               Get Started
             </span>
-            <Link href="/dashboard" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
+            <Link href="/auth/register" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
               Register your plot
             </Link>
-            <Link href="/dashboard" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
+            <Link href="/auth/register" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
               For cooperatives
             </Link>
-            <Link href="/verifier" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
+            <Link href="/auth/login" className="text-sm text-primary-green-100 hover:text-white transition-colors duration-150">
               For verifiers
             </Link>
           </div>
@@ -82,7 +82,7 @@ export function LandingFooter() {
         {/* Bottom Integrity Notice & Copyright */}
         <div className="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-primary-green-300 font-mono">
           <div>
-            © 2026 AgriTensor. Built for Nigerian Agricultural Cooperatives. All carbon metrics qualified as <strong className="text-white">tCO₂e (est.)</strong>.
+            © 2026 CarbonTensor. Built for Nigerian Agricultural Cooperatives. All carbon metrics qualified as <strong className="text-white">tCO₂e (est.)</strong>.
           </div>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1 text-primary-green-200">

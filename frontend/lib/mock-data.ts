@@ -611,3 +611,4 @@ export const MOCK_PAYMENTS: Payment[] = [
     simulation_environment: "Access Bank Sandbox (Simulated)",
   },
 ];
+

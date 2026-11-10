@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TensorCarbon | Scalable AWD Methane Avoidance & Payout Layer",
+  title: "CarbonTensor | Scalable AWD Methane Avoidance & Payout Layer",
   description:
     "Aggregating Nigerian rice cooperatives to verify AWD water cycles, package registry-ready MRV evidence, and disburse carbon dividends to smallholders.",
   keywords: [
+    "CarbonTensor",
     "AWD",
     "Methane Avoidance",
     "Carbon MRV",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
     "Climate Finance",
   ],
   openGraph: {
-    title: "TensorCarbon — AWD Methane Avoidance Layer",
+    title: "CarbonTensor — AWD Methane Avoidance Layer",
     description:
       "Supply-side data and payout infrastructure for Nigerian rice cooperatives.",
     type: "website",

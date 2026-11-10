@@ -3,7 +3,7 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
 export const metadata: Metadata = {
-  title: "Register Account | AgriTensor",
+  title: "Register Account | CarbonTensor",
   description: "Register your smallholder rice plot or cooperative union for verified AWD carbon finance in Nigeria.",
 };
 

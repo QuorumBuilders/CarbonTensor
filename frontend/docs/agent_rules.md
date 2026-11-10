@@ -1,4 +1,4 @@
-# TensorCarbon Frontend Agent Rules
+# CarbonTensor Frontend Agent Rules
 
 ## 1. Directory Lock & Environment Boundaries
 - **Strict Directory Isolation**: Operate strictly within `~/Documents/tensor/frontend/` (`frontend/`).
@@ -40,4 +40,3 @@
 - **Carbon accounting clarity**: Carbon tonnage must ALWAYS be labeled as `tCO₂e (est.)`. Never present estimated avoided methane as certified credits without qualification.
 - **Banking simulation labeling**: Payout interfaces and transaction references must explicitly state `Access Bank Sandbox (Simulated)`.
 - **Remote sensing caveats**: Satellite verification overlays must clearly state `Sentinel-1 Radar Cross-Check (Sample)`.
-

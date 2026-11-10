@@ -40,14 +40,14 @@ export const api = {
           };
 
           const session: AuthSession = {
-            token: "demo-jwt-token-agritensor-sandbox",
+            token: "demo-jwt-token-carbontensor-sandbox",
             user: matchedUser,
             cooperative: MOCK_COOPERATIVE,
             farmer: matchedUser.account_type === "farmer" ? MOCK_FARMERS[0] : undefined,
           };
 
           if (typeof window !== "undefined") {
-            localStorage.setItem("agritensor_session", JSON.stringify(session));
+            localStorage.setItem("carbontensor_session", JSON.stringify(session));
           }
 
           return session;
@@ -85,7 +85,7 @@ export const api = {
           };
 
           if (typeof window !== "undefined") {
-            localStorage.setItem("agritensor_session", JSON.stringify(session));
+            localStorage.setItem("carbontensor_session", JSON.stringify(session));
           }
 
           return session;
@@ -122,7 +122,7 @@ export const api = {
           };
 
           if (typeof window !== "undefined") {
-            localStorage.setItem("agritensor_session", JSON.stringify(session));
+            localStorage.setItem("carbontensor_session", JSON.stringify(session));
           }
 
           return session;
@@ -134,11 +134,11 @@ export const api = {
       return ApiClient.get<AuthSession | null>("/auth/me/", {
         mockFallback: () => {
           if (typeof window === "undefined") return null;
-          const stored = localStorage.getItem("agritensor_session");
+          const stored = localStorage.getItem("carbontensor_session");
           if (!stored) {
             // Default demo cooperative admin session for fast judging exploration
             const defaultSession: AuthSession = {
-              token: "demo-jwt-token-agritensor-sandbox",
+              token: "demo-jwt-token-carbontensor-sandbox",
               user: MOCK_USERS[0],
               cooperative: MOCK_COOPERATIVE,
             };
@@ -151,7 +151,7 @@ export const api = {
 
     logout: async (): Promise<void> => {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("agritensor_session");
+        localStorage.removeItem("carbontensor_session");
       }
     },
   },

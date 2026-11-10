@@ -71,7 +71,7 @@ export function HowItWorksSection() {
         {/* Section Header */}
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded text-xs font-mono font-semibold text-primary-green-800 bg-primary-green-50 border border-primary-green-200 mb-3">
-            <span>6-Step AgriTensor Architecture</span>
+            <span>6-Step CarbonTensor Architecture</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
             From the field to the farmer&apos;s account.
@@ -149,7 +149,7 @@ export function HowItWorksSection() {
         <div className="mt-8 rounded-xl border border-neutral-purple-200 bg-neutral-purple-50 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-neutral-purple-800">
           <div>
             <strong className="text-primary-green-900 font-sans">Clear Boundary Notice: </strong>
-            AgriTensor handles nodes 01–04 (data ingestion & MRV preparation) and node 06 (payout split). Node 05 is conducted exclusively by independent, third-party accredited registries and verifiers.
+            CarbonTensor handles nodes 01–04 (data ingestion & MRV preparation) and node 06 (payout split). Node 05 is conducted exclusively by independent, third-party accredited registries and verifiers.
           </div>
           <a
             href="#payout-split"

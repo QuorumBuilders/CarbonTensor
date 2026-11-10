@@ -11,7 +11,7 @@ export class ApiClient {
   private static getStoredToken(): string | null {
     if (typeof window === "undefined") return null;
     try {
-      const session = localStorage.getItem("agritensor_session");
+      const session = localStorage.getItem("carbontensor_session");
       if (!session) return null;
       const parsed = JSON.parse(session);
       return parsed.token || null;

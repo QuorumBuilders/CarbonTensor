@@ -180,3 +180,4 @@ export interface CooperativeRegisterPayload {
   address: string;
   password: string;
 }
+

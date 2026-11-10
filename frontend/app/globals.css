@@ -149,6 +149,19 @@ body {
   animation-play-state: paused;
 }
 
+/* Purposeful Brand Motion Tokens (150ms - 250ms ease-out) */
+.transition-brand {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-brand-slow {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-awd-oscillate {
     animation: none !important;

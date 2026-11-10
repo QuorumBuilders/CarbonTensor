@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 
 interface PhotoCard {
@@ -7,160 +8,57 @@ interface PhotoCard {
   location: string;
   badge: string;
   caption: string;
-  renderGraphic: () => React.ReactNode;
+  image: string;
 }
 
 const photoCards: PhotoCard[] = [
   {
-    id: "pani-pipe",
-    title: "Pani pipe water sensor",
-    location: "Kano River Scheme",
-    badge: "Field Telemetry",
-    caption: "Perforated field tube logs water drop to the safe -15 cm depth limit before re-flooding.",
-    renderGraphic: () => (
-      <svg viewBox="0 0 400 250" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Field water sensor measuring soil water table depth">
-        <rect width="400" height="250" fill="#07381A" />
-        {/* Soil Layer */}
-        <rect y="70" width="400" height="180" fill="#0B4D25" />
-        {/* Soil Baseline */}
-        <line x1="0" y1="70" x2="400" y2="70" stroke="#9CC9AB" strokeWidth="2" />
-        <text x="16" y="60" fill="#C9E2D2" fontSize="11" fontFamily="monospace" fontWeight="600">Soil Surface (0 cm)</text>
-        {/* Safe AWD Threshold (-15cm) */}
-        <line x1="0" y1="140" x2="400" y2="140" stroke="#F15A24" strokeWidth="1.5" strokeDasharray="4 4" />
-        <text x="16" y="132" fill="#FADAD0" fontSize="10" fontFamily="monospace" fontWeight="700">Safe AWD Threshold (-15 cm)</text>
-        {/* Pani Pipe Tube */}
-        <rect x="220" y="30" width="36" height="180" rx="3" fill="#296F3B" stroke="#6DAB6C" strokeWidth="2" />
-        {/* Tube perforations */}
-        <circle cx="238" cy="90" r="3" fill="#07381A" />
-        <circle cx="238" cy="115" r="3" fill="#07381A" />
-        <circle cx="238" cy="140" r="3" fill="#07381A" />
-        <circle cx="238" cy="165" r="3" fill="#07381A" />
-        <circle cx="238" cy="190" r="3" fill="#07381A" />
-        {/* Water Level in pipe */}
-        <rect x="224" y="130" width="28" height="76" rx="2" fill="#3F8851" fillOpacity="0.75" />
-        <line x1="220" y1="130" x2="256" y2="130" stroke="#EAF3ED" strokeWidth="2" />
-        {/* Sensor Cap */}
-        <rect x="216" y="22" width="44" height="14" rx="2" fill="#03200E" stroke="#3F8851" strokeWidth="1.5" />
-        <circle cx="238" cy="29" r="3" fill="#F15A24" />
-        {/* Telemetry Tag */}
-        <rect x="270" y="115" width="112" height="30" rx="4" fill="#03200E" stroke="#3F8851" strokeWidth="1" />
-        <text x="280" y="134" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold" className="tabular-nums">-14.2 cm</text>
-      </svg>
-    ),
+    id: "farm-1",
+    title: "Field water monitoring tube",
+    location: "Kano River Irrigation Scheme",
+    badge: "In-Situ Sensor",
+    caption: "Perforated field tube logs water table drop to safe -15 cm threshold before re-flooding.",
+    image: "/images/farm1.png",
   },
   {
-    id: "cooperative-plots",
+    id: "farm-2",
     title: "Aggregated cooperative plots",
-    location: "Kebbi Rice Belt",
+    location: "Kebbi Rice Farming Belt",
     badge: "Plot Registry",
-    caption: "Smallholder paddies mapped into cooperative clusters for shared water scheduling.",
-    renderGraphic: () => (
-      <svg viewBox="0 0 400 250" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rice paddy plot grid mapped by cooperative">
-        <rect width="400" height="250" fill="#07381A" />
-        {/* Cartographic Rice Paddy Cells */}
-        <rect x="30" y="30" width="155" height="85" rx="4" fill="#0B4D25" stroke="#6DAB6C" strokeWidth="1.5" />
-        <rect x="215" y="30" width="155" height="85" rx="4" fill="#1B5C2D" stroke="#6DAB6C" strokeWidth="1.5" />
-        <rect x="30" y="135" width="155" height="85" rx="4" fill="#1B5C2D" stroke="#6DAB6C" strokeWidth="1.5" />
-        <rect x="215" y="135" width="155" height="85" rx="4" fill="#0B4D25" stroke="#6DAB6C" strokeWidth="1.5" />
-        {/* Irrigation Canal Dividing Path */}
-        <line x1="200" y1="20" x2="200" y2="230" stroke="#3F8851" strokeWidth="4" strokeDasharray="6 4" />
-        {/* Plot ID tags */}
-        <text x="44" y="55" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold">Plot KB-01</text>
-        <text x="44" y="75" fill="#9CC9AB" fontSize="9" fontFamily="monospace">AWD Status: DRYING</text>
-        <text x="229" y="55" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold">Plot KB-02</text>
-        <text x="229" y="75" fill="#9CC9AB" fontSize="9" fontFamily="monospace">AWD Status: FLOODED</text>
-        <text x="44" y="160" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold">Plot KB-03</text>
-        <text x="44" y="180" fill="#9CC9AB" fontSize="9" fontFamily="monospace">AWD Status: DRYING</text>
-        <text x="229" y="160" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold">Plot KB-04</text>
-        <text x="229" y="180" fill="#9CC9AB" fontSize="9" fontFamily="monospace">AWD Status: DRYING</text>
-      </svg>
-    ),
+    caption: "Smallholder paddies mapped into cooperative cohorts for synchronized water control.",
+    image: "/images/farm2.png",
   },
   {
-    id: "field-aeration",
-    title: "Aeration & drainage phase",
+    id: "farm-3",
+    title: "Soil drainage & aeration",
     location: "Niger River Basin",
-    badge: "Methane Avoidance",
-    caption: "Periodic drying lets atmospheric oxygen reach roots, halting methane-producing bacteria.",
-    renderGraphic: () => (
-      <svg viewBox="0 0 400 250" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Soil aeration diagram illustrating aerobic soil preventing methane formation">
-        <rect width="400" height="250" fill="#07381A" />
-        {/* Oxygen Flow Arrows */}
-        <g stroke="#6DAB6C" strokeWidth="2" strokeLinecap="round">
-          <path d="M 80 20 L 80 60 M 75 50 L 80 60 L 85 50" />
-          <path d="M 200 15 L 200 55 M 195 45 L 200 55 L 205 45" />
-          <path d="M 320 20 L 320 60 M 315 50 L 320 60 L 325 50" />
-        </g>
-        <text x="140" y="32" fill="#C9E2D2" fontSize="10" fontFamily="monospace" fontWeight="bold">Atmospheric O₂ Ingress</text>
-        {/* Aerated Top Soil */}
-        <rect y="70" width="400" height="70" fill="#1B5C2D" />
-        <text x="20" y="105" fill="#EAF3ED" fontSize="12" fontFamily="monospace" fontWeight="bold">Aerobic Zone (O₂ Rich)</text>
-        <text x="20" y="122" fill="#9CC9AB" fontSize="9" fontFamily="monospace">Methanogenesis Inactive • 0 Methane</text>
-        {/* Deep Soil */}
-        <rect y="140" width="400" height="110" fill="#0B4D25" />
-        <text x="20" y="175" fill="#C9E2D2" fontSize="11" fontFamily="monospace">Root System Anchored & Healthy</text>
-        {/* Rice Roots */}
-        <path d="M 120 70 Q 110 120 100 160 M 120 70 Q 130 110 140 155" stroke="#9CC9AB" strokeWidth="1.5" />
-        <path d="M 260 70 Q 250 115 240 160 M 260 70 Q 275 120 280 165" stroke="#9CC9AB" strokeWidth="1.5" />
-      </svg>
-    ),
+    badge: "AWD Drying Cycle",
+    caption: "Aerating the soil lets oxygen reach roots, breaking anaerobic methane formation.",
+    image: "/images/farm3.png",
   },
   {
-    id: "water-reflood",
-    title: "Controlled re-flooding",
+    id: "farm-4",
+    title: "Controlled canal re-flooding",
     location: "Hadejia Valley, Jigawa",
     badge: "Water Saving",
-    caption: "Controlled inlet watering restores shallow 5 cm water table, cutting irrigation costs.",
-    renderGraphic: () => (
-      <svg viewBox="0 0 400 250" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Irrigation canal re-flooding rice field under AWD regime">
-        <rect width="400" height="250" fill="#07381A" />
-        {/* Canal Bed */}
-        <rect y="60" width="400" height="190" fill="#0B4D25" />
-        {/* Water Layer */}
-        <rect y="60" width="400" height="50" fill="#3F8851" fillOpacity="0.4" />
-        <line x1="0" y1="60" x2="400" y2="60" stroke="#6DAB6C" strokeWidth="2" />
-        <text x="20" y="50" fill="#EAF3ED" fontSize="11" fontFamily="monospace" fontWeight="bold">+5 cm Water Level</text>
-        {/* Water Gate */}
-        <rect x="170" y="20" width="60" height="130" rx="3" fill="#03200E" stroke="#3F8851" strokeWidth="2" />
-        <rect x="185" y="80" width="30" height="40" fill="#1B5C2D" />
-        {/* Controlled Flow lines */}
-        <path d="M 190 130 Q 200 150 190 180" stroke="#9CC9AB" strokeWidth="2" strokeDasharray="3 3" />
-        <path d="M 210 130 Q 200 150 210 180" stroke="#9CC9AB" strokeWidth="2" strokeDasharray="3 3" />
-        <text x="245" y="95" fill="#EAF3ED" fontSize="10" fontFamily="monospace" fontWeight="bold">Sluice Gate Regulated</text>
-        <text x="245" y="112" fill="#9CC9AB" fontSize="9" fontFamily="monospace">~30% Irrigation Savings</text>
-      </svg>
-    ),
+    caption: "Irrigation restored to shallow 5 cm standing water, conserving up to 30% water volume.",
+    image: "/images/farm4.png",
   },
   {
-    id: "mrv-evidence",
-    title: "Verified MRV audit package",
-    location: "Wushishi Basin, Niger",
-    badge: "Registry Evidence",
-    caption: "Sensor logs cross-checked with radar surface moisture before export to registry.",
-    renderGraphic: () => (
-      <svg viewBox="0 0 400 250" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital MRV audit package graph with satellite cross-check">
-        <rect width="400" height="250" fill="#07381A" />
-        {/* Radar Map Grid Overlay */}
-        <g stroke="#1B5C2D" strokeWidth="1">
-          <line x1="40" y1="30" x2="360" y2="30" />
-          <line x1="40" y1="80" x2="360" y2="80" />
-          <line x1="40" y1="130" x2="360" y2="130" />
-          <line x1="40" y1="180" x2="360" y2="180" />
-          <line x1="120" y1="20" x2="120" y2="190" />
-          <line x1="200" y1="20" x2="200" y2="190" />
-          <line x1="280" y1="20" x2="280" y2="190" />
-        </g>
-        {/* Telemetry Waveform */}
-        <path d="M 40 60 L 90 60 L 120 150 L 180 150 L 220 60 L 270 60 L 310 150 L 360 150" stroke="#6DAB6C" strokeWidth="2.5" fill="none" />
-        {/* Sentinel-1 Cross-Check Dots */}
-        <circle cx="150" cy="150" r="4" fill="#F15A24" />
-        <circle cx="245" cy="60" r="4" fill="#F15A24" />
-        <circle cx="335" cy="150" r="4" fill="#F15A24" />
-        {/* Badge Banner */}
-        <rect x="40" y="198" width="320" height="32" rx="4" fill="#03200E" stroke="#3F8851" strokeWidth="1" />
-        <text x="56" y="218" fill="#EAF3ED" fontSize="10.5" fontFamily="monospace" fontWeight="bold">Sentinel-1 Radar Cross-Check: PASS (98.4%)</text>
-      </svg>
-    ),
+    id: "farm-5",
+    title: "Smallholder cooperative governance",
+    location: "Wushishi Cooperative, Niger",
+    badge: "Farmer Governance",
+    caption: "Cooperative members reviewing water schedules and automated carbon dividend allocations.",
+    image: "/images/farm5.png",
+  },
+  {
+    id: "farm-6",
+    title: "Pre-harvest rice field",
+    location: "Kadawa Irrigation Scheme",
+    badge: "Yield & Carbon",
+    caption: "Healthy tillering and grain filling achieved under disciplined wetting and drying cycles.",
+    image: "/images/farm6.png",
   },
 ];
 
@@ -247,9 +145,15 @@ export function HeroSection() {
                       key={`${card.id}-${idx}`}
                       className="w-[280px] sm:w-[320px] shrink-0 rounded-xl border border-neutral-purple-200 bg-white overflow-hidden shadow-xs hover:border-primary-green-400 transition-colors duration-150"
                     >
-                      {/* 16:10 Visual Slot */}
+                      {/* 16:10 Visual Photo Slot */}
                       <div className="aspect-[16/10] bg-primary-green-900 relative overflow-hidden">
-                        {card.renderGraphic()}
+                        <Image
+                          src={card.image}
+                          alt={card.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 280px, 320px"
+                        />
                       </div>
 
                       {/* Clean Caption Slot */}
@@ -282,7 +186,7 @@ export function HeroSection() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-primary-green-600" />
                   Continuous Field Monitoring
                 </span>
-                <span>5 Cooperative Sites</span>
+                <span>6 Cooperative Sites</span>
               </div>
 
             </div>

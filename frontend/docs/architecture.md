@@ -1,7 +1,7 @@
-# TensorCarbon Frontend Architecture
+# CarbonTensor Frontend Architecture
 
 ## 1. System Overview
-TensorCarbon Frontend is a specialized web interface aggregating Nigerian rice farming cooperatives to monitor, verify, and disburse payouts for avoided methane emissions via Alternate Wetting and Drying (AWD) water management.
+CarbonTensor Frontend is a specialized web interface aggregating Nigerian rice farming cooperatives to monitor, verify, and disburse payouts for avoided methane emissions via Alternate Wetting and Drying (AWD) water management.
 
 The architecture emphasizes:
 - **Resilient Data Decoupling**: Dual-mode data fetching with seamless mock-safe fallback adapters for zero-backend standalone demos.
@@ -59,4 +59,3 @@ frontend/
    - Ensures standalone demonstrations and verifier audits execute reliably without external infrastructure dependencies.
 3. **Data Contracts**:
    - Explicit TypeScript schemas for Rice Cooperatives, Field Plots, Water Table Sensor Feeds, Sentinel-1 Backscatter Readings, and Access Bank Disbursal Batches.
-

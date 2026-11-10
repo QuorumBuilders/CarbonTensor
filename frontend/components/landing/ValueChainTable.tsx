@@ -19,7 +19,7 @@ export function ValueChainTable() {
       isPrimary: false,
     },
     {
-      actor: "TensorCarbon Platform",
+      actor: "CarbonTensor Platform",
       category: "Data & MRV Layer",
       action: "Automated Data Ingestion",
       responsibility: "Validates field sensor telemetry, executes anomaly detection algorithms, runs Sentinel-1 radar cross-checks.",
@@ -61,7 +61,7 @@ export function ValueChainTable() {
             Who Creates, Who Verifies, Who Pays
           </h2>
           <p className="mt-4 text-base text-neutral-purple-900 leading-relaxed">
-            Every participant in the TensorCarbon value chain operates under defined agronomic, verification, and financial boundaries.
+            Every participant in the CarbonTensor value chain operates under defined agronomic, verification, and financial boundaries.
           </p>
         </div>
 
@@ -73,53 +73,42 @@ export function ValueChainTable() {
                 <th className="py-3.5 px-4 border-b border-primary-green-700">Stakeholder</th>
                 <th className="py-3.5 px-4 border-b border-primary-green-700">Role & Category</th>
                 <th className="py-3.5 px-4 border-b border-primary-green-700">Verification Responsibility</th>
-                <th className="py-3.5 px-4 border-b border-primary-green-700">Auditable Deliverable</th>
-                <th className="py-3.5 px-4 border-b border-primary-green-700">Economic Distribution</th>
+                <th className="py-3.5 px-4 border-b border-primary-green-700">Output Deliverable</th>
+                <th className="py-3.5 px-4 border-b border-primary-green-700">Financial Remuneration</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-purple-200 bg-white">
-              {rows.map((row) => (
+              {rows.map((row, idx) => (
                 <tr
-                  key={row.actor}
-                  className={`hover:bg-primary-green-50/40 transition-colors ${
-                    row.isPrimary ? "bg-primary-green-50/20" : ""
+                  key={idx}
+                  className={`hover:bg-neutral-purple-50/80 transition-colors ${
+                    row.isPrimary ? "bg-primary-green-50/40" : ""
                   }`}
                 >
-                  <td className="py-4 px-4 font-bold text-primary-green-900 align-top">
+                  <td className="py-4 px-4 font-bold text-primary-green-900 whitespace-nowrap">
                     {row.actor}
                     {row.isPrimary && (
-                      <span className="block mt-1 text-[10px] uppercase tracking-wide font-extrabold text-accent-orange-600">
-                        Primary Value Origin
+                      <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-primary-green-200 text-primary-green-900">
+                        Primary Producer
                       </span>
                     )}
                   </td>
-                  <td className="py-4 px-4 align-top">
-                    <span className="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-neutral-purple-100 text-neutral-purple-800 border border-neutral-purple-200">
-                      {row.category}
-                    </span>
-                    <span className="block mt-1 text-xs text-neutral-purple-600 font-medium">
-                      {row.action}
-                    </span>
+                  <td className="py-4 px-4 font-mono text-xs text-neutral-purple-700 whitespace-nowrap">
+                    {row.category}
                   </td>
-                  <td className="py-4 px-4 text-xs text-neutral-purple-900 align-top max-w-xs leading-relaxed">
+                  <td className="py-4 px-4 text-xs text-neutral-purple-900 max-w-xs leading-relaxed">
                     {row.responsibility}
                   </td>
-                  <td className="py-4 px-4 text-xs font-mono text-primary-green-800 align-top max-w-xs">
+                  <td className="py-4 px-4 text-xs font-medium text-primary-green-800 max-w-xs leading-relaxed">
                     {row.deliverable}
                   </td>
-                  <td className="py-4 px-4 text-xs font-semibold text-primary-green-900 align-top max-w-xs">
+                  <td className="py-4 px-4 font-mono text-xs font-semibold text-primary-green-900 whitespace-nowrap">
                     {row.remuneration}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* Footnote on Payout Cadence */}
-        <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-neutral-purple-600 font-mono">
-          <span>* Payout Structure: 40% Seasonal Advance (Post-Sensor Audit) + 60% Registry Issuance Dividend.</span>
-          <span className="font-semibold text-primary-green-800">Settled via: Access Bank Sandbox (Simulated)</span>
         </div>
 
       </div>

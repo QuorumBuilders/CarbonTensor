@@ -90,27 +90,27 @@ export function HeroSection() {
 
             {/* Subline */}
             <p className="text-lg sm:text-xl text-primary-green-800 font-semibold leading-snug">
-              AgriTensor helps Nigerian rice cooperatives measure water use, show methane reduction and share carbon proceeds with farmers.
+              CarbonTensor helps Nigerian rice cooperatives measure water use, show methane reduction and share carbon proceeds with farmers.
             </p>
 
             {/* Narrative */}
-            <p className="text-sm sm:text-base text-neutral-purple-800 leading-relaxed font-normal">
-              AgriTensor helps rice cooperatives in Nigeria turn better water management into verified evidence and fair payouts. With a farmer-first approach, we work alongside cooperatives, independent verifiers and carbon registries to make climate-friendly farming pay.
+            <p className="text-base text-neutral-purple-800 leading-relaxed font-normal">
+              CarbonTensor helps rice cooperatives in Nigeria turn better water management into verified evidence and fair payouts. With a farmer-first approach, we work alongside cooperatives, independent verifiers and carbon registries to make climate-friendly farming pay.
             </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <a
                 href="#problem"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded text-sm sm:text-base font-bold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-xs hover:shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-xs hover:shadow-sm"
               >
                 <span>Learn more</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ArrowRight className="w-5 h-5" />
               </a>
 
               <Link
-                href="/dashboard"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded text-sm sm:text-base font-semibold text-primary-green-900 bg-white border border-neutral-purple-300 hover:border-primary-green-600 hover:bg-primary-green-50 transition-all duration-150"
+                href="/auth/register"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-base font-semibold text-primary-green-900 bg-white border border-neutral-purple-300 hover:border-primary-green-600 hover:bg-primary-green-50 transition-all duration-150"
               >
                 <span>Register cooperative plot</span>
               </Link>

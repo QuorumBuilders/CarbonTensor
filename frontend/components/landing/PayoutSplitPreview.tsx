@@ -2,7 +2,7 @@ export function PayoutSplitPreview() {
   return (
     <section id="payout-split" className="py-16 sm:py-20 lg:py-24 bg-white border-b border-neutral-purple-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded text-xs font-mono font-semibold text-primary-green-800 bg-primary-green-50 border border-primary-green-200 mb-3">
@@ -18,7 +18,7 @@ export function PayoutSplitPreview() {
 
         {/* Sleek Single Horizontal Split Bar Container */}
         <div className="mt-10 rounded-xl border border-neutral-purple-200 bg-white p-6 sm:p-8 lg:p-10 shadow-xs">
-          
+
           {/* Top Label */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-neutral-purple-100">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-purple-600">
@@ -61,7 +61,7 @@ export function PayoutSplitPreview() {
 
           {/* 3-Column Clean Card Breakdown */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-            
+
             <div className="rounded-lg border border-neutral-purple-200 bg-neutral-purple-50/40 p-5 transition-colors hover:border-primary-green-300">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-primary-green-700" />

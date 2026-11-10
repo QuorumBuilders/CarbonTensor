@@ -1,4 +1,4 @@
-# TensorCarbon backend instructions
+# CarbonTensor backend instructions
 
 These instructions supplement the repository root `AGENTS.md` for work within `backend/`.
 

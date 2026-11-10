@@ -1,8 +1,11 @@
-# TensorCarbon
+# CarbonTensor
 
 A digital platform for managing aggregated smallholder rice farming projects, implementing Alternate Wetting and Drying (AWD), monitoring methane avoidance, and managing carbon-credit revenue and farmer bonus distributions.
 
 The platform provides an integrated system for farmer onboarding, agricultural project management, digital Measurement, Reporting and Verification (MRV), and carbon-credit financial management.
+
+Product naming and retained technical identifiers are documented in
+[Project Naming](docs/Project%20Naming.md).
 
 ## Overview
 
@@ -27,7 +30,7 @@ It connects farmers, cooperatives, field agents, project administrators, MRV ope
 The project is organized as a monorepo containing independently maintained backend and frontend applications.
 
 ```text
-awd-carbon-platform/
+CarbonTensor/
 │
 ├── backend/
 │   ├── ...

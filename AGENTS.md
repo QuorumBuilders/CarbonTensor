@@ -1,8 +1,8 @@
-# TensorCarbon agent instructions
+# CarbonTensor agent instructions
 
 ## Project and scope
 
-- TensorCarbon is an agnostic carbon Measurement, Reporting and Verification (MRV) platform. The initial implementation covers methane avoidance through Alternate Wetting and Drying (AWD) in smallholder rice cultivation.
+- CarbonTensor is an agnostic carbon Measurement, Reporting and Verification (MRV) platform. The initial implementation covers methane avoidance through Alternate Wetting and Drying (AWD) in smallholder rice cultivation.
 - This monorepo contains independently maintained `backend/` and `frontend/` applications. The backend follows a modular monolith architecture.
 - The MVP manages one carbon project. Do not introduce a `projects` application without an established domain requirement and developer approval.
 - AWD is a practice within MRV, not a separate application. Keep business responsibilities in their owning modules; reserve `core` for genuinely shared infrastructure.
@@ -21,7 +21,7 @@ Before every substantial task:
 
 ## Requirements and documentation
 
-- Use `docs/api/MVP Data Model and API Contract.md` (**TensorCarbon MVP Data Model & API Contract**) as the initial functional reference. Read the relevant sections before implementation.
+- Use `docs/api/MVP Data Model and API Contract.md` (**CarbonTensor MVP Data Model & API Contract**) as the initial functional reference. Read the relevant sections before implementation.
 - Do not silently change requirements or invent business rules. For missing relationships, contradictions, unclear rules, inadequate constraints, or API inconsistencies, document the source, issue, impact, proposed resolution, and approval status.
 - Keep existing agreed requirements, technical implementation decisions, and proposed changes awaiting approval clearly distinguished in documentation and reports.
 - `README.md` describes a broader product vision, including multiple projects and candidate integrations. Those descriptions do not expand the agreed single-project MVP scope.

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, Fragment } from "react";
-import { MapContainer, TileLayer, Polygon, Popup, CircleMarker } from "react-leaflet";
+import { useState, useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MOCK_PLOTS } from "@/lib/mock-data";
 import type { Plot } from "@/types";
@@ -82,16 +82,17 @@ interface PlotMapProps {
   onSelectPlot?: (plotId: string) => void;
 }
 
-let mapContainerCount = 0;
+// Argungu / Kebbi coordinates center
+const MAP_CENTER: [number, number] = [12.741, 4.533];
 
 export function PlotMap({
   plots = MOCK_PLOTS,
   selectedPlotId,
   onSelectPlot,
 }: PlotMapProps) {
-  // Fresh container key per component mount prevents "Map container is being reused"
-  // when navigating across client routes in Next.js SPA transitions.
-  const [containerKey] = useState(() => `map-canvas-v${++mapContainerCount}`);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+
   const enrichedPlots = enrichPlots(plots);
   const [filter, setFilter] = useState<string>("ALL");
 
@@ -104,8 +105,124 @@ export function PlotMap({
     return true;
   });
 
-  // Argungu / Kebbi coordinates center
-  const mapCenter: [number, number] = [12.741, 4.533];
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+    const container = mapContainerRef.current;
+
+    // Guaranteed lifecycle safety: Remove existing instance and clean up container ID
+    // This permanently prevents Leaflet's "Map container is being reused by another instance" error
+    // during fast route navigation in Next.js SPA transitions.
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.remove();
+      mapInstanceRef.current = null;
+    }
+    if ((container as unknown as { _leaflet_id?: number })._leaflet_id) {
+      delete (container as unknown as { _leaflet_id?: number })._leaflet_id;
+    }
+
+    const map = L.map(container, {
+      center: MAP_CENTER,
+      zoom: 14,
+      scrollWheelZoom: false,
+    });
+
+    // CartoDB Voyager Tile Layer
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      }
+    ).addTo(map);
+
+    const layerGroup = L.layerGroup().addTo(map);
+
+    filteredPlots.forEach((plot) => {
+      const coords = plot.boundary.coordinates[0].map(
+        ([lng, lat]) => [lat, lng] as [number, number]
+      );
+      const style = STATUS_STYLES[plot.complianceStatus];
+      const isSelected = selectedPlotId === plot.id;
+
+      const polygon = L.polygon(coords, {
+        color: isSelected ? "#F15A24" : style.pathOptions.color,
+        fillColor: style.pathOptions.fillColor,
+        fillOpacity: style.pathOptions.fillOpacity,
+        weight: isSelected ? 4 : style.pathOptions.weight,
+      });
+
+      polygon.on("click", () => {
+        onSelectPlot?.(plot.id);
+      });
+
+      const warningHtml =
+        plot.complianceStatus === "NON_COMPLIANT"
+          ? `<div style="padding:6px;background:#FDF0ED;border-radius:6px;font-size:11px;color:#7A1C18;line-height:1.2;margin-bottom:6px;">Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.</div>`
+          : plot.complianceStatus === "RADAR_DISCREPANCY"
+          ? `<div style="padding:6px;background:#FDF0EB;border-radius:6px;font-size:11px;color:#CE4312;line-height:1.2;margin-bottom:6px;">Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.</div>`
+          : "";
+
+      const statusBadgeStyle =
+        plot.complianceStatus === "COMPLIANT"
+          ? "background:#EAF3ED;color:#0B4D25;border-color:#6DAB6C;"
+          : plot.complianceStatus === "NON_COMPLIANT"
+          ? "background:#FDF0ED;color:#7A1C18;border-color:#FCA5A5;"
+          : plot.complianceStatus === "SENSOR_FAULT"
+          ? "background:#FDF5E6;color:#7A4D05;border-color:#FCD34D;"
+          : "background:#FDF0EB;color:#CE4312;border-color:#FDBA74;";
+
+      const popupHtml = `
+        <div style="padding:2px;max-width:240px;color:#2D253B;font-family:inherit;">
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E2DFEA;padding-bottom:6px;margin-bottom:6px;">
+            <span style="font-family:monospace;font-weight:bold;font-size:12px;color:#0B4D25;">${plot.id.toUpperCase()}</span>
+            <span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:bold;border:1px solid;${statusBadgeStyle}">
+              ${plot.statusLabel}
+            </span>
+          </div>
+
+          <div style="font-size:11px;line-height:1.6;margin-bottom:6px;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#787287;">Farmer:</span><strong>${plot.farmerName}</strong></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#787287;">Rice Variety:</span><span>${plot.rice_variety}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#787287;">Area:</span><strong style="font-variant-numeric:tabular-nums;">${plot.calculated_area.toFixed(2)} ha</strong></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#787287;">Live Water:</span><strong style="font-family:monospace;font-variant-numeric:tabular-nums;">${plot.currentWaterLevel > 0 ? "+" : ""}${plot.currentWaterLevel.toFixed(1)} cm</strong></div>
+          </div>
+
+          ${warningHtml}
+
+          <div style="padding-top:4px;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#787287;border-top:1px solid #F0EEF5;">
+            <span>AWD Drying: ${plot.dryingEpisodeDays} days</span>
+            <span style="color:#0B4D25;font-weight:bold;">Select Plot &rarr;</span>
+          </div>
+        </div>
+      `;
+
+      polygon.bindPopup(popupHtml, { className: "carbontensor-map-popup" });
+      polygon.addTo(layerGroup);
+
+      // Centroid Marker
+      const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
+      const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
+
+      const marker = L.circleMarker([centerLat, centerLng], {
+        radius: 4,
+        color: style.pathOptions.color,
+        fillColor: "#FFFFFF",
+        fillOpacity: 1,
+        weight: 2,
+      });
+      marker.addTo(layerGroup);
+    });
+
+    mapInstanceRef.current = map;
+
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+      if ((container as unknown as { _leaflet_id?: number })._leaflet_id) {
+        delete (container as unknown as { _leaflet_id?: number })._leaflet_id;
+      }
+    };
+  }, [filteredPlots, selectedPlotId, onSelectPlot]);
 
   return (
     <div className="relative w-full h-[520px] rounded-xl overflow-hidden border border-neutral-purple-200 shadow-xs bg-neutral-purple-50 flex flex-col">
@@ -170,125 +287,12 @@ export function PlotMap({
         </div>
       </div>
 
-      {/* Leaflet Map Canvas */}
+      {/* Leaflet Map Canvas Div with Ref */}
       <div className="relative flex-1 w-full min-h-0">
-        <MapContainer
-          key={containerKey}
-          center={mapCenter}
-          zoom={14}
-          scrollWheelZoom={false}
-          className="w-full h-full z-0"
-        >
-          {/* CartoDB Voyager Tile Layer */}
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          />
-
-          {filteredPlots.map((plot) => {
-            const coords = plot.boundary.coordinates[0].map(
-              ([lng, lat]) => [lat, lng] as [number, number]
-            );
-            const style = STATUS_STYLES[plot.complianceStatus];
-            const isSelected = selectedPlotId === plot.id;
-
-            // Centroid approx for marker
-            const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
-            const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
-
-            return (
-              <Fragment key={plot.id}>
-                <Polygon
-                  positions={coords}
-                  pathOptions={{
-                    ...style.pathOptions,
-                    weight: isSelected ? 4 : style.pathOptions.weight,
-                    color: isSelected ? "#F15A24" : style.pathOptions.color,
-                  }}
-                  eventHandlers={{
-                    click: () => onSelectPlot?.(plot.id),
-                  }}
-                >
-                  <Popup className="carbontensor-map-popup">
-                    <div className="p-1 space-y-2 max-w-xs text-neutral-purple-900">
-                      <div className="flex items-center justify-between gap-2 border-b border-neutral-purple-200 pb-1.5">
-                        <span className="font-mono font-bold text-xs text-primary-green-900">
-                          {plot.id.toUpperCase()}
-                        </span>
-                        <span
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${style.badgeClass}`}
-                        >
-                          {plot.statusLabel}
-                        </span>
-                      </div>
-
-                      <div className="text-xs space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Farmer:</span>
-                          <span className="font-semibold">{plot.farmerName}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Rice Variety:</span>
-                          <span className="font-medium">{plot.rice_variety}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Area:</span>
-                          <span className="font-bold tabular-nums">
-                            {plot.calculated_area.toFixed(2)} ha
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Live Water:</span>
-                          <span className="font-mono font-bold tabular-nums">
-                            {plot.currentWaterLevel > 0 ? "+" : ""}
-                            {plot.currentWaterLevel.toFixed(1)} cm
-                          </span>
-                        </div>
-                      </div>
-
-                      {plot.complianceStatus === "NON_COMPLIANT" && (
-                        <div className="p-1.5 bg-status-error-bg rounded text-[11px] text-status-error-text leading-tight">
-                          Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.
-                        </div>
-                      )}
-
-                      {plot.complianceStatus === "RADAR_DISCREPANCY" && (
-                        <div className="p-1.5 bg-accent-orange-50 rounded text-[11px] text-accent-orange-700 leading-tight">
-                          Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.
-                        </div>
-                      )}
-
-                      <div className="pt-1 flex items-center justify-between text-[10px] text-neutral-purple-500">
-                        <span>AWD Drying: {plot.dryingEpisodeDays} days</span>
-                        <button
-                          onClick={() => onSelectPlot?.(plot.id)}
-                          className="text-primary-green-700 font-bold hover:underline"
-                        >
-                          View Telemetry &rarr;
-                        </button>
-                      </div>
-                    </div>
-                  </Popup>
-                </Polygon>
-
-                {/* Plot Centroid Sensor Marker */}
-                <CircleMarker
-                  center={[centerLat, centerLng]}
-                  radius={4}
-                  pathOptions={{
-                    color: style.pathOptions.color,
-                    fillColor: "#FFFFFF",
-                    fillOpacity: 1,
-                    weight: 2,
-                  }}
-                />
-              </Fragment>
-            );
-          })}
-        </MapContainer>
+        <div ref={mapContainerRef} className="w-full h-full z-0" />
 
         {/* Satellite Honesty Badge Overlay */}
-        <div className="absolute bottom-3 left-3 z-1000 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-neutral-purple-200/90 shadow-xs flex items-center gap-1.5 text-[11px] text-neutral-purple-700 max-w-sm">
+        <div className="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-neutral-purple-200/90 shadow-xs flex items-center gap-1.5 text-[11px] text-neutral-purple-700 max-w-sm">
           <Satellite className="w-3.5 h-3.5 text-primary-green-600 shrink-0" />
           <span>
             Sentinel-1 Radar Cross-Check (Sample) • European Space Agency Copernicus
@@ -296,7 +300,7 @@ export function PlotMap({
         </div>
 
         {/* Legend Overlay */}
-        <div className="absolute top-3 right-3 z-1000 bg-white/95 backdrop-blur-xs p-2.5 rounded-lg border border-neutral-purple-200/90 shadow-xs space-y-1 text-[11px]">
+        <div className="absolute top-3 right-3 z-[400] bg-white/95 backdrop-blur-xs p-2.5 rounded-lg border border-neutral-purple-200/90 shadow-xs space-y-1 text-[11px]">
           <div className="font-bold text-neutral-purple-900 flex items-center gap-1 pb-1 border-b border-neutral-purple-100">
             <Info className="w-3 h-3 text-neutral-purple-500" />
             <span>Map Legend</span>

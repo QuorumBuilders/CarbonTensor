@@ -198,3 +198,4 @@ export function PlotSpotlightCard({ plot }: PlotSpotlightCardProps) {
     </div>
   );
 }
+

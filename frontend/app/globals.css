@@ -129,6 +129,20 @@ body {
   animation: awdOscillation 10s ease-in-out infinite;
 }
 
+/* Telemetry Flash Ingestion Highlight */
+@keyframes telemetryFlash {
+  0% {
+    background-color: #C9E2D2;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.animate-telemetry-flash {
+  animation: telemetryFlash 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Infinite Marquee Motion */
 @keyframes marqueeScroll {
   0% {

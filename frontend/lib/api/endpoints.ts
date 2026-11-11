@@ -24,6 +24,46 @@ import type {
   Farmer,
 } from "@/types";
 
+export interface SensorObservationPayload {
+  sensor_serial_number: string;
+  plot_id: string;
+  cultivation_cycle_id: string;
+  observed_at: string;
+  water_level: number;
+  raw_payload?: {
+    battery_v?: number;
+    rssi?: number;
+    [key: string]: unknown;
+  };
+}
+
+export type ObservationListener = (obs: Observation) => void;
+const observationListeners = new Set<ObservationListener>();
+
+export function subscribeToObservations(listener: ObservationListener): () => void {
+  observationListeners.add(listener);
+  return () => {
+    observationListeners.delete(listener);
+  };
+}
+
+export function notifyObservationCreated(obs: Observation): void {
+  observationListeners.forEach((listener) => {
+    try {
+      listener(obs);
+    } catch {
+      // Listener error handled
+    }
+  });
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("carbontensor:observation-created", {
+        detail: obs,
+      })
+    );
+  }
+}
+
 export const api = {
   auth: {
     login: async (credentials: LoginPayload): Promise<ApiResponse<AuthSession>> => {
@@ -218,6 +258,37 @@ export const api = {
             return MOCK_OBSERVATIONS.filter((o) => o.plot === plotId);
           }
           return MOCK_OBSERVATIONS;
+        },
+      });
+    },
+
+    createSensorObservation: async (
+      payload: SensorObservationPayload
+    ): Promise<ApiResponse<Observation>> => {
+      return ApiClient.post<Observation>("/observations/sensor-ingest/", payload, {
+        mockFallback: () => {
+          const isAnomaly = payload.water_level < -40 || payload.water_level > 25;
+          const newObs: Observation = {
+            id: `obs-sim-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            source_type: "IOT_PIEZOMETER",
+            sensor: payload.sensor_serial_number,
+            plot: payload.plot_id,
+            cultivation_cycle: payload.cultivation_cycle_id,
+            observed_at: payload.observed_at,
+            water_level: Number(payload.water_level.toFixed(1)),
+            validation_status: isAnomaly ? "REJECTED" : "VALID",
+            rejection_reason: isAnomaly
+              ? `Physical anomaly detected: water reading (${payload.water_level.toFixed(1)} cm) exceeds maximum piezometer tube depth (-40 cm).`
+              : undefined,
+          };
+
+          // In-memory append so new readings instantly update active plot's series
+          MOCK_OBSERVATIONS.push(newObs);
+
+          // Broadcast to any active subscribers
+          notifyObservationCreated(newObs);
+
+          return newObs;
         },
       });
     },

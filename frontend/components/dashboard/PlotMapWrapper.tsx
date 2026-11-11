@@ -46,3 +46,4 @@ const DynamicPlotMap = dynamic(
 export function PlotMapWrapper(props: PlotMapProps) {
   return <DynamicPlotMap {...props} />;
 }
+

@@ -289,7 +289,7 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
 
       {/* Slide-over Inspection Modal */}
       {inspectingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
           <div className="bg-white border border-[#E2DFEA] rounded-2xl max-w-lg w-full shadow-2xl p-5 sm:p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[#E2DFEA]">

@@ -87,7 +87,7 @@ export function RegisterPlotModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary-green-950/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-primary-green-950/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
       <div
         className="w-full max-w-xl bg-white rounded-2xl border border-neutral-purple-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150"

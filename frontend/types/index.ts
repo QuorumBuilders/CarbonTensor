@@ -110,36 +110,63 @@ export interface SatelliteObservation {
 }
 
 // ==========================================
-// Financial Entities: Access Bank Sandbox Payouts
+// Financial Entities: Access Bank Sandbox Payouts (Section G DRF Models)
 // ==========================================
 
 export interface FarmerBonus {
   id: string;
-  farmer: string;
+  farmer: string; // UUID of farmer
   farmer_name: string;
-  cooperative: string;
-  cultivation_cycle: string;
-  plot: string;
-  carbon_avoided_tco2e_est: number; // strict tCO2e (est.) per honesty rules
-  gross_amount_ngn: number;
-  farmer_net_ngn: number; // 70% farmer share
-  cooperative_fee_ngn: number; // 15% cooperative share
-  platform_fee_ngn: number; // 15% platform/verifier share
-  calculation_date: string;
+  plot_id: string;
+  amount: number;
+  currency: string; // "USD" & "NGN"
   status: "PENDING" | "APPROVED" | "DISBURSED" | "FAILED";
+  calculation_reference: string;
+  created_at: string;
+  // Backward compatibility fields
+  plot?: string;
+  cooperative?: string;
+  cultivation_cycle?: string;
+  carbon_avoided_tco2e_est?: number; // strict tCO2e (est.) per honesty rules
+  gross_amount_ngn?: number;
+  farmer_net_ngn?: number; // 70% farmer share
+  cooperative_fee_ngn?: number; // 15% cooperative share
+  platform_fee_ngn?: number; // 15% platform/verifier share
+  calculation_date?: string;
+}
+
+export interface CooperativeCommission {
+  id: string;
+  cooperative: string; // UUID of cooperative
+  cooperative_name: string;
+  amount: number;
+  currency: string;
+  status: "PENDING" | "APPROVED" | "DISBURSED";
+  calculation_reference: string;
+  created_at: string;
 }
 
 export interface Payment {
   id: string;
-  bonus: string;
-  recipient_farmer: string;
-  account_number: string;
+  beneficiary_type: "farmer" | "cooperative";
+  beneficiary_id: string;
+  beneficiary_name: string;
   bank_name: string;
-  transaction_reference: string;
-  amount_ngn: number;
-  disbursed_at: string;
-  status: "SIMULATED_SUCCESS" | "PENDING" | "FAILED";
-  simulation_environment: "Access Bank Sandbox (Simulated)";
+  account_number: string;
+  amount: number;
+  currency: string;
+  payment_provider: string; // "Access Bank Sandbox"
+  provider_reference: string;
+  status: "PENDING" | "COMPLETED" | "FAILED" | "SIMULATED_SUCCESS";
+  initiated_at: string;
+  completed_at?: string;
+  // Backward compatibility fields
+  bonus?: string;
+  recipient_farmer?: string;
+  transaction_reference?: string;
+  amount_ngn?: number;
+  disbursed_at?: string;
+  simulation_environment?: "Access Bank Sandbox (Simulated)";
 }
 
 // ==========================================

@@ -13,6 +13,7 @@ import {
   AlertOctagon,
   Satellite,
   FileCheck,
+  Send,
 } from "lucide-react";
 
 export interface DemoStep {
@@ -171,6 +172,21 @@ export function DemoController() {
           new CustomEvent("carbontensor:open-evidence-preview")
         );
       }, 350);
+    } else if (stepIndex === 5) {
+      // Step 6 (Execute Payout): Navigate to /finance, scroll to ledger, and trigger simulated buyer settlement modal
+      if (pathname !== "/finance") {
+        router.push("/finance");
+      }
+
+      setTimeout(() => {
+        const ledgerEl = document.getElementById("payments-ledger-table");
+        if (ledgerEl) {
+          ledgerEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:open-payout-modal")
+        );
+      }, 350);
     }
   }, [pathname, router]);
 
@@ -295,7 +311,7 @@ export function DemoController() {
                 </p>
               </div>
 
-              {/* Step 3 & Step 4 & Step 5 Action Buttons or Prev/Next Navigation */}
+              {/* Step 3, 4, 5, 6 Action Buttons or Prev/Next Navigation */}
               <div className="flex items-center gap-2 shrink-0">
                 {activeStep.id === 3 && (
                   <Link
@@ -354,6 +370,26 @@ export function DemoController() {
                   >
                     <FileCheck className="w-3.5 h-3.5 text-white" />
                     <span>Open Evidence Preview</span>
+                  </button>
+                )}
+
+                {activeStep.id === 6 && (
+                  <button
+                    onClick={() => {
+                      if (pathname !== "/finance") {
+                        router.push("/finance");
+                      }
+                      setTimeout(() => {
+                        window.dispatchEvent(
+                          new CustomEvent("carbontensor:open-payout-modal")
+                        );
+                      }, 150);
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] border border-accent-orange-400 transition-colors shadow-xs"
+                    title="Simulate Buyer Carbon Settlement & Payout"
+                  >
+                    <Send className="w-3.5 h-3.5 text-white" />
+                    <span>Execute Payout</span>
                   </button>
                 )}
 

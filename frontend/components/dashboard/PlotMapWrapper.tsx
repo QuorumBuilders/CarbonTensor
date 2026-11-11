@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import type { Plot } from "@/types";
 import { MapPin, Loader2 } from "lucide-react";
 
@@ -43,6 +44,11 @@ const DynamicPlotMap = dynamic(
   }
 );
 
+let mapWrapperMountCount = 0;
+
 export function PlotMapWrapper(props: PlotMapProps) {
-  return <DynamicPlotMap key="argungu-basin-map-singleton" {...props} />;
+  // Generates a fresh key on every mount so Leaflet attaches to a clean DOM container
+  // across client-side route transitions, preventing container reuse errors.
+  const [mapKey] = useState(() => `argungu-basin-map-v${++mapWrapperMountCount}`);
+  return <DynamicPlotMap key={mapKey} {...props} />;
 }

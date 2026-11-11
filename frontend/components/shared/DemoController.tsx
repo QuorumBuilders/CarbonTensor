@@ -157,14 +157,20 @@ export function DemoController() {
         );
       }, 300);
     } else if (stepIndex === 4) {
-      // Step 5 (Export Evidence): Navigate to /verifier and open Evidence Dossier Modal
+      // Step 5 (Export Evidence): Navigate to /verifier, scroll to #evidence-package-card, and open Evidence Preview Modal
       if (pathname !== "/verifier") {
         router.push("/verifier");
       }
 
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent("carbontensor:open-audit-pack"));
-      }, 300);
+        const evidenceEl = document.getElementById("evidence-package-card");
+        if (evidenceEl) {
+          evidenceEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:open-evidence-preview")
+        );
+      }, 350);
     }
   }, [pathname, router]);
 
@@ -289,12 +295,12 @@ export function DemoController() {
                 </p>
               </div>
 
-              {/* Step 3 & Step 4 Action Buttons or Prev/Next Navigation */}
+              {/* Step 3 & Step 4 & Step 5 Action Buttons or Prev/Next Navigation */}
               <div className="flex items-center gap-2 shrink-0">
                 {activeStep.id === 3 && (
                   <Link
                     href="/verifier"
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-accent-orange-600 hover:bg-accent-orange-700 border border-accent-orange-400 transition-colors shadow-xs animate-pulse"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-accent-orange-600 hover:bg-accent-orange-700 border border-accent-orange-400 transition-colors shadow-xs"
                     title="Audit Detected Sensor Anomaly in Verifier"
                   >
                     <AlertOctagon className="w-3.5 h-3.5 text-white" />
@@ -329,14 +335,25 @@ export function DemoController() {
                         router.push("/verifier");
                       }
                       setTimeout(() => {
-                        window.dispatchEvent(new CustomEvent("carbontensor:open-audit-pack"));
+                        const evidenceEl = document.getElementById(
+                          "evidence-package-card"
+                        );
+                        if (evidenceEl) {
+                          evidenceEl.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center",
+                          });
+                        }
+                        window.dispatchEvent(
+                          new CustomEvent("carbontensor:open-evidence-preview")
+                        );
                       }, 150);
                     }}
                     className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] border border-accent-orange-400 transition-colors shadow-xs"
-                    title="Open Tamper-Evident MRV Audit Pack"
+                    title="Open Tamper-Evident MRV Evidence Package Preview"
                   >
                     <FileCheck className="w-3.5 h-3.5 text-white" />
-                    <span>Open Audit Pack</span>
+                    <span>Open Evidence Preview</span>
                   </button>
                 )}
 

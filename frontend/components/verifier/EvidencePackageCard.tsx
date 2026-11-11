@@ -389,11 +389,7 @@ export function EvidencePackageCard({
             Review Status: {report.review_status.replace(/_/g, " ")}
           </span>
           <span className="text-[11px] text-neutral-purple-400 font-mono tabular-nums">
-            Generated:{" "}
-            {new Date(report.generated_at).toLocaleString("en-GB", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            })}
+            Generated: 11 Nov 2026, 05:00 UTC
           </span>
         </div>
       </div>

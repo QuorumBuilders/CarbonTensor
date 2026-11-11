@@ -12,6 +12,10 @@ import {
   Coins,
   Lock,
 } from "lucide-react";
+import {
+  generateMRVReport,
+  downloadMRVReportJSON,
+} from "@/lib/evidence-generator";
 
 interface ExportEvidenceModalProps {
   isOpen: boolean;
@@ -33,6 +37,9 @@ export function ExportEvidenceModal({ isOpen, onClose }: ExportEvidenceModalProp
   };
 
   const handleDownload = (format: "json" | "pdf") => {
+    if (format === "json") {
+      downloadMRVReportJSON(generateMRVReport());
+    }
     setDownloadSuccess(format.toUpperCase());
     setTimeout(() => setDownloadSuccess(null), 3000);
   };
@@ -221,4 +228,3 @@ export function ExportEvidenceModal({ isOpen, onClose }: ExportEvidenceModalProp
     </div>
   );
 }
-

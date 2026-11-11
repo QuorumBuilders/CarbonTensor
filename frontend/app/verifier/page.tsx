@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PortalShell } from "@/components/shared/PortalShell";
 import { VerifierMetricCards } from "@/components/verifier/VerifierMetricCards";
+import { EvidencePackageCard } from "@/components/verifier/EvidencePackageCard";
+import { EvidencePreviewModal } from "@/components/verifier/EvidencePreviewModal";
 import { AnomalyQueueTable } from "@/components/verifier/AnomalyQueueTable";
 import { SatelliteCrossCheckCard } from "@/components/verifier/SatelliteCrossCheckCard";
 import { ExportEvidenceModal } from "@/components/verifier/ExportEvidenceModal";
@@ -20,16 +22,31 @@ import {
 
 export default function VerifierPortalPage() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOpenAuditPack = () => {
       setIsExportModalOpen(true);
     };
+    const handleOpenEvidencePreview = () => {
+      setIsPreviewModalOpen(true);
+    };
+
     window.addEventListener("carbontensor:open-audit-pack", handleOpenAuditPack);
+    window.addEventListener(
+      "carbontensor:open-evidence-preview",
+      handleOpenEvidencePreview
+    );
+
     return () => {
       window.removeEventListener("carbontensor:open-audit-pack", handleOpenAuditPack);
+      window.removeEventListener(
+        "carbontensor:open-evidence-preview",
+        handleOpenEvidencePreview
+      );
     };
   }, []);
+
   return (
     <PortalShell
       roleBadge="Field Verifier"
@@ -65,7 +82,7 @@ export default function VerifierPortalPage() {
           {/* Quick Header Actions */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <button
-              onClick={() => setIsExportModalOpen(true)}
+              onClick={() => setIsPreviewModalOpen(true)}
               className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] transition-colors shadow-xs"
             >
               <Download className="w-4 h-4 text-white" />
@@ -93,12 +110,19 @@ export default function VerifierPortalPage() {
         {/* Section 1: Executive Anomaly & Audit Metric Cards */}
         <VerifierMetricCards />
 
-        {/* Section 2: MRV Anomaly Flag Queue (DRF Ingestion Rejections) */}
+        {/* Section 2: Registry-Ready MRV Evidence Package */}
+        <section aria-label="Registry-Ready MRV Evidence Package">
+          <EvidencePackageCard
+            onPreviewClick={() => setIsPreviewModalOpen(true)}
+          />
+        </section>
+
+        {/* Section 3: MRV Anomaly Flag Queue (DRF Ingestion Rejections) */}
         <section aria-label="MRV Anomaly Flag Queue">
           <AnomalyQueueTable />
         </section>
 
-        {/* Section 3: Sentinel-1 SAR Radar Cross-Check Dual-Timeline Component */}
+        {/* Section 4: Sentinel-1 SAR Radar Cross-Check Dual-Timeline Component */}
         <section aria-label="Remote Sensing Sentinel-1 Radar Cross-Check">
           <SatelliteCrossCheckCard />
         </section>
@@ -108,7 +132,7 @@ export default function VerifierPortalPage() {
           <div className="flex items-center gap-2">
             <FileCheck className="w-4 h-4 text-primary-green-700 shrink-0" />
             <span>
-              Carbon credit baseline calculated under <strong>UNFCCC AMS-III.H</strong> & <strong>Verra VM0042</strong> methodology guidelines for flooded rice systems.
+              Carbon credit baseline calculated under <strong>UNFCCC AMS-III.H</strong> &amp; <strong>Verra VM0042</strong> methodology guidelines for flooded rice systems.
             </span>
           </div>
 
@@ -119,6 +143,12 @@ export default function VerifierPortalPage() {
         </div>
       </div>
 
+      {/* JSON Evidence Payload Preview Modal */}
+      <EvidencePreviewModal
+        isOpen={isPreviewModalOpen}
+        onClose={() => setIsPreviewModalOpen(false)}
+      />
+
       {/* Tamper-Evident Evidence Package Modal */}
       <ExportEvidenceModal
         isOpen={isExportModalOpen}
@@ -127,4 +157,3 @@ export default function VerifierPortalPage() {
     </PortalShell>
   );
 }
-

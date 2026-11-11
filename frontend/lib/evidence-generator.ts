@@ -123,7 +123,7 @@ export function generateMRVReport(): MRVReport {
     },
     evidence_references: evidenceReferences,
     review_status: "PENDING_VVB_AUDIT",
-    generated_at: new Date().toISOString(),
+    generated_at: "2026-11-11T05:00:00Z",
     verification_hash: DETERMINISTIC_HASH,
   };
 

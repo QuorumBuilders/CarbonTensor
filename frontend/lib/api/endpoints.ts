@@ -175,6 +175,38 @@ export const api = {
         mockFallback: () => MOCK_PLOTS.find((p) => p.id === id),
       });
     },
+    create: async (newPlotData: Partial<Plot>): Promise<ApiResponse<Plot>> => {
+      return ApiClient.post<Plot>("/plots/", newPlotData, {
+        mockFallback: () => {
+          const plotCount = MOCK_PLOTS.length + 1;
+          const newPlot: Plot = {
+            id: newPlotData.id || `plot-${String(plotCount).padStart(3, "0")}`,
+            farm: newPlotData.farm || `Argungu Rice Basin Parcel D${plotCount}`,
+            cooperative: newPlotData.cooperative || "coop-kebbi-01",
+            farmer: newPlotData.farmer || "farmer-001",
+            boundary: newPlotData.boundary || {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [4.546, 12.744],
+                  [4.55, 12.7442],
+                  [4.5498, 12.7405],
+                  [4.5458, 12.7402],
+                  [4.546, 12.744],
+                ],
+              ],
+            },
+            calculated_area: newPlotData.calculated_area || 1.75,
+            rice_variety: newPlotData.rice_variety || "FARO 44 (Sippi)",
+            registration_status: "REGISTERED",
+            activity_status: "ACTIVE",
+            created_at: new Date().toISOString(),
+          };
+          MOCK_PLOTS.push(newPlot);
+          return newPlot;
+        },
+      });
+    },
   },
 
   observations: {

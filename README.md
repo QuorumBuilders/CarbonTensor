@@ -242,3 +242,8 @@ This repository represents the software development foundation for the proposed 
 
 Specific implementation status, supported integrations, carbon methodologies, and deployment instructions should be documented as the respective components are developed and validated.
 
+## Local Docker development
+
+See [docs/docker-development.md](docs/docker-development.md) for the reproducible
+three-service Next.js, Django, and PostgreSQL/PostGIS development environment.
+

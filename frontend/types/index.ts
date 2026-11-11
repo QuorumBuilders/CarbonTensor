@@ -180,6 +180,18 @@ export interface AuthSession {
   farmer?: Farmer;
 }
 
+export type PersonaRole = "cooperative" | "staff" | "farmer";
+
+export interface MockUserSession {
+  role: PersonaRole;
+  name: string;
+  organization: string;
+  token: string;
+  user?: User;
+  cooperative?: Cooperative;
+  farmer?: Farmer;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;

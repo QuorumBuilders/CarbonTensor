@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 import { api } from "@/lib/api/endpoints";
+import { DEMO_PERSONAS, setStoredSession } from "@/lib/mock-data";
+import type { PersonaRole } from "@/types";
 
 export function LoginForm() {
   const router = useRouter();
@@ -14,17 +16,15 @@ export function LoginForm() {
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedPersona, setSelectedPersona] = useState<PersonaRole>("cooperative");
 
   // Quick-fill presets for demo evaluation
-  const handleQuickFill = (type: "admin" | "verifier") => {
+  const handleQuickFill = (role: PersonaRole) => {
     setError(null);
-    if (type === "admin") {
-      setEmail("admin@kebbigreenrice.org");
-      setPassword("demo-password-2026");
-    } else {
-      setEmail("verifier@africarice-audit.org");
-      setPassword("demo-password-2026");
-    }
+    setSelectedPersona(role);
+    const persona = DEMO_PERSONAS[role];
+    setEmail(persona.email);
+    setPassword("demo-password-2026");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,8 +33,38 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      await api.auth.login({ email, password });
-      router.push("/dashboard");
+      // Determine effective persona from email or active selection
+      const emailLower = email.toLowerCase();
+      let effectiveRole: PersonaRole = selectedPersona;
+      if (
+        emailLower.includes("verifier") ||
+        emailLower.includes("audit") ||
+        emailLower.includes("staff")
+      ) {
+        effectiveRole = "staff";
+      } else if (
+        emailLower.includes("usman") ||
+        emailLower.includes("farmer") ||
+        emailLower.includes("argungu")
+      ) {
+        effectiveRole = "farmer";
+      } else if (emailLower.includes("coop") || emailLower.includes("admin")) {
+        effectiveRole = "cooperative";
+      }
+
+      // Store mock user session in localStorage (carbontensor_session) matching PR #9 DRF spec
+      setStoredSession(effectiveRole);
+
+      // Best effort API call (falls back seamlessly to mock)
+      try {
+        await api.auth.login({ email, password });
+      } catch {
+        // Proceed with stored session
+      }
+
+      // Redirect dynamically based on persona destination route
+      const destination = DEMO_PERSONAS[effectiveRole].destination;
+      router.push(destination);
     } catch {
       setError("Invalid credentials. Please verify your email or use a demo quick-fill.");
     } finally {
@@ -56,17 +86,36 @@ export function LoginForm() {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => handleQuickFill("admin")}
-            className="text-xs font-medium py-1 px-3 rounded-md bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
+            onClick={() => handleQuickFill("cooperative")}
+            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+              selectedPersona === "cooperative" && email === DEMO_PERSONAS.cooperative.email
+                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
+                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+            }`}
           >
             [Demo: Cooperative Admin]
           </button>
           <button
             type="button"
-            onClick={() => handleQuickFill("verifier")}
-            className="text-xs font-medium py-1 px-3 rounded-md bg-white text-primary-green-800 border border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500 transition-colors duration-150"
+            onClick={() => handleQuickFill("staff")}
+            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+              selectedPersona === "staff" && email === DEMO_PERSONAS.staff.email
+                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
+                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+            }`}
           >
             [Demo: Field Verifier]
+          </button>
+          <button
+            type="button"
+            onClick={() => handleQuickFill("farmer")}
+            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+              selectedPersona === "farmer" && email === DEMO_PERSONAS.farmer.email
+                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
+                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+            }`}
+          >
+            [Demo: Smallholder Farmer]
           </button>
         </div>
       </div>
@@ -94,7 +143,7 @@ export function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="admin@kebbigreenrice.org"
+            placeholder="coop@carbontensor.org"
             className="w-full h-11 pl-10 pr-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
           />
         </div>

@@ -15,11 +15,14 @@ import {
   Send,
   ArrowRight,
   ExternalLink,
+  Smartphone,
 } from "lucide-react";
+import { UssdMockModal } from "@/components/farmer/UssdMockModal";
 
 export default function FinancePage() {
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
   const [isSettled, setIsSettled] = useState(false);
+  const [isUssdModalOpen, setIsUssdModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOpenPayout = () => {
@@ -28,14 +31,33 @@ export default function FinancePage() {
 
     const handlePayoutDisbursed = () => {
       setIsSettled(true);
+      setTimeout(() => {
+        setIsUssdModalOpen(true);
+      }, 700);
     };
 
     window.addEventListener("carbontensor:open-payout-modal", handleOpenPayout);
     window.addEventListener("carbontensor:payout-disbursed", handlePayoutDisbursed);
+    const handleOpenUssd = () => setIsUssdModalOpen(true);
+    window.addEventListener("carbontensor:open-ussd", handleOpenUssd);
+
+    const checkUssdParam = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("modal") === "ussd" || params.get("view") === "farmer") {
+          setIsUssdModalOpen(true);
+        }
+      }
+    };
+
+    queueMicrotask(checkUssdParam);
+    window.addEventListener("popstate", checkUssdParam);
 
     return () => {
       window.removeEventListener("carbontensor:open-payout-modal", handleOpenPayout);
       window.removeEventListener("carbontensor:payout-disbursed", handlePayoutDisbursed);
+      window.removeEventListener("carbontensor:open-ussd", handleOpenUssd);
+      window.removeEventListener("popstate", checkUssdParam);
     };
   }, []);
 
@@ -79,6 +101,16 @@ export default function FinancePage() {
             >
               <Send className="w-4 h-4 text-white" />
               <span>Simulate Buyer Settlement</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsUssdModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-primary-green-900 bg-primary-green-50 hover:bg-primary-green-100 border border-primary-green-300 transition-colors shadow-2xs"
+              title="Roadmap Feature-Phone SMS Alert (Mock)"
+            >
+              <Smartphone className="w-4 h-4 text-primary-green-700" />
+              <span>View Farmer SMS Alert</span>
             </button>
 
             <Link
@@ -135,6 +167,12 @@ export default function FinancePage() {
         isOpen={isPayoutModalOpen}
         onClose={() => setIsPayoutModalOpen(false)}
         onSettlementComplete={() => setIsSettled(true)}
+      />
+
+      {/* Roadmap Feature-Phone SMS & USSD Alert Modal */}
+      <UssdMockModal
+        isOpen={isUssdModalOpen}
+        onClose={() => setIsUssdModalOpen(false)}
       />
     </PortalShell>
   );

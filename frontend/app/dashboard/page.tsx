@@ -10,7 +10,7 @@ import { PlotSpotlightCard } from "@/components/dashboard/PlotSpotlightCard";
 import { RegisterPlotModal } from "@/components/dashboard/RegisterPlotModal";
 import { WaterLevelChart } from "@/components/dashboard/WaterLevelChart";
 import { SensorSimulatorBar } from "@/components/dashboard/SensorSimulatorBar";
-import { enrichPlots, type PlotEnriched } from "@/components/dashboard/PlotMap";
+import { enrichPlots, type PlotEnriched } from "@/lib/plot-utils";
 import { MOCK_PLOTS, MOCK_OBSERVATIONS } from "@/lib/mock-data";
 import { api, subscribeToObservations } from "@/lib/api/endpoints";
 import type { Plot, Observation } from "@/types";

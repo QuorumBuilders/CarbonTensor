@@ -1,10 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PortalShell } from "@/components/shared/PortalShell";
 import { VerifierMetricCards } from "@/components/verifier/VerifierMetricCards";
 import { AnomalyQueueTable } from "@/components/verifier/AnomalyQueueTable";
 import { SatelliteCrossCheckCard } from "@/components/verifier/SatelliteCrossCheckCard";
+import { ExportEvidenceModal } from "@/components/verifier/ExportEvidenceModal";
 import {
   ShieldCheck,
   Building2,
@@ -13,9 +15,21 @@ import {
   Coins,
   Satellite,
   ArrowRight,
+  Download,
 } from "lucide-react";
 
 export default function VerifierPortalPage() {
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpenAuditPack = () => {
+      setIsExportModalOpen(true);
+    };
+    window.addEventListener("carbontensor:open-audit-pack", handleOpenAuditPack);
+    return () => {
+      window.removeEventListener("carbontensor:open-audit-pack", handleOpenAuditPack);
+    };
+  }, []);
   return (
     <PortalShell
       roleBadge="Field Verifier"
@@ -50,6 +64,14 @@ export default function VerifierPortalPage() {
 
           {/* Quick Header Actions */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              onClick={() => setIsExportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] transition-colors shadow-xs"
+            >
+              <Download className="w-4 h-4 text-white" />
+              <span>Export Audit Pack</span>
+            </button>
+
             <Link
               href="/dashboard"
               className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-neutral-purple-700 bg-[#F8F7FA] hover:bg-neutral-purple-100 border border-[#E2DFEA] transition-colors"
@@ -96,6 +118,12 @@ export default function VerifierPortalPage() {
           </div>
         </div>
       </div>
+
+      {/* Tamper-Evident Evidence Package Modal */}
+      <ExportEvidenceModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+      />
     </PortalShell>
   );
 }

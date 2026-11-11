@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, CircleMarker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  MOCK_PLOTS,
-  MOCK_FARMERS,
-} from "@/lib/mock-data";
+import { MOCK_PLOTS } from "@/lib/mock-data";
 import type { Plot } from "@/types";
+import {
+  enrichPlots,
+  type PlotEnriched,
+  type PlotComplianceStatus,
+} from "@/lib/plot-utils";
 import {
   ShieldCheck,
   AlertTriangle,
@@ -17,76 +19,7 @@ import {
   Info,
 } from "lucide-react";
 
-export type PlotComplianceStatus =
-  | "COMPLIANT"
-  | "NON_COMPLIANT"
-  | "SENSOR_FAULT"
-  | "RADAR_DISCREPANCY";
-
-export interface PlotEnriched extends Plot {
-  farmerName: string;
-  farmerPhone: string;
-  complianceStatus: PlotComplianceStatus;
-  statusLabel: string;
-  currentWaterLevel: number;
-  waterStatusText: string;
-  dryingEpisodeDays: number;
-}
-
-export function enrichPlots(plots: Plot[]): PlotEnriched[] {
-  const farmerMap = new Map(MOCK_FARMERS.map((f) => [f.id, f]));
-
-  return plots.map((p) => {
-    const farmer = p.farmer ? farmerMap.get(p.farmer) : undefined;
-    const farmerName = farmer
-      ? `${farmer.first_name} ${farmer.last_name}`
-      : "Enrolled Farmer";
-    const farmerPhone = farmer?.phone_number || "+234 800 000 0000";
-
-    let complianceStatus: PlotComplianceStatus = "COMPLIANT";
-    let statusLabel = "AWD Compliant";
-    let currentWaterLevel = -12.0;
-    let waterStatusText = "Optimal Aeration (-12.0 cm)";
-    let dryingEpisodeDays = 5;
-
-    if (p.id === "plot-002") {
-      complianceStatus = "COMPLIANT";
-      statusLabel = "AWD Compliant";
-      currentWaterLevel = -10.5;
-      waterStatusText = "Active Drying (-10.5 cm)";
-      dryingEpisodeDays = 4;
-    } else if (p.id === "plot-003") {
-      complianceStatus = "NON_COMPLIANT";
-      statusLabel = "Continuous Flooding Violation";
-      currentWaterLevel = 4.8;
-      waterStatusText = "Submerged > 21 Days (+4.8 cm)";
-      dryingEpisodeDays = 0;
-    } else if (p.id === "plot-004") {
-      complianceStatus = "SENSOR_FAULT";
-      statusLabel = "Sensor Hardware Fault";
-      currentWaterLevel = -82.0;
-      waterStatusText = "Signal Out of Bounds (-82.0 cm)";
-      dryingEpisodeDays = 0;
-    } else if (p.id === "plot-005") {
-      complianceStatus = "RADAR_DISCREPANCY";
-      statusLabel = "Radar Moisture Discrepancy";
-      currentWaterLevel = -11.5;
-      waterStatusText = "Sensor -11.5cm / Sentinel-1 WET";
-      dryingEpisodeDays = 3;
-    }
-
-    return {
-      ...p,
-      farmerName,
-      farmerPhone,
-      complianceStatus,
-      statusLabel,
-      currentWaterLevel,
-      waterStatusText,
-      dryingEpisodeDays,
-    };
-  });
-}
+export { enrichPlots, type PlotEnriched, type PlotComplianceStatus };
 
 const STATUS_STYLES: Record<
   PlotComplianceStatus,
@@ -235,118 +168,119 @@ export function PlotMap({
       {/* Leaflet Map Canvas */}
       <div className="relative flex-1 w-full min-h-0">
         <MapContainer
+          key="carbon-tensor-argungu-map"
           center={mapCenter}
           zoom={14}
           scrollWheelZoom={false}
           className="w-full h-full z-0"
         >
-          {/* CartoDB Voyager Tile Layer */}
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          />
+            {/* CartoDB Voyager Tile Layer */}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            />
 
-          {filteredPlots.map((plot) => {
-            const coords = plot.boundary.coordinates[0].map(
-              ([lng, lat]) => [lat, lng] as [number, number]
-            );
-            const style = STATUS_STYLES[plot.complianceStatus];
-            const isSelected = selectedPlotId === plot.id;
+            {filteredPlots.map((plot) => {
+              const coords = plot.boundary.coordinates[0].map(
+                ([lng, lat]) => [lat, lng] as [number, number]
+              );
+              const style = STATUS_STYLES[plot.complianceStatus];
+              const isSelected = selectedPlotId === plot.id;
 
-            // Centroid approx for marker
-            const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
-            const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
+              // Centroid approx for marker
+              const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
+              const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
 
-            return (
-              <div key={plot.id}>
-                <Polygon
-                  positions={coords}
-                  pathOptions={{
-                    ...style.pathOptions,
-                    weight: isSelected ? 4 : style.pathOptions.weight,
-                    color: isSelected ? "#F15A24" : style.pathOptions.color,
-                  }}
-                  eventHandlers={{
-                    click: () => onSelectPlot?.(plot.id),
-                  }}
-                >
-                  <Popup className="carbontensor-map-popup">
-                    <div className="p-1 space-y-2 max-w-xs text-neutral-purple-900">
-                      <div className="flex items-center justify-between gap-2 border-b border-neutral-purple-200 pb-1.5">
-                        <span className="font-mono font-bold text-xs text-primary-green-900">
-                          {plot.id.toUpperCase()}
-                        </span>
-                        <span
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${style.badgeClass}`}
-                        >
-                          {plot.statusLabel}
-                        </span>
-                      </div>
-
-                      <div className="text-xs space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Farmer:</span>
-                          <span className="font-semibold">{plot.farmerName}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Rice Variety:</span>
-                          <span className="font-medium">{plot.rice_variety}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Area:</span>
-                          <span className="font-bold tabular-nums">
-                            {plot.calculated_area.toFixed(2)} ha
+              return (
+                <Fragment key={plot.id}>
+                  <Polygon
+                    positions={coords}
+                    pathOptions={{
+                      ...style.pathOptions,
+                      weight: isSelected ? 4 : style.pathOptions.weight,
+                      color: isSelected ? "#F15A24" : style.pathOptions.color,
+                    }}
+                    eventHandlers={{
+                      click: () => onSelectPlot?.(plot.id),
+                    }}
+                  >
+                    <Popup className="carbontensor-map-popup">
+                      <div className="p-1 space-y-2 max-w-xs text-neutral-purple-900">
+                        <div className="flex items-center justify-between gap-2 border-b border-neutral-purple-200 pb-1.5">
+                          <span className="font-mono font-bold text-xs text-primary-green-900">
+                            {plot.id.toUpperCase()}
+                          </span>
+                          <span
+                            className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${style.badgeClass}`}
+                          >
+                            {plot.statusLabel}
                           </span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-neutral-purple-500">Live Water:</span>
-                          <span className="font-mono font-bold tabular-nums">
-                            {plot.currentWaterLevel > 0 ? "+" : ""}
-                            {plot.currentWaterLevel.toFixed(1)} cm
-                          </span>
+
+                        <div className="text-xs space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-neutral-purple-500">Farmer:</span>
+                            <span className="font-semibold">{plot.farmerName}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-neutral-purple-500">Rice Variety:</span>
+                            <span className="font-medium">{plot.rice_variety}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-neutral-purple-500">Area:</span>
+                            <span className="font-bold tabular-nums">
+                              {plot.calculated_area.toFixed(2)} ha
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-neutral-purple-500">Live Water:</span>
+                            <span className="font-mono font-bold tabular-nums">
+                              {plot.currentWaterLevel > 0 ? "+" : ""}
+                              {plot.currentWaterLevel.toFixed(1)} cm
+                            </span>
+                          </div>
+                        </div>
+
+                        {plot.complianceStatus === "NON_COMPLIANT" && (
+                          <div className="p-1.5 bg-status-error-bg rounded text-[11px] text-status-error-text leading-tight">
+                            Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.
+                          </div>
+                        )}
+
+                        {plot.complianceStatus === "RADAR_DISCREPANCY" && (
+                          <div className="p-1.5 bg-accent-orange-50 rounded text-[11px] text-accent-orange-700 leading-tight">
+                            Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.
+                          </div>
+                        )}
+
+                        <div className="pt-1 flex items-center justify-between text-[10px] text-neutral-purple-500">
+                          <span>AWD Drying: {plot.dryingEpisodeDays} days</span>
+                          <button
+                            onClick={() => onSelectPlot?.(plot.id)}
+                            className="text-primary-green-700 font-bold hover:underline"
+                          >
+                            View Telemetry &rarr;
+                          </button>
                         </div>
                       </div>
+                    </Popup>
+                  </Polygon>
 
-                      {plot.complianceStatus === "NON_COMPLIANT" && (
-                        <div className="p-1.5 bg-status-error-bg rounded text-[11px] text-status-error-text leading-tight">
-                          Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.
-                        </div>
-                      )}
-
-                      {plot.complianceStatus === "RADAR_DISCREPANCY" && (
-                        <div className="p-1.5 bg-accent-orange-50 rounded text-[11px] text-accent-orange-700 leading-tight">
-                          Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.
-                        </div>
-                      )}
-
-                      <div className="pt-1 flex items-center justify-between text-[10px] text-neutral-purple-500">
-                        <span>AWD Drying: {plot.dryingEpisodeDays} days</span>
-                        <button
-                          onClick={() => onSelectPlot?.(plot.id)}
-                          className="text-primary-green-700 font-bold hover:underline"
-                        >
-                          View Telemetry &rarr;
-                        </button>
-                      </div>
-                    </div>
-                  </Popup>
-                </Polygon>
-
-                {/* Plot Centroid Sensor Marker */}
-                <CircleMarker
-                  center={[centerLat, centerLng]}
-                  radius={4}
-                  pathOptions={{
-                    color: style.pathOptions.color,
-                    fillColor: "#FFFFFF",
-                    fillOpacity: 1,
-                    weight: 2,
-                  }}
-                />
-              </div>
-            );
-          })}
-        </MapContainer>
+                  {/* Plot Centroid Sensor Marker */}
+                  <CircleMarker
+                    center={[centerLat, centerLng]}
+                    radius={4}
+                    pathOptions={{
+                      color: style.pathOptions.color,
+                      fillColor: "#FFFFFF",
+                      fillOpacity: 1,
+                      weight: 2,
+                    }}
+                  />
+                </Fragment>
+              );
+            })}
+          </MapContainer>
 
         {/* Satellite Honesty Badge Overlay */}
         <div className="absolute bottom-3 left-3 z-1000 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-neutral-purple-200/90 shadow-xs flex items-center gap-1.5 text-[11px] text-neutral-purple-700 max-w-sm">

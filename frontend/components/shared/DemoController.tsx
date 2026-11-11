@@ -12,6 +12,7 @@ import {
   ExternalLink,
   AlertOctagon,
   Satellite,
+  FileCheck,
 } from "lucide-react";
 
 export interface DemoStep {
@@ -154,6 +155,15 @@ export function DemoController() {
             detail: { plotId: "plot-005" },
           })
         );
+      }, 300);
+    } else if (stepIndex === 4) {
+      // Step 5 (Export Evidence): Navigate to /verifier and open Evidence Dossier Modal
+      if (pathname !== "/verifier") {
+        router.push("/verifier");
+      }
+
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("carbontensor:open-audit-pack"));
       }, 300);
     }
   }, [pathname, router]);
@@ -309,6 +319,24 @@ export function DemoController() {
                   >
                     <Satellite className="w-3.5 h-3.5 text-accent-orange-400" />
                     <span>Focus Radar Track</span>
+                  </button>
+                )}
+
+                {activeStep.id === 5 && (
+                  <button
+                    onClick={() => {
+                      if (pathname !== "/verifier") {
+                        router.push("/verifier");
+                      }
+                      setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent("carbontensor:open-audit-pack"));
+                      }, 150);
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] border border-accent-orange-400 transition-colors shadow-xs"
+                    title="Open Tamper-Evident MRV Audit Pack"
+                  >
+                    <FileCheck className="w-3.5 h-3.5 text-white" />
+                    <span>Open Audit Pack</span>
                   </button>
                 )}
 

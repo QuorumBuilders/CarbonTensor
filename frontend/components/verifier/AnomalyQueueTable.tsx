@@ -413,3 +413,4 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
     </div>
   );
 }
+

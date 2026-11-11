@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Satellite,
   Radio,
@@ -65,7 +65,20 @@ const COMPARISON_PLOTS: ComparisonPlotData[] = [
 
 export function SatelliteCrossCheckCard() {
   const [activePlotIndex, setActivePlotIndex] = useState<number>(0);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
   const activePlot = COMPARISON_PLOTS[activePlotIndex];
+
+  // Listen for presentation demo focus events
+  useEffect(() => {
+    const handleHighlight = () => {
+      setIsHighlighted(true);
+      setTimeout(() => setIsHighlighted(false), 3000);
+    };
+    window.addEventListener("carbontensor:highlight-radar", handleHighlight);
+    return () => {
+      window.removeEventListener("carbontensor:highlight-radar", handleHighlight);
+    };
+  }, []);
 
   return (
     <div
@@ -271,7 +284,9 @@ export function SatelliteCrossCheckCard() {
                   Cross-Check Result:
                 </span>
                 <span
-                  className={`px-2 py-0.5 rounded-full text-xs font-mono font-bold border ${
+                  className={`px-2 py-0.5 rounded-full text-xs font-mono font-bold border transition-all ${
+                    isHighlighted ? "ring-2 ring-accent-orange-500 shadow-sm " : ""
+                  }${
                     activePlot.status === "AGREE"
                       ? "bg-[#EAF3ED] text-[#0B4D25] border-primary-green-300"
                       : "bg-accent-orange-50 text-accent-orange-700 border-accent-orange-300"

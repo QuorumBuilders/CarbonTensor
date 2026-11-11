@@ -11,6 +11,7 @@ import {
   Sparkles,
   ExternalLink,
   AlertOctagon,
+  Satellite,
 } from "lucide-react";
 
 export interface DemoStep {
@@ -137,8 +138,25 @@ export function DemoController() {
           })
         );
       }, 350);
+    } else if (stepIndex === 3) {
+      // Step 4 (Satellite Radar): Navigate to /verifier and smoothly scroll to SatelliteCrossCheckCard
+      if (pathname !== "/verifier") {
+        router.push("/verifier");
+      }
+
+      setTimeout(() => {
+        const radarEl = document.getElementById("satellite-crosscheck");
+        if (radarEl) {
+          radarEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:highlight-radar", {
+            detail: { plotId: "plot-005" },
+          })
+        );
+      }, 300);
     }
-  }, []);
+  }, [pathname, router]);
 
   const handleNext = () => {
     if (currentStepIndex < DEMO_STEPS.length - 1) {
@@ -261,7 +279,7 @@ export function DemoController() {
                 </p>
               </div>
 
-              {/* Step 3 Special Anomaly Trigger Pill or Prev/Next Navigation */}
+              {/* Step 3 & Step 4 Action Buttons or Prev/Next Navigation */}
               <div className="flex items-center gap-2 shrink-0">
                 {activeStep.id === 3 && (
                   <Link
@@ -273,6 +291,25 @@ export function DemoController() {
                     <span>Audit Anomaly in Verifier</span>
                     <ExternalLink className="w-3 h-3" />
                   </Link>
+                )}
+
+                {activeStep.id === 4 && (
+                  <button
+                    onClick={() => {
+                      const radarEl = document.getElementById("satellite-crosscheck");
+                      if (radarEl) radarEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                      window.dispatchEvent(
+                        new CustomEvent("carbontensor:highlight-radar", {
+                          detail: { plotId: "plot-005" },
+                        })
+                      );
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#0B4D25] hover:bg-primary-green-800 border border-primary-green-500 transition-colors shadow-xs"
+                    title="Focus Satellite Radar Comparison"
+                  >
+                    <Satellite className="w-3.5 h-3.5 text-accent-orange-400" />
+                    <span>Focus Radar Track</span>
+                  </button>
                 )}
 
                 <div className="flex items-center gap-1.5">

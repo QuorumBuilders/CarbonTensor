@@ -44,6 +44,5 @@ const DynamicPlotMap = dynamic(
 );
 
 export function PlotMapWrapper(props: PlotMapProps) {
-  return <DynamicPlotMap {...props} />;
+  return <DynamicPlotMap key="argungu-basin-map-singleton" {...props} />;
 }
-

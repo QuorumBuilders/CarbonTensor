@@ -181,3 +181,45 @@ export interface CooperativeRegisterPayload {
   password: string;
 }
 
+// ==========================================
+// MRV Evidence Package — Section E (DRF Schema)
+// ==========================================
+
+export interface EvidenceReference {
+  plot_id: string;
+  sensor_serial: string;
+  observation_count: number;
+  geojson_boundary: object;
+  anomaly_flags: string[];
+  satellite_cross_check?: {
+    status: string;
+    confidence: number;
+    pass_date: string;
+  };
+}
+
+export interface MRVReport {
+  id: string;
+  monitoring_period: {
+    start_date: string;
+    end_date: string;
+    status: string;
+  };
+  version: string;
+  report_data: {
+    cooperative_id: string;
+    cooperative_name: string;
+    total_hectares: number;
+    enrolled_plots_count: number;
+    verified_plots_count: number;
+    gross_avoided_tco2e_est: number;
+    net_avoided_tco2e_est: number;
+    baseline_daily_emission_factor: number;
+    gwp_methane: number;
+    aeration_days_achieved: number;
+  };
+  evidence_references: EvidenceReference[];
+  review_status: "PENDING_VVB_AUDIT" | "FINALIZED" | "SUBMITTED_TO_REGISTRY";
+  generated_at: string;
+  verification_hash: string;
+}

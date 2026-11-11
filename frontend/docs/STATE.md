@@ -1,8 +1,8 @@
 # CarbonTensor Frontend State Ledger
-- Current Phase: PR #4 (`feat/coop-dashboard-and-map`)
-- Active Branch: `feat/coop-dashboard-and-map`
+- Current Phase: PR #5 (`feat/awd-water-chart-simulator`)
+- Active Branch: `feat/awd-water-chart-simulator`
 - Status: Complete
 - Active Working Directory: frontend/
 - Package Manager: pnpm
-- Immediate Next Step: PR #5 (`feat/water-level-chart-and-simulator`)
+- Immediate Next Step: PR #6 (`feat/verifier-mrv-audit`)
 - Blockers: None

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Sparkles,
   ExternalLink,
+  AlertOctagon,
 } from "lucide-react";
 
 export interface DemoStep {
@@ -77,6 +78,68 @@ export function DemoController() {
 
   const activeStep = DEMO_STEPS[currentStepIndex];
 
+  // Automated step simulation and scene choreography
+  const triggerStepActions = useCallback((stepIndex: number) => {
+    if (typeof window === "undefined") return;
+
+    if (stepIndex === 1) {
+      // Step 2 (Sensor Stream): Focus water chart, select plot-001, run 2 simulated telemetry ticks
+      window.dispatchEvent(
+        new CustomEvent("carbontensor:select-plot", {
+          detail: { plotId: "plot-001" },
+        })
+      );
+
+      setTimeout(() => {
+        const chartEl = document.getElementById("water-chart");
+        if (chartEl) {
+          chartEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 150);
+
+      // Telemetry Tick 1: drops into aerobic drying zone
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:simulator-tick", {
+            detail: { plotId: "plot-001", scenario: "dry_down" },
+          })
+        );
+      }, 400);
+
+      // Telemetry Tick 2: further drops water level
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:simulator-tick", {
+            detail: { plotId: "plot-001", scenario: "dry_down" },
+          })
+        );
+      }, 1100);
+    } else if (stepIndex === 2) {
+      // Step 3 (Catch Anomaly): Switch to plot-004 (sensor fault) and highlight out-of-range alert
+      window.dispatchEvent(
+        new CustomEvent("carbontensor:select-plot", {
+          detail: { plotId: "plot-004" },
+        })
+      );
+
+      setTimeout(() => {
+        const chartEl = document.getElementById("water-chart");
+        if (chartEl) {
+          chartEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 150);
+
+      // Trigger physical sensor fault telemetry injection (-82.0cm)
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("carbontensor:simulator-tick", {
+            detail: { plotId: "plot-004", scenario: "sensor_fault" },
+          })
+        );
+      }, 350);
+    }
+  }, []);
+
   const handleNext = () => {
     if (currentStepIndex < DEMO_STEPS.length - 1) {
       const nextIndex = currentStepIndex + 1;
@@ -85,6 +148,7 @@ export function DemoController() {
       if (nextStep.href !== pathname) {
         router.push(nextStep.href);
       }
+      triggerStepActions(nextIndex);
     }
   };
 
@@ -96,6 +160,7 @@ export function DemoController() {
       if (prevStep.href !== pathname) {
         router.push(prevStep.href);
       }
+      triggerStepActions(prevIndex);
     }
   };
 
@@ -105,6 +170,7 @@ export function DemoController() {
     if (step.href !== pathname) {
       router.push(step.href);
     }
+    triggerStepActions(index);
   };
 
   return (
@@ -116,7 +182,7 @@ export function DemoController() {
         {/* Header Bar */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-accent-orange-500 animate-pulse" />
+            <span className="flex h-2 w-2 rounded-full bg-accent-orange-500" />
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-accent-orange-400" />
               <span className="text-xs font-bold tracking-wide uppercase text-primary-green-200">
@@ -176,9 +242,9 @@ export function DemoController() {
             </div>
 
             {/* Current Step Description & Actions */}
-            <div className="flex items-center justify-between gap-3 bg-primary-green-950/60 rounded-xl p-2.5 border border-primary-green-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-primary-green-950/60 rounded-xl p-2.5 border border-primary-green-800">
               <div className="flex-1 min-w-0 pr-2">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-bold text-accent-orange-400">
                     {activeStep.label}
                   </span>
@@ -195,27 +261,41 @@ export function DemoController() {
                 </p>
               </div>
 
-              {/* Prev / Next Buttons */}
-              <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  onClick={handlePrev}
-                  disabled={currentStepIndex === 0}
-                  className="p-1.5 rounded-lg bg-primary-green-800 hover:bg-primary-green-700 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-colors"
-                  title="Previous Step"
-                  aria-label="Previous Step"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={handleNext}
-                  disabled={currentStepIndex === DEMO_STEPS.length - 1}
-                  className="px-3 py-1.5 rounded-lg bg-accent-orange-500 hover:bg-accent-orange-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-xs inline-flex items-center gap-1 transition-colors shadow-xs"
-                  title="Next Step"
-                  aria-label="Next Step"
-                >
-                  <span>Next</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
+              {/* Step 3 Special Anomaly Trigger Pill or Prev/Next Navigation */}
+              <div className="flex items-center gap-2 shrink-0">
+                {activeStep.id === 3 && (
+                  <Link
+                    href="/verifier"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-accent-orange-600 hover:bg-accent-orange-700 border border-accent-orange-400 transition-colors shadow-xs animate-pulse"
+                    title="Audit Detected Sensor Anomaly in Verifier"
+                  >
+                    <AlertOctagon className="w-3.5 h-3.5 text-white" />
+                    <span>Audit Anomaly in Verifier</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </Link>
+                )}
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={handlePrev}
+                    disabled={currentStepIndex === 0}
+                    className="p-1.5 rounded-lg bg-primary-green-800 hover:bg-primary-green-700 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-colors"
+                    title="Previous Step"
+                    aria-label="Previous Step"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentStepIndex === DEMO_STEPS.length - 1}
+                    className="px-3 py-1.5 rounded-lg bg-accent-orange-500 hover:bg-accent-orange-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-xs inline-flex items-center gap-1 transition-colors shadow-xs"
+                    title="Next Step"
+                    aria-label="Next Step"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -224,4 +304,3 @@ export function DemoController() {
     </aside>
   );
 }
-

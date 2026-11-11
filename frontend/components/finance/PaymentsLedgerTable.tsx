@@ -25,6 +25,9 @@ export function PaymentsLedgerTable({
   initialPayments = MOCK_PAYMENTS,
 }: PaymentsLedgerTableProps) {
   const [payments, setPayments] = useState<Payment[]>(initialPayments);
+  const [filter, setFilter] = useState<"ALL" | "farmer" | "cooperative">("ALL");
+  const [search, setSearch] = useState("");
+  const [isRefetching, setIsRefetching] = useState(false);
   const [recentlyUpdatedIds, setRecentlyUpdatedIds] = useState<Set<string>>(
     new Set()
   );

@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { AppHeader } from "@/components/shared/AppHeader";
-import { DemoController } from "@/components/shared/DemoController";
+import { PortalShell } from "@/components/shared/PortalShell";
 import { MetricCards } from "@/components/dashboard/MetricCards";
 import { PlotMapWrapper } from "@/components/dashboard/PlotMapWrapper";
 import { PlotsTable } from "@/components/dashboard/PlotsTable";
@@ -11,7 +10,7 @@ import { PlotSpotlightCard } from "@/components/dashboard/PlotSpotlightCard";
 import { RegisterPlotModal } from "@/components/dashboard/RegisterPlotModal";
 import { WaterLevelChart } from "@/components/dashboard/WaterLevelChart";
 import { SensorSimulatorBar } from "@/components/dashboard/SensorSimulatorBar";
-import { enrichPlots, type PlotEnriched } from "@/components/dashboard/PlotMap";
+import { enrichPlots, type PlotEnriched } from "@/lib/plot-utils";
 import { MOCK_PLOTS, MOCK_OBSERVATIONS } from "@/lib/mock-data";
 import { api, subscribeToObservations } from "@/lib/api/endpoints";
 import type { Plot, Observation } from "@/types";
@@ -109,14 +108,11 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-purple-50/50 flex flex-col font-sans pb-28">
-      {/* Universal Portal Top Navigation */}
-      <AppHeader
-        cooperativeName="Kebbi Green Rice Growers Union"
-        roleBadge="Cooperative Admin"
-      />
-
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <PortalShell
+      cooperativeName="Kebbi Green Rice Growers Union"
+      roleBadge="Cooperative Admin"
+    >
+      <div className="space-y-6">
         {/* Union Overview Banner */}
         <div className="bg-white border border-neutral-purple-200 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -214,7 +210,7 @@ export default function DashboardPage() {
             waterLevelOverrides={waterLevelOverrides}
           />
         </section>
-      </main>
+      </div>
 
       {/* Modal Dialog: Enroll Plot */}
       <RegisterPlotModal
@@ -222,9 +218,6 @@ export default function DashboardPage() {
         onClose={() => setIsRegisterModalOpen(false)}
         onPlotRegistered={handlePlotRegistered}
       />
-
-      {/* Sticky Presentation Controller */}
-      <DemoController />
-    </div>
+    </PortalShell>
   );
 }

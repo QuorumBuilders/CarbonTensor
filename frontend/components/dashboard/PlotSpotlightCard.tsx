@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { PlotEnriched } from "./PlotMap";
+import type { PlotEnriched } from "@/lib/plot-utils";
 import {
   Radio,
   Satellite,

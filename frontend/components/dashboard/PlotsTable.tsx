@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Plot } from "@/types";
-import { enrichPlots, type PlotEnriched, type PlotComplianceStatus } from "./PlotMap";
+import { enrichPlots, type PlotEnriched, type PlotComplianceStatus } from "@/lib/plot-utils";
 import {
   Search,
   Filter,

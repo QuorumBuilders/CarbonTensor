@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef } from "react";
 import type { Plot } from "@/types";
 import { MapPin, Loader2 } from "lucide-react";
 
@@ -45,12 +44,5 @@ const DynamicPlotMap = dynamic(
 );
 
 export function PlotMapWrapper(props: PlotMapProps) {
-  // Stable instance key: generated once on first render, never changes.
-  // This prevents React from remounting the Leaflet container on SPA navigation
-  // while still giving Leaflet a stable DOM node to attach to.
-  const instanceKeyRef = useRef<string | null>(null);
-  if (instanceKeyRef.current === null) {
-    instanceKeyRef.current = "argungu-basin-map-singleton";
-  }
-  return <DynamicPlotMap key={instanceKeyRef.current} {...props} />;
+  return <DynamicPlotMap key="argungu-basin-map-singleton" {...props} />;
 }

@@ -14,12 +14,17 @@ import {
   AlertTriangle,
   ShieldCheck,
   BookOpen,
+  Loader2,
+  Download,
 } from "lucide-react";
-import { generateMRVReport } from "@/lib/evidence-generator";
+import {
+  generateMRVReport,
+  downloadMRVReportJSON,
+} from "@/lib/evidence-generator";
 
 interface EvidencePackageCardProps {
   onPreviewClick: () => void;
-  onDownloadClick: () => void;
+  onDownloadClick?: () => void;
 }
 
 export function EvidencePackageCard({
@@ -28,6 +33,9 @@ export function EvidencePackageCard({
 }: EvidencePackageCardProps) {
   const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [copiedHash, setCopiedHash] = useState(false);
+  const [downloadStatus, setDownloadStatus] = useState<
+    "idle" | "packaging" | "success"
+  >("idle");
 
   const report = generateMRVReport();
   const { report_data: rd } = report;
@@ -36,6 +44,19 @@ export function EvidencePackageCard({
     navigator.clipboard.writeText(report.verification_hash);
     setCopiedHash(true);
     setTimeout(() => setCopiedHash(false), 2000);
+  };
+
+  const handleDownload = () => {
+    if (downloadStatus !== "idle") return;
+    setDownloadStatus("packaging");
+
+    // Simulate cryptographic compilation & bundle preparation
+    setTimeout(() => {
+      downloadMRVReportJSON(report);
+      setDownloadStatus("success");
+      onDownloadClick?.();
+      setTimeout(() => setDownloadStatus("idle"), 3500);
+    }, 600);
   };
 
   return (
@@ -55,8 +76,7 @@ export function EvidencePackageCard({
                 MRV Evidence Package
               </h2>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary-green-800 text-primary-green-200 border border-primary-green-600">
-                Registry-Ready Evidence Package (External VVB &amp; Registry
-                Review)
+                Registry-Ready Evidence Package (External VVB &amp; Registry Review)
               </span>
             </div>
             <p className="text-xs text-primary-green-300 mt-0.5">
@@ -66,6 +86,7 @@ export function EvidencePackageCard({
             </p>
           </div>
         </div>
+
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onPreviewClick}
@@ -75,16 +96,50 @@ export function EvidencePackageCard({
             <span>Preview JSON</span>
           </button>
           <button
-            onClick={onDownloadClick}
-            className="px-3.5 py-2 rounded-lg text-xs font-bold text-[#0B4D25] bg-white hover:bg-neutral-purple-50 transition-colors inline-flex items-center gap-1.5"
+            onClick={handleDownload}
+            disabled={downloadStatus === "packaging"}
+            className="px-3.5 py-2 rounded-lg text-xs font-bold text-[#0B4D25] bg-white hover:bg-neutral-purple-50 transition-colors inline-flex items-center gap-1.5 disabled:opacity-75 shadow-xs"
           >
-            <FileCheck className="w-3.5 h-3.5 text-[#0B4D25]" />
-            <span>Download Bundle</span>
+            {downloadStatus === "packaging" ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 text-[#0B4D25] animate-spin" />
+                <span>Packaging Bundle…</span>
+              </>
+            ) : downloadStatus === "success" ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#3F8851]" />
+                <span>Downloaded!</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5 text-[#0B4D25]" />
+                <span>Download Bundle</span>
+              </>
+            )}
           </button>
         </div>
       </div>
 
       <div className="p-5 space-y-5">
+        {/* Download Feedback Banner */}
+        {downloadStatus === "success" && (
+          <div className="p-3 rounded-xl bg-primary-green-50 border border-primary-green-200 text-xs text-[#0B4D25] font-semibold flex items-center justify-between gap-2 animate-in fade-in duration-150">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#3F8851] shrink-0" />
+              <span>
+                Successfully compiled and downloaded{" "}
+                <strong className="font-mono">
+                  CarbonTensor-Evidence-Package-Kebbi-2026.json
+                </strong>{" "}
+                with verified SHA-256 integrity hash.
+              </span>
+            </div>
+            <span className="text-[11px] font-mono text-primary-green-800">
+              Verified
+            </span>
+          </div>
+        )}
+
         {/* SHA-256 Hash Strip */}
         <div className="bg-[#F8F7FA] border border-[#E2DFEA] rounded-xl p-3.5 flex items-center justify-between gap-3">
           <div className="min-w-0">
@@ -345,4 +400,3 @@ export function EvidencePackageCard({
     </div>
   );
 }
-

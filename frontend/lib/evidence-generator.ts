@@ -130,3 +130,22 @@ export function generateMRVReport(): MRVReport {
   return report;
 }
 
+/**
+ * Triggers a browser download of the MRV report as a formatted JSON bundle.
+ */
+export function downloadMRVReportJSON(
+  report: MRVReport,
+  filename = "CarbonTensor-Evidence-Package-Kebbi-2026.json"
+): void {
+  if (typeof window === "undefined") return;
+  const jsonPayload = JSON.stringify(report, null, 2);
+  const blob = new Blob([jsonPayload], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}

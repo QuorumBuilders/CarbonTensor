@@ -9,12 +9,15 @@ import {
   FileJson,
   Lock,
 } from "lucide-react";
-import { generateMRVReport } from "@/lib/evidence-generator";
+import {
+  generateMRVReport,
+  downloadMRVReportJSON,
+} from "@/lib/evidence-generator";
 
 interface EvidencePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDownload: () => void;
+  onDownload?: () => void;
 }
 
 export function EvidencePreviewModal({
@@ -31,6 +34,12 @@ export function EvidencePreviewModal({
     navigator.clipboard.writeText(jsonPayload);
     setCopiedJson(true);
     setTimeout(() => setCopiedJson(false), 2000);
+  };
+
+  const handleDownload = () => {
+    downloadMRVReportJSON(report);
+    onDownload?.();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -114,10 +123,7 @@ export function EvidencePreviewModal({
               Close
             </button>
             <button
-              onClick={() => {
-                onDownload();
-                onClose();
-              }}
+              onClick={handleDownload}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white bg-[#0B4D25] hover:bg-primary-green-800 transition-colors shadow-xs"
             >
               <Download className="w-3.5 h-3.5" />

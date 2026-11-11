@@ -82,11 +82,16 @@ interface PlotMapProps {
   onSelectPlot?: (plotId: string) => void;
 }
 
+let mapContainerCount = 0;
+
 export function PlotMap({
   plots = MOCK_PLOTS,
   selectedPlotId,
   onSelectPlot,
 }: PlotMapProps) {
+  // Fresh container key per component mount prevents "Map container is being reused"
+  // when navigating across client routes in Next.js SPA transitions.
+  const [containerKey] = useState(() => `map-canvas-v${++mapContainerCount}`);
   const enrichedPlots = enrichPlots(plots);
   const [filter, setFilter] = useState<string>("ALL");
 
@@ -168,119 +173,119 @@ export function PlotMap({
       {/* Leaflet Map Canvas */}
       <div className="relative flex-1 w-full min-h-0">
         <MapContainer
-          key="carbon-tensor-argungu-map"
+          key={containerKey}
           center={mapCenter}
           zoom={14}
           scrollWheelZoom={false}
           className="w-full h-full z-0"
         >
-            {/* CartoDB Voyager Tile Layer */}
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-            />
+          {/* CartoDB Voyager Tile Layer */}
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          />
 
-            {filteredPlots.map((plot) => {
-              const coords = plot.boundary.coordinates[0].map(
-                ([lng, lat]) => [lat, lng] as [number, number]
-              );
-              const style = STATUS_STYLES[plot.complianceStatus];
-              const isSelected = selectedPlotId === plot.id;
+          {filteredPlots.map((plot) => {
+            const coords = plot.boundary.coordinates[0].map(
+              ([lng, lat]) => [lat, lng] as [number, number]
+            );
+            const style = STATUS_STYLES[plot.complianceStatus];
+            const isSelected = selectedPlotId === plot.id;
 
-              // Centroid approx for marker
-              const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
-              const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
+            // Centroid approx for marker
+            const centerLat = coords.reduce((acc, c) => acc + c[0], 0) / coords.length;
+            const centerLng = coords.reduce((acc, c) => acc + c[1], 0) / coords.length;
 
-              return (
-                <Fragment key={plot.id}>
-                  <Polygon
-                    positions={coords}
-                    pathOptions={{
-                      ...style.pathOptions,
-                      weight: isSelected ? 4 : style.pathOptions.weight,
-                      color: isSelected ? "#F15A24" : style.pathOptions.color,
-                    }}
-                    eventHandlers={{
-                      click: () => onSelectPlot?.(plot.id),
-                    }}
-                  >
-                    <Popup className="carbontensor-map-popup">
-                      <div className="p-1 space-y-2 max-w-xs text-neutral-purple-900">
-                        <div className="flex items-center justify-between gap-2 border-b border-neutral-purple-200 pb-1.5">
-                          <span className="font-mono font-bold text-xs text-primary-green-900">
-                            {plot.id.toUpperCase()}
-                          </span>
-                          <span
-                            className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${style.badgeClass}`}
-                          >
-                            {plot.statusLabel}
+            return (
+              <Fragment key={plot.id}>
+                <Polygon
+                  positions={coords}
+                  pathOptions={{
+                    ...style.pathOptions,
+                    weight: isSelected ? 4 : style.pathOptions.weight,
+                    color: isSelected ? "#F15A24" : style.pathOptions.color,
+                  }}
+                  eventHandlers={{
+                    click: () => onSelectPlot?.(plot.id),
+                  }}
+                >
+                  <Popup className="carbontensor-map-popup">
+                    <div className="p-1 space-y-2 max-w-xs text-neutral-purple-900">
+                      <div className="flex items-center justify-between gap-2 border-b border-neutral-purple-200 pb-1.5">
+                        <span className="font-mono font-bold text-xs text-primary-green-900">
+                          {plot.id.toUpperCase()}
+                        </span>
+                        <span
+                          className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${style.badgeClass}`}
+                        >
+                          {plot.statusLabel}
+                        </span>
+                      </div>
+
+                      <div className="text-xs space-y-1">
+                        <div className="flex justify-between">
+                          <span className="text-neutral-purple-500">Farmer:</span>
+                          <span className="font-semibold">{plot.farmerName}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-neutral-purple-500">Rice Variety:</span>
+                          <span className="font-medium">{plot.rice_variety}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-neutral-purple-500">Area:</span>
+                          <span className="font-bold tabular-nums">
+                            {plot.calculated_area.toFixed(2)} ha
                           </span>
                         </div>
-
-                        <div className="text-xs space-y-1">
-                          <div className="flex justify-between">
-                            <span className="text-neutral-purple-500">Farmer:</span>
-                            <span className="font-semibold">{plot.farmerName}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-neutral-purple-500">Rice Variety:</span>
-                            <span className="font-medium">{plot.rice_variety}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-neutral-purple-500">Area:</span>
-                            <span className="font-bold tabular-nums">
-                              {plot.calculated_area.toFixed(2)} ha
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-neutral-purple-500">Live Water:</span>
-                            <span className="font-mono font-bold tabular-nums">
-                              {plot.currentWaterLevel > 0 ? "+" : ""}
-                              {plot.currentWaterLevel.toFixed(1)} cm
-                            </span>
-                          </div>
-                        </div>
-
-                        {plot.complianceStatus === "NON_COMPLIANT" && (
-                          <div className="p-1.5 bg-status-error-bg rounded text-[11px] text-status-error-text leading-tight">
-                            Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.
-                          </div>
-                        )}
-
-                        {plot.complianceStatus === "RADAR_DISCREPANCY" && (
-                          <div className="p-1.5 bg-accent-orange-50 rounded text-[11px] text-accent-orange-700 leading-tight">
-                            Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.
-                          </div>
-                        )}
-
-                        <div className="pt-1 flex items-center justify-between text-[10px] text-neutral-purple-500">
-                          <span>AWD Drying: {plot.dryingEpisodeDays} days</span>
-                          <button
-                            onClick={() => onSelectPlot?.(plot.id)}
-                            className="text-primary-green-700 font-bold hover:underline"
-                          >
-                            View Telemetry &rarr;
-                          </button>
+                        <div className="flex justify-between">
+                          <span className="text-neutral-purple-500">Live Water:</span>
+                          <span className="font-mono font-bold tabular-nums">
+                            {plot.currentWaterLevel > 0 ? "+" : ""}
+                            {plot.currentWaterLevel.toFixed(1)} cm
+                          </span>
                         </div>
                       </div>
-                    </Popup>
-                  </Polygon>
 
-                  {/* Plot Centroid Sensor Marker */}
-                  <CircleMarker
-                    center={[centerLat, centerLng]}
-                    radius={4}
-                    pathOptions={{
-                      color: style.pathOptions.color,
-                      fillColor: "#FFFFFF",
-                      fillOpacity: 1,
-                      weight: 2,
-                    }}
-                  />
-                </Fragment>
-              );
-            })}
-          </MapContainer>
+                      {plot.complianceStatus === "NON_COMPLIANT" && (
+                        <div className="p-1.5 bg-status-error-bg rounded text-[11px] text-status-error-text leading-tight">
+                          Continuous submersion exceeds 21 days limit. Methane avoidance dividend withheld.
+                        </div>
+                      )}
+
+                      {plot.complianceStatus === "RADAR_DISCREPANCY" && (
+                        <div className="p-1.5 bg-accent-orange-50 rounded text-[11px] text-accent-orange-700 leading-tight">
+                          Sentinel-1 Radar flags wet standing water while sensor reports dry. Flagged for verifier review.
+                        </div>
+                      )}
+
+                      <div className="pt-1 flex items-center justify-between text-[10px] text-neutral-purple-500">
+                        <span>AWD Drying: {plot.dryingEpisodeDays} days</span>
+                        <button
+                          onClick={() => onSelectPlot?.(plot.id)}
+                          className="text-primary-green-700 font-bold hover:underline"
+                        >
+                          View Telemetry &rarr;
+                        </button>
+                      </div>
+                    </div>
+                  </Popup>
+                </Polygon>
+
+                {/* Plot Centroid Sensor Marker */}
+                <CircleMarker
+                  center={[centerLat, centerLng]}
+                  radius={4}
+                  pathOptions={{
+                    color: style.pathOptions.color,
+                    fillColor: "#FFFFFF",
+                    fillOpacity: 1,
+                    weight: 2,
+                  }}
+                />
+              </Fragment>
+            );
+          })}
+        </MapContainer>
 
         {/* Satellite Honesty Badge Overlay */}
         <div className="absolute bottom-3 left-3 z-1000 bg-white/95 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-neutral-purple-200/90 shadow-xs flex items-center gap-1.5 text-[11px] text-neutral-purple-700 max-w-sm">

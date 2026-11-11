@@ -45,7 +45,7 @@ export function ExportEvidenceModal({ isOpen, onClose }: ExportEvidenceModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
       <div className="bg-white border border-[#E2DFEA] rounded-2xl max-w-2xl w-full shadow-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#E2DFEA]">
@@ -89,12 +89,12 @@ export function ExportEvidenceModal({ isOpen, onClose }: ExportEvidenceModalProp
             >
               {copiedHash ? (
                 <>
-                  <CheckCircle2 className="w-3 h-3 text-primary-green-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-primary-green-600" />
                   <span>Digest Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3 h-3" />
+                  <Copy className="w-3.5 h-3.5" />
                   <span>Copy Hash</span>
                 </>
               )}

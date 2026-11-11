@@ -8,6 +8,7 @@ import {
   MOCK_SATELLITE_OBSERVATIONS,
   MOCK_BONUSES,
   MOCK_PAYMENTS,
+  MOCK_COMMISSIONS,
 } from "@/lib/mock-data";
 import type {
   ApiResponse,
@@ -21,6 +22,7 @@ import type {
   SatelliteObservation,
   FarmerBonus,
   Payment,
+  CooperativeCommission,
   Farmer,
 } from "@/types";
 
@@ -323,4 +325,91 @@ export const api = {
       });
     },
   },
+  finance: {
+    farmerBonuses: {
+      list: async (): Promise<ApiResponse<FarmerBonus[]>> => {
+        return ApiClient.get<FarmerBonus[]>("/finance/farmer-bonuses/", {
+          mockFallback: () => MOCK_BONUSES,
+        });
+      },
+    },
+    cooperativeCommissions: {
+      list: async (): Promise<ApiResponse<CooperativeCommission[]>> => {
+        return ApiClient.get<CooperativeCommission[]>("/finance/cooperative-commissions/", {
+          mockFallback: () => MOCK_COMMISSIONS,
+        });
+      },
+    },
+    payments: {
+      list: async (): Promise<ApiResponse<Payment[]>> => {
+        return ApiClient.get<Payment[]>("/finance/payments/", {
+          mockFallback: () => MOCK_PAYMENTS,
+        });
+      },
+      disburseBatch: async (): Promise<
+        ApiResponse<{
+          disbursed_count: number;
+          total_amount: number;
+          payments: Payment[];
+        }>
+      > => {
+        return ApiClient.post<{
+          disbursed_count: number;
+          total_amount: number;
+          payments: Payment[];
+        }>(
+          "/finance/payments/disburse-batch/",
+          {},
+          {
+            mockFallback: () => {
+              const now = new Date().toISOString();
+              MOCK_PAYMENTS.forEach((p) => {
+                if (p.status === "PENDING") {
+                  p.status = "COMPLETED";
+                  p.completed_at = now;
+                }
+              });
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(
+                  new CustomEvent("carbontensor:payout-disbursed", {
+                    detail: { payments: [...MOCK_PAYMENTS] },
+                  })
+                );
+              }
+              return {
+                disbursed_count: MOCK_PAYMENTS.length,
+                total_amount: MOCK_PAYMENTS.reduce((sum, p) => sum + p.amount, 0),
+                payments: [...MOCK_PAYMENTS],
+              };
+            },
+          }
+        );
+      },
+    },
+  },
 };
+
+// Top-level DRF API Convenience Functions
+export async function getFarmerBonuses(): Promise<FarmerBonus[]> {
+  const res = await api.finance.farmerBonuses.list();
+  return res.data;
+}
+
+export async function getCooperativeCommissions(): Promise<CooperativeCommission[]> {
+  const res = await api.finance.cooperativeCommissions.list();
+  return res.data;
+}
+
+export async function getPayments(): Promise<Payment[]> {
+  const res = await api.finance.payments.list();
+  return res.data;
+}
+
+export async function disburseBatchPayments(): Promise<{
+  disbursed_count: number;
+  total_amount: number;
+  payments: Payment[];
+}> {
+  const res = await api.finance.payments.disburseBatch();
+  return res.data;
+}

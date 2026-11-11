@@ -1,6 +1,20 @@
 import type { ApiResponse, ApiError } from "@/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+function getApiBaseUrl(): string {
+  const apiBaseUrl =
+    typeof window === "undefined"
+      ? process.env.INTERNAL_API_URL
+      : process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiBaseUrl) {
+    throw new Error(
+      "API URL is not configured. Set INTERNAL_API_URL for server-side requests " +
+        "and NEXT_PUBLIC_API_URL for browser requests."
+    );
+  }
+
+  return apiBaseUrl.replace(/\/+$/, "");
+}
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
@@ -44,7 +58,9 @@ export class ApiClient {
     }
 
     // Build URL with query params
-    let url = endpoint.startsWith("http") ? endpoint : `${API_BASE_URL}${endpoint}`;
+    let url = endpoint.startsWith("http")
+      ? endpoint
+      : `${getApiBaseUrl()}${endpoint}`;
     if (params) {
       const searchParams = new URLSearchParams();
       Object.entries(params).forEach(([key, value]) => {

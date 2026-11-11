@@ -20,12 +20,15 @@ import {
   ShieldCheck,
   Building2,
   Calendar,
+  Smartphone,
 } from "lucide-react";
+import { UssdMockModal } from "@/components/farmer/UssdMockModal";
 
 export default function DashboardPage() {
   const [plots, setPlots] = useState<Plot[]>(MOCK_PLOTS);
   const [selectedPlotId, setSelectedPlotId] = useState<string>("plot-001");
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isUssdModalOpen, setIsUssdModalOpen] = useState(false);
   const [observations, setObservations] = useState<Observation[]>(MOCK_OBSERVATIONS);
   const [flashingPlotId, setFlashingPlotId] = useState<string | null>(null);
   const [waterLevelOverrides, setWaterLevelOverrides] = useState<Record<string, number>>({});
@@ -42,6 +45,28 @@ export default function DashboardPage() {
       }
     }
     loadPlots();
+  }, []);
+
+  // Listen for ?modal=ussd or ?view=farmer query params and custom demo events
+  useEffect(() => {
+    const checkUssdParam = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("modal") === "ussd" || params.get("view") === "farmer") {
+          setIsUssdModalOpen(true);
+        }
+      }
+    };
+
+    queueMicrotask(checkUssdParam);
+    window.addEventListener("popstate", checkUssdParam);
+    const handleOpenUssd = () => setIsUssdModalOpen(true);
+    window.addEventListener("carbontensor:open-ussd", handleOpenUssd);
+
+    return () => {
+      window.removeEventListener("popstate", checkUssdParam);
+      window.removeEventListener("carbontensor:open-ussd", handleOpenUssd);
+    };
   }, []);
 
   // Real-time telemetry ingestion handler
@@ -156,6 +181,16 @@ export default function DashboardPage() {
               <ShieldCheck className="w-4 h-4 text-primary-green-700" />
               <span>MRV Verifier</span>
             </Link>
+
+            <button
+              type="button"
+              onClick={() => setIsUssdModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-primary-green-900 bg-primary-green-50 hover:bg-primary-green-100 border border-primary-green-300 transition-colors shadow-2xs"
+              title="Roadmap Feature-Phone SMS Alert (Mock)"
+            >
+              <Smartphone className="w-4 h-4 text-primary-green-700" />
+              <span>View Farmer SMS Alert</span>
+            </button>
           </div>
         </div>
 
@@ -217,6 +252,12 @@ export default function DashboardPage() {
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
         onPlotRegistered={handlePlotRegistered}
+      />
+
+      {/* Modal Dialog: Farmer Feature-Phone SMS & USSD Alert (Mock) */}
+      <UssdMockModal
+        isOpen={isUssdModalOpen}
+        onClose={() => setIsUssdModalOpen(false)}
       />
     </PortalShell>
   );

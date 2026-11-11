@@ -9,6 +9,8 @@ import type {
   CooperativeCommission,
   Payment,
   User,
+  MockUserSession,
+  PersonaRole,
 } from "@/types";
 
 // ============================================================================
@@ -680,6 +682,7 @@ export const MOCK_PAYMENTS: Payment[] = [
     beneficiary_type: "cooperative",
     beneficiary_id: "mrv-reserve-01",
     beneficiary_name: "CarbonTensor MRV Operations",
+
     bank_name: "Access Bank Nigeria",
     account_number: "•••• 1002",
     amount: 1500,
@@ -692,3 +695,109 @@ export const MOCK_PAYMENTS: Payment[] = [
     simulation_environment: "Access Bank Sandbox (Simulated)",
   },
 ];
+
+// ============================================================================
+// 6. Judging Demo Personas & Fast Session Helpers
+// ============================================================================
+
+export interface DemoPersona {
+  role: PersonaRole;
+  email: string;
+  name: string;
+  organization: string;
+  badge: string;
+  destination: string;
+  pillLabel: string;
+}
+
+export const DEMO_PERSONAS: Record<PersonaRole, DemoPersona> = {
+  cooperative: {
+    role: "cooperative",
+    email: "coop@carbontensor.org",
+    name: "Hajiya Fatima Aliyu",
+    organization: "Kebbi Green Rice Growers Union",
+    badge: "Cooperative Admin",
+    destination: "/dashboard",
+    pillLabel: "[Demo: Cooperative Admin]",
+  },
+  staff: {
+    role: "staff",
+    email: "verifier@vvb-audit.org",
+    name: "Dr. Marcus Vance",
+    organization: "Bureau Veritas / VVB Lead",
+    badge: "Auditor (Staff)",
+    destination: "/verifier",
+    pillLabel: "[Demo: Field Verifier]",
+  },
+  farmer: {
+    role: "farmer",
+    email: "usman.bello@argungu.ng",
+    name: "Usman Bello (Argungu Cluster)",
+    organization: "Argungu Rice Outgrower Scheme",
+    badge: "Smallholder Farmer",
+    destination: "/dashboard?view=farmer&modal=ussd",
+    pillLabel: "[Demo: Smallholder Farmer]",
+  },
+};
+
+export function getStoredSession(): MockUserSession {
+  if (typeof window === "undefined") {
+    return {
+      role: "cooperative",
+      name: DEMO_PERSONAS.cooperative.name,
+      organization: DEMO_PERSONAS.cooperative.organization,
+      token: "mock-jwt-token-access-2026",
+    };
+  }
+  try {
+    const raw = localStorage.getItem("carbontensor_session");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.role) return parsed as MockUserSession;
+      if (parsed.user?.account_type) {
+        const role = parsed.user.account_type as PersonaRole;
+        const persona = DEMO_PERSONAS[role] || DEMO_PERSONAS.cooperative;
+        return {
+          role,
+          name: persona.name,
+          organization: persona.organization,
+          token: parsed.token || "mock-jwt-token-access-2026",
+        };
+      }
+    }
+  } catch {
+    // Session parse fallback
+  }
+  return {
+    role: "cooperative",
+    name: DEMO_PERSONAS.cooperative.name,
+    organization: DEMO_PERSONAS.cooperative.organization,
+    token: "mock-jwt-token-access-2026",
+  };
+}
+
+export function setStoredSession(personaKey: PersonaRole): MockUserSession {
+  const p = DEMO_PERSONAS[personaKey];
+  const session: MockUserSession = {
+    role: p.role,
+    name: p.name,
+    organization: p.organization,
+    token: "mock-jwt-token-access-2026",
+    user: {
+      id: `usr-${p.role}`,
+      email: p.email,
+      account_type: p.role,
+      is_active: true,
+      created_at: new Date().toISOString(),
+    },
+    cooperative: MOCK_COOPERATIVE,
+    farmer: MOCK_FARMERS[0],
+  };
+  if (typeof window !== "undefined") {
+    localStorage.setItem("carbontensor_session", JSON.stringify(session));
+    window.dispatchEvent(
+      new CustomEvent("carbontensor:session-change", { detail: session })
+    );
+  }
+  return session;
+}

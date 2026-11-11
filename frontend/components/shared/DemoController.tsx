@@ -14,6 +14,7 @@ import {
   Satellite,
   FileCheck,
   Send,
+  Smartphone,
 } from "lucide-react";
 
 export interface DemoStep {
@@ -85,7 +86,15 @@ export function DemoController() {
   const triggerStepActions = useCallback((stepIndex: number) => {
     if (typeof window === "undefined") return;
 
-    if (stepIndex === 1) {
+    if (stepIndex === 0) {
+      // Step 1 (Coop Overview): Navigate to /dashboard and scroll to top
+      if (pathname !== "/dashboard") {
+        router.push("/dashboard");
+      }
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 150);
+    } else if (stepIndex === 1) {
       // Step 2 (Sensor Stream): Focus water chart, select plot-001, run 2 simulated telemetry ticks
       window.dispatchEvent(
         new CustomEvent("carbontensor:select-plot", {
@@ -374,23 +383,35 @@ export function DemoController() {
                 )}
 
                 {activeStep.id === 6 && (
-                  <button
-                    onClick={() => {
-                      if (pathname !== "/finance") {
-                        router.push("/finance");
-                      }
-                      setTimeout(() => {
-                        window.dispatchEvent(
-                          new CustomEvent("carbontensor:open-payout-modal")
-                        );
-                      }, 150);
-                    }}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] border border-accent-orange-400 transition-colors shadow-xs"
-                    title="Simulate Buyer Carbon Settlement & Payout"
-                  >
-                    <Send className="w-3.5 h-3.5 text-white" />
-                    <span>Execute Payout</span>
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        window.dispatchEvent(new CustomEvent("carbontensor:open-ussd"));
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-primary-green-100 bg-primary-green-800 hover:bg-primary-green-700 border border-primary-green-600 transition-colors shadow-xs"
+                      title="Prompt Farmer Feature-Phone SMS & USSD Modal"
+                    >
+                      <Smartphone className="w-3.5 h-3.5 text-accent-orange-400" />
+                      <span>Farmer SMS</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (pathname !== "/finance") {
+                          router.push("/finance");
+                        }
+                        setTimeout(() => {
+                          window.dispatchEvent(
+                            new CustomEvent("carbontensor:open-payout-modal")
+                          );
+                        }, 150);
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#F15A24] hover:bg-[#CE4312] border border-accent-orange-400 transition-colors shadow-xs"
+                      title="Simulate Buyer Carbon Settlement & Payout"
+                    >
+                      <Send className="w-3.5 h-3.5 text-white" />
+                      <span>Execute Payout</span>
+                    </button>
+                  </>
                 )}
 
                 <div className="flex items-center gap-1.5">

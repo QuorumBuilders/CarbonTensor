@@ -16,6 +16,7 @@ import {
   Droplets,
   ExternalLink,
 } from "lucide-react";
+import { TableSkeleton, TableEmptyState } from "@/components/shared/TableSkeleton";
 
 interface PlotsTableProps {
   plots: Plot[];
@@ -24,6 +25,7 @@ interface PlotsTableProps {
   onOpenRegisterModal?: () => void;
   flashingPlotId?: string | null;
   waterLevelOverrides?: Record<string, number>;
+  isLoading?: boolean;
 }
 
 const STATUS_CONFIG: Record<
@@ -99,6 +101,7 @@ export function PlotsTable({
   onOpenRegisterModal,
   flashingPlotId,
   waterLevelOverrides,
+  isLoading = false,
 }: PlotsTableProps) {
   const enrichedPlots = enrichPlots(plots);
   const [searchTerm, setSearchTerm] = useState("");
@@ -247,12 +250,20 @@ export function PlotsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-purple-100 text-xs text-neutral-purple-900">
-            {filteredPlots.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="py-8 text-center text-neutral-purple-500">
-                  No plots match the selected search or filter criteria.
-                </td>
-              </tr>
+            {isLoading ? (
+              <TableSkeleton rows={4} columns={7} />
+            ) : filteredPlots.length === 0 ? (
+              <TableEmptyState
+                colSpan={7}
+                icon={Search}
+                title="No enrolled plots matching filter"
+                description="No paddy plots match your current search query or compliance filter."
+                resetAction={() => {
+                  setSearchTerm("");
+                  setStatusFilter("ALL");
+                }}
+                resetLabel="Reset Plot Filters"
+              />
             ) : (
               filteredPlots.map((plot) => {
                 const isSelected = selectedPlotId === plot.id;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TableSkeleton, TableEmptyState } from "@/components/shared/TableSkeleton";
 import {
   AlertOctagon,
   AlertTriangle,
@@ -72,6 +73,7 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
   const [items, setItems] = useState<AnomalyItem[]>(SEED_ANOMALIES);
   const [filter, setFilter] = useState<AnomalyFilter>("ALL");
   const [inspectingItem, setInspectingItem] = useState<AnomalyItem | null>(null);
+  const [isRefetching, setIsRefetching] = useState(false);
 
   const criticalCount = items.filter((i) => i.severity === "CRITICAL").length;
   const warningCount = items.filter((i) => i.severity === "WARNING").length;
@@ -125,7 +127,11 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
         {/* Filter Tabs */}
         <div className="flex items-center gap-1 bg-[#F8F7FA] p-1 rounded-xl border border-[#E2DFEA]">
           <button
-            onClick={() => setFilter("ALL")}
+            onClick={() => {
+              setIsRefetching(true);
+              setFilter("ALL");
+              setTimeout(() => setIsRefetching(false), 220);
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
               filter === "ALL"
                 ? "bg-[#0B4D25] text-white shadow-xs"
@@ -136,7 +142,11 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
           </button>
 
           <button
-            onClick={() => setFilter("CRITICAL")}
+            onClick={() => {
+              setIsRefetching(true);
+              setFilter("CRITICAL");
+              setTimeout(() => setIsRefetching(false), 220);
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
               filter === "CRITICAL"
                 ? "bg-red-700 text-white shadow-xs"
@@ -148,7 +158,11 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
           </button>
 
           <button
-            onClick={() => setFilter("WARNING")}
+            onClick={() => {
+              setIsRefetching(true);
+              setFilter("WARNING");
+              setTimeout(() => setIsRefetching(false), 220);
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
               filter === "WARNING"
                 ? "bg-amber-600 text-white shadow-xs"
@@ -176,12 +190,17 @@ export function AnomalyQueueTable({ onInspectPlot }: AnomalyQueueTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-purple-100">
-            {filteredItems.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="py-8 text-center text-neutral-purple-500">
-                  No anomaly flags currently match the active filter.
-                </td>
-              </tr>
+            {isRefetching ? (
+              <TableSkeleton rows={3} columns={7} />
+            ) : filteredItems.length === 0 ? (
+              <TableEmptyState
+                colSpan={7}
+                icon={AlertOctagon}
+                title="No flagged anomalies matching this filter"
+                description="No DRF sensor violations or continuous flooding anomalies match the active severity criteria."
+                resetAction={() => setFilter("ALL")}
+                resetLabel="Show All Anomaly Flags"
+              />
             ) : (
               filteredItems.map((item) => {
                 const isCritical = item.severity === "CRITICAL";

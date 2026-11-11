@@ -196,11 +196,10 @@ export function SensorSimulatorBar({
 
           <button
             onClick={() => setIsStreaming(!isStreaming)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors border ${
-              isStreaming
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors border ${isStreaming
                 ? "bg-neutral-purple-100 hover:bg-neutral-purple-200 text-neutral-purple-900 border-neutral-purple-300"
                 : "bg-primary-green-50 hover:bg-primary-green-100 text-[#0B4D25] border-primary-green-200"
-            }`}
+              }`}
           >
             {isStreaming ? (
               <>
@@ -225,11 +224,10 @@ export function SensorSimulatorBar({
 
           <button
             onClick={() => setScenario("dry_down")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${
-              scenario === "dry_down"
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${scenario === "dry_down"
                 ? "bg-[#0B4D25] text-white border-[#0B4D25] font-bold shadow-xs"
                 : "bg-white hover:bg-[#F8F7FA] text-neutral-purple-800 border-[#E2DFEA]"
-            }`}
+              }`}
           >
             <ArrowDownRight className="w-3.5 h-3.5" />
             <span>Normal Dry-Down (-1.5cm)</span>
@@ -237,11 +235,10 @@ export function SensorSimulatorBar({
 
           <button
             onClick={() => setScenario("re_flood")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${
-              scenario === "re_flood"
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${scenario === "re_flood"
                 ? "bg-[#0B4D25] text-white border-[#0B4D25] font-bold shadow-xs"
                 : "bg-white hover:bg-[#F8F7FA] text-neutral-purple-800 border-[#E2DFEA]"
-            }`}
+              }`}
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Irrigation Re-flood (+4.0cm)</span>
@@ -249,11 +246,10 @@ export function SensorSimulatorBar({
 
           <button
             onClick={() => setScenario("sensor_fault")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${
-              scenario === "sensor_fault"
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors border ${scenario === "sensor_fault"
                 ? "bg-accent-orange-600 text-white border-accent-orange-700 font-bold shadow-xs"
                 : "bg-white hover:bg-[#F8F7FA] text-accent-orange-700 border-[#E2DFEA]"
-            }`}
+              }`}
           >
             <AlertOctagon className="w-3.5 h-3.5 text-accent-orange-500" />
             <span>Sensor Fault (-82.0cm)</span>
@@ -303,11 +299,10 @@ export function SensorSimulatorBar({
               {lastInjected.time}
             </span>
             <span
-              className={`px-1.5 py-0.5 rounded font-bold ${
-                lastInjected.status === "VALID"
+              className={`px-1.5 py-0.5 rounded font-bold ${lastInjected.status === "VALID"
                   ? "bg-primary-green-50 text-[#0B4D25] border border-primary-green-200"
                   : "bg-red-50 text-red-700 border border-red-200"
-              }`}
+                }`}
             >
               {lastInjected.waterLevel > 0 ? "+" : ""}
               {lastInjected.waterLevel.toFixed(1)} cm ({lastInjected.status})

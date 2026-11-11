@@ -22,6 +22,8 @@ interface PlotsTableProps {
   selectedPlotId?: string | null;
   onSelectPlot?: (plotId: string) => void;
   onOpenRegisterModal?: () => void;
+  flashingPlotId?: string | null;
+  waterLevelOverrides?: Record<string, number>;
 }
 
 const STATUS_CONFIG: Record<
@@ -54,11 +56,49 @@ const STATUS_CONFIG: Record<
   },
 };
 
+function MiniSparkline({ plotId, level }: { plotId: string; level: number }) {
+  let points = "0,14 10,12 20,8 30,16 40,10";
+  let stroke = "#3F8851";
+
+  if (level < -40) {
+    points = "0,6 10,8 20,10 30,12 40,22";
+    stroke = "#F15A24";
+  } else if (level > 0) {
+    points = "0,6 10,5 20,6 30,5 40,5";
+    stroke = "#2563EB";
+  } else if (plotId === "plot-001") {
+    points = "0,4 10,10 20,16 30,20 40,17";
+  } else if (plotId === "plot-002") {
+    points = "0,5 10,11 20,15 30,18 40,16";
+  }
+
+  return (
+    <svg className="w-9 h-5 shrink-0 overflow-visible" viewBox="0 0 40 24">
+      <polyline
+        fill="none"
+        stroke={stroke}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={points}
+      />
+      <circle
+        cx="40"
+        cy={level < -40 ? 22 : level > 0 ? 5 : 17}
+        r="2.5"
+        fill={stroke}
+      />
+    </svg>
+  );
+}
+
 export function PlotsTable({
   plots,
   selectedPlotId,
   onSelectPlot,
   onOpenRegisterModal,
+  flashingPlotId,
+  waterLevelOverrides,
 }: PlotsTableProps) {
   const enrichedPlots = enrichPlots(plots);
   const [searchTerm, setSearchTerm] = useState("");
@@ -216,14 +256,32 @@ export function PlotsTable({
             ) : (
               filteredPlots.map((plot) => {
                 const isSelected = selectedPlotId === plot.id;
+                const isFlashing = flashingPlotId === plot.id;
                 const statusCfg = STATUS_CONFIG[plot.complianceStatus];
                 const StatusIcon = statusCfg.icon;
+
+                const overriddenLevel = waterLevelOverrides?.[plot.id];
+                const effectiveWaterLevel =
+                  overriddenLevel !== undefined ? overriddenLevel : plot.currentWaterLevel;
+
+                let effectiveStatusText = plot.waterStatusText;
+                if (overriddenLevel !== undefined) {
+                  if (effectiveWaterLevel < -40) {
+                    effectiveStatusText = `Sensor Fault Anomaly (${effectiveWaterLevel.toFixed(1)} cm)`;
+                  } else if (effectiveWaterLevel > 0) {
+                    effectiveStatusText = `Submerged / Flooded (+${effectiveWaterLevel.toFixed(1)} cm)`;
+                  } else {
+                    effectiveStatusText = `Safe AWD Drying (${effectiveWaterLevel.toFixed(1)} cm)`;
+                  }
+                }
 
                 return (
                   <tr
                     key={plot.id}
                     onClick={() => onSelectPlot?.(plot.id)}
                     className={`cursor-pointer transition-colors duration-120 ${
+                      isFlashing ? "animate-telemetry-flash " : ""
+                    }${
                       isSelected
                         ? "bg-primary-green-50/70 border-l-4 border-l-primary-green-700"
                         : "hover:bg-neutral-purple-50/60"
@@ -259,33 +317,38 @@ export function PlotsTable({
                       {plot.calculated_area.toFixed(2)} ha
                     </td>
 
-                    {/* Latest Water Level */}
+                    {/* Latest Water Level & Sparkline */}
                     <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5 font-mono tabular-nums font-semibold">
-                        <Droplets
-                          className={`w-3.5 h-3.5 ${
-                            plot.currentWaterLevel > 0
-                              ? "text-blue-500"
-                              : plot.currentWaterLevel < -40
-                              ? "text-amber-600"
-                              : "text-primary-green-600"
-                          }`}
-                        />
-                        <span
-                          className={
-                            plot.currentWaterLevel < -40
-                              ? "text-amber-700 font-bold"
-                              : plot.currentWaterLevel > 0
-                              ? "text-blue-700"
-                              : "text-primary-green-800"
-                          }
-                        >
-                          {plot.currentWaterLevel > 0 ? "+" : ""}
-                          {plot.currentWaterLevel.toFixed(1)} cm
-                        </span>
-                      </div>
-                      <div className="text-[10px] text-neutral-purple-500 mt-0.5">
-                        {plot.waterStatusText}
+                      <div className="flex items-center gap-2.5">
+                        <MiniSparkline plotId={plot.id} level={effectiveWaterLevel} />
+                        <div>
+                          <div className="flex items-center gap-1.5 font-mono tabular-nums font-semibold">
+                            <Droplets
+                              className={`w-3.5 h-3.5 ${
+                                effectiveWaterLevel > 0
+                                  ? "text-blue-500"
+                                  : effectiveWaterLevel < -40
+                                  ? "text-amber-600"
+                                  : "text-primary-green-600"
+                              }`}
+                            />
+                            <span
+                              className={
+                                effectiveWaterLevel < -40
+                                  ? "text-amber-700 font-bold"
+                                  : effectiveWaterLevel > 0
+                                  ? "text-blue-700"
+                                  : "text-primary-green-800"
+                              }
+                            >
+                              {effectiveWaterLevel > 0 ? "+" : ""}
+                              {effectiveWaterLevel.toFixed(1)} cm
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-neutral-purple-500 mt-0.5">
+                            {effectiveStatusText}
+                          </div>
+                        </div>
                       </div>
                     </td>
 

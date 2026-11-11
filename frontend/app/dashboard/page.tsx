@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { AppHeader } from "@/components/shared/AppHeader";
 import { DemoController } from "@/components/shared/DemoController";
@@ -9,10 +9,12 @@ import { PlotMapWrapper } from "@/components/dashboard/PlotMapWrapper";
 import { PlotsTable } from "@/components/dashboard/PlotsTable";
 import { PlotSpotlightCard } from "@/components/dashboard/PlotSpotlightCard";
 import { RegisterPlotModal } from "@/components/dashboard/RegisterPlotModal";
+import { WaterLevelChart } from "@/components/dashboard/WaterLevelChart";
+import { SensorSimulatorBar } from "@/components/dashboard/SensorSimulatorBar";
 import { enrichPlots, type PlotEnriched } from "@/components/dashboard/PlotMap";
-import { MOCK_PLOTS } from "@/lib/mock-data";
-import { api } from "@/lib/api/endpoints";
-import type { Plot } from "@/types";
+import { MOCK_PLOTS, MOCK_OBSERVATIONS } from "@/lib/mock-data";
+import { api, subscribeToObservations } from "@/lib/api/endpoints";
+import type { Plot, Observation } from "@/types";
 import {
   MapPin,
   Plus,
@@ -25,6 +27,9 @@ export default function DashboardPage() {
   const [plots, setPlots] = useState<Plot[]>(MOCK_PLOTS);
   const [selectedPlotId, setSelectedPlotId] = useState<string>("plot-001");
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [observations, setObservations] = useState<Observation[]>(MOCK_OBSERVATIONS);
+  const [flashingPlotId, setFlashingPlotId] = useState<string | null>(null);
+  const [waterLevelOverrides, setWaterLevelOverrides] = useState<Record<string, number>>({});
 
   useEffect(() => {
     async function loadPlots() {
@@ -40,9 +45,63 @@ export default function DashboardPage() {
     loadPlots();
   }, []);
 
+  // Real-time telemetry ingestion handler
+  const handleObservationCreated = useCallback((newObs: Observation) => {
+    setObservations((prev) => [...prev, newObs]);
+    setWaterLevelOverrides((prev) => ({
+      ...prev,
+      [newObs.plot]: newObs.water_level,
+    }));
+    setFlashingPlotId(newObs.plot);
+    setTimeout(() => {
+      setFlashingPlotId(null);
+    }, 650);
+  }, []);
+
+  // Subscribe to in-memory DRF mutations and custom dispatch events
+  useEffect(() => {
+    const unsubscribe = subscribeToObservations((newObs) => {
+      handleObservationCreated(newObs);
+    });
+
+    const handleSelectPlotEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ plotId: string }>;
+      if (customEvent.detail?.plotId) {
+        setSelectedPlotId(customEvent.detail.plotId);
+      }
+    };
+    window.addEventListener("carbontensor:select-plot", handleSelectPlotEvent);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("carbontensor:select-plot", handleSelectPlotEvent);
+    };
+  }, [handleObservationCreated]);
+
   const enrichedPlots = enrichPlots(plots);
-  const selectedPlot: PlotEnriched =
+  const baseSelectedPlot: PlotEnriched =
     enrichedPlots.find((p) => p.id === selectedPlotId) || enrichedPlots[0];
+
+  // Dynamically reflect live telemetry on the spotlight card
+  const selectedPlot: PlotEnriched = useMemo(() => {
+    const overridden = waterLevelOverrides[selectedPlotId];
+    if (overridden === undefined) return baseSelectedPlot;
+
+    let waterStatusText = baseSelectedPlot.waterStatusText;
+    if (overridden < -40) {
+      waterStatusText = `Sensor Fault Anomaly (${overridden.toFixed(1)} cm)`;
+    } else if (overridden > 0) {
+      waterStatusText = `Submerged / Flooded (+${overridden.toFixed(1)} cm)`;
+    } else {
+      waterStatusText = `Safe AWD Drying (${overridden.toFixed(1)} cm)`;
+    }
+
+    return {
+      ...baseSelectedPlot,
+      currentWaterLevel: overridden,
+      waterStatusText,
+    };
+  }, [baseSelectedPlot, selectedPlotId, waterLevelOverrides]);
 
   const handlePlotRegistered = (newPlot: Plot) => {
     setPlots((prev) => [newPlot, ...prev]);
@@ -107,6 +166,14 @@ export default function DashboardPage() {
         {/* Executive Metric Cards */}
         <MetricCards />
 
+        {/* Interactive Field Telemetry Ingestion Simulator */}
+        <section aria-label="Field Telemetry Transmission Simulator">
+          <SensorSimulatorBar
+            activePlotId={selectedPlotId}
+            onObservationCreated={handleObservationCreated}
+          />
+        </section>
+
         {/* Spatial Map & Spotlight Inspection 2-Column Grid */}
         <section
           aria-label="Spatial Paddy Monitoring and Sensor Telemetry"
@@ -127,6 +194,15 @@ export default function DashboardPage() {
           </div>
         </section>
 
+        {/* 30-Day In-situ AWD Water-Level Time Series Chart */}
+        <section id="water-chart" aria-label="AWD Water Level Time Series Telemetry">
+          <WaterLevelChart
+            selectedPlotId={selectedPlotId}
+            onSelectPlot={(id) => setSelectedPlotId(id)}
+            observations={observations}
+          />
+        </section>
+
         {/* Enrolled Plots Roster Table */}
         <section aria-label="Enrolled Plots Ledger" id="plots">
           <PlotsTable
@@ -134,6 +210,8 @@ export default function DashboardPage() {
             selectedPlotId={selectedPlotId}
             onSelectPlot={(id) => setSelectedPlotId(id)}
             onOpenRegisterModal={() => setIsRegisterModalOpen(true)}
+            flashingPlotId={flashingPlotId}
+            waterLevelOverrides={waterLevelOverrides}
           />
         </section>
       </main>
@@ -150,4 +228,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

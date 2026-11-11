@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { TableSkeleton, TableEmptyState } from "@/components/shared/TableSkeleton";
 import {
   Landmark,
   CheckCircle2,
@@ -10,6 +11,7 @@ import {
   User,
   Building2,
   ShieldCheck,
+  Search,
 } from "lucide-react";
 import type { Payment } from "@/types";
 import { MOCK_PAYMENTS } from "@/lib/mock-data";
@@ -79,6 +81,22 @@ export function PaymentsLedgerTable({
     };
   }, []);
 
+  const handleFilterChange = (newFilter: "ALL" | "farmer" | "cooperative") => {
+    setIsRefetching(true);
+    setFilter(newFilter);
+    setTimeout(() => setIsRefetching(false), 200);
+  };
+
+  const filteredPayments = payments.filter((p) => {
+    const matchesRole = filter === "ALL" || p.beneficiary_type === filter;
+    const matchesSearch =
+      search === "" ||
+      p.beneficiary_name.toLowerCase().includes(search.toLowerCase()) ||
+      p.id.toLowerCase().includes(search.toLowerCase()) ||
+      p.account_number.includes(search);
+    return matchesRole && matchesSearch;
+  });
+
   return (
     <div
       id="payments-ledger-table"
@@ -100,10 +118,57 @@ export function PaymentsLedgerTable({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center bg-[#F8F7FA] p-1 rounded-lg border border-neutral-purple-200 text-xs">
+            <button
+              type="button"
+              onClick={() => handleFilterChange("ALL")}
+              className={`px-2.5 py-1 rounded font-semibold transition-colors ${
+                filter === "ALL"
+                  ? "bg-[#0B4D25] text-white shadow-2xs"
+                  : "text-neutral-purple-600 hover:text-neutral-purple-900"
+              }`}
+            >
+              All ({payments.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFilterChange("farmer")}
+              className={`px-2.5 py-1 rounded font-semibold transition-colors ${
+                filter === "farmer"
+                  ? "bg-[#0B4D25] text-white shadow-2xs"
+                  : "text-neutral-purple-600 hover:text-neutral-purple-900"
+              }`}
+            >
+              Farmers (70%)
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFilterChange("cooperative")}
+              className={`px-2.5 py-1 rounded font-semibold transition-colors ${
+                filter === "cooperative"
+                  ? "bg-[#0B4D25] text-white shadow-2xs"
+                  : "text-neutral-purple-600 hover:text-neutral-purple-900"
+              }`}
+            >
+              Cooperative & MRV
+            </button>
+          </div>
+
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-purple-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search beneficiary..."
+              className="pl-8 pr-2.5 py-1 text-xs rounded-lg border border-neutral-purple-200 bg-white text-neutral-purple-900 placeholder:text-neutral-purple-400 focus:outline-hidden focus:border-[#0B4D25] w-36 sm:w-44"
+            />
+          </div>
+
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary-green-50 text-[#0B4D25] border border-primary-green-200 flex items-center gap-1">
             <Landmark className="w-3 h-3" />
-            <span>Access Bank Sandbox (Simulated)</span>
+            <span>Sandbox</span>
           </span>
         </div>
       </div>
@@ -124,7 +189,22 @@ export function PaymentsLedgerTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-purple-100">
-            {payments.map((row) => {
+            {isRefetching ? (
+              <TableSkeleton rows={4} columns={8} />
+            ) : filteredPayments.length === 0 ? (
+              <TableEmptyState
+                colSpan={8}
+                icon={Search}
+                title="No settlement transactions matching filter"
+                description="No Access Bank sandbox payments match your current query or category filter."
+                resetAction={() => {
+                  setSearch("");
+                  setFilter("ALL");
+                }}
+                resetLabel="Reset Ledger Filter"
+              />
+            ) : (
+              filteredPayments.map((row) => {
               const isCompleted =
                 row.status === "COMPLETED" || row.status === "SIMULATED_SUCCESS";
               const isPending = row.status === "PENDING";
@@ -246,7 +326,7 @@ export function PaymentsLedgerTable({
                   </td>
                 </tr>
               );
-            })}
+            }))}
           </tbody>
         </table>
       </div>

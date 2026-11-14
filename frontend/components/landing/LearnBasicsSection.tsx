@@ -1,136 +1,121 @@
-import { BookOpen, ArrowRight, Clock, Sprout, Droplets, Coins, FileCheck2, Leaf } from "lucide-react";
+import {
+  IconBook,
+  IconArrowRight,
+  IconClock,
+  IconDroplet,
+  IconPlant2,
+  IconCoins,
+} from "@tabler/icons-react";
 
 export function LearnBasicsSection() {
   const articles = [
     {
       id: "methane-101",
-      title: "Rice and methane 101",
-      subtitle: "Why flooded fields release methane.",
+      title: "Paddy Soil Methanogenesis 101",
+      subtitle: "Why anaerobic soils produce methane gas.",
       description:
-        "Learn why stagnant floodwater prevents oxygen from penetrating paddy soils, how anaerobic bacteria produce methane gas, and how periodic drying stops the process.",
+        "Stagnant water tables isolate soil organic matter from atmospheric oxygen, enabling anaerobic methanogens. Periodic aeration restores aerobic respiration.",
       category: "Soil Biology",
       readTime: "4 min read",
-      icon: Droplets,
-      href: "#problem",
-    },
-    {
-      id: "awd-steps",
-      title: "What is AWD and how do you do it?",
-      subtitle: "The steps, in plain language.",
-      description:
-        "A practical field walkthrough on installing perforated pani pipes, monitoring the -15 cm water line, and timing irrigation cycles without reducing paddy yield.",
-      category: "Field Practical",
-      readTime: "5 min read",
-      icon: Sprout,
+      icon: IconDroplet,
       href: "#awd-explainer",
     },
     {
-      id: "carbon-credit",
-      title: "What is a carbon credit?",
-      subtitle: "Who creates it, who checks it, who pays.",
+      id: "awd-steps",
+      title: "Field Piezometer Operation",
+      subtitle: "Pani pipe installation and reading protocol.",
       description:
-        "Follow the path of verified methane reduction from a smallholder cooperative to accredited independent VVBs, international registries, and corporate buyers.",
-      category: "Carbon Economics",
-      readTime: "6 min read",
-      icon: Coins,
-      href: "#payout-split",
-    },
-    {
-      id: "farm-management",
-      title: "Water and farm management basics",
-      subtitle: "Scheduling irrigation and keeping simple field records.",
-      description:
-        "How cooperative clusters manage shared irrigation canals, allocate water days, and maintain straightforward digital plot logs that pass audit requirements.",
-      category: "Cooperative Ops",
-      readTime: "4 min read",
-      icon: FileCheck2,
+        "Practical field guide on positioning perforated PVC tubes to -15 cm, checking capillary subsoil moisture, and calibrating daily readings.",
+      category: "Field Practical",
+      readTime: "5 min read",
+      icon: IconPlant2,
       href: "#how-it-works",
     },
     {
-      id: "climate-friendly",
-      title: "Climate-friendly farm practices",
-      subtitle: "Straw handling, fertilizer timing and more.",
+      id: "carbon-credit",
+      title: "UNFCCC AMS-III.H Methodology",
+      subtitle: "Emission factor baselines and registry audits.",
       description:
-        "Beyond water depth: managing post-harvest crop residue without open burning, timing urea applications, and improving organic soil health across seasons.",
-      category: "Agronomy",
-      readTime: "5 min read",
-      icon: Leaf,
-      href: "#benefits",
+        "Understand smallholder baseline formulas, satellite cross-validation requirements, and how aggregated cohorts achieve third-party VVB validation.",
+      category: "Carbon Economics",
+      readTime: "6 min read",
+      icon: IconCoins,
+      href: "#payout-split",
     },
   ];
 
   return (
-    <section id="learn" className="py-16 sm:py-20 lg:py-24 bg-white border-b border-neutral-purple-200">
+    <section
+      id="learn"
+      className="py-16 sm:py-20 lg:py-24 bg-background border-b border-border"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-purple-100 text-xs font-semibold text-neutral-purple-900 mb-3 border border-neutral-purple-200">
-            <BookOpen className="w-3.5 h-3.5 text-primary-green-700" />
-            <span>Educational Knowledge Base</span>
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill bg-muted text-xs font-mono font-medium text-foreground border border-border">
+            <IconBook size={14} stroke={1.5} className="text-accent" />
+            <span>Knowledge Resources</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
-            Learn the basics.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-foreground leading-[1.2]">
+            Technical documentation
+            <br className="hidden sm:inline" /> and field agronomic guides.
           </h2>
 
-          <p className="mt-3 text-base sm:text-lg text-neutral-purple-800 leading-relaxed font-normal">
-            Straightforward, practical guides for farmers, cooperative leaders, and agronomists on rice decarbonization, water stewardship, and carbon credits.
+          <p className="text-base sm:text-lg font-normal text-muted-foreground leading-relaxed">
+            Essential reference materials for cooperative managers, verifiers, and extension officers managing Alternate Wetting and Drying cohorts.
           </p>
         </div>
 
-        {/* 5-Card Article Grid */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* 3-Card Knowledge Grid */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {articles.map((article) => {
             const Icon = article.icon;
             return (
               <a
                 key={article.id}
                 href={article.href}
-                className="group rounded-xl border border-neutral-purple-200 bg-white p-6 sm:p-7 shadow-xs hover:border-primary-green-400 hover:shadow-sm transition-all duration-150 flex flex-col justify-between"
+                className="group rounded-card border border-border bg-card p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-brand/60 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
-                <div>
-                  {/* Category & Read Time */}
-                  <div className="flex items-center justify-between pb-4 border-b border-neutral-purple-200">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <span className="text-[10px] font-mono font-medium uppercase tracking-wider px-2 py-0.5 rounded-pill bg-muted text-muted-foreground border border-border">
                       {article.category}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-xs font-mono text-neutral-purple-600">
-                      <Clock className="w-3 h-3 text-neutral-purple-500" />
-                      <span>{article.readTime}</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono text-subtle">
+                      <IconClock size={12} stroke={1.5} />
+                      <span className="tabular-nums">{article.readTime}</span>
                     </span>
                   </div>
 
-                  {/* Icon & Title */}
-                  <div className="mt-5 flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-neutral-purple-50 border border-neutral-purple-200 flex items-center justify-center text-primary-green-700 group-hover:bg-primary-green-50 group-hover:border-primary-green-300 transition-colors duration-150 shrink-0">
-                      <Icon className="w-5 h-5" />
+                  <div className="space-y-1">
+                    <div className="w-8 h-8 rounded-control bg-muted border border-border flex items-center justify-center text-brand mb-3">
+                      <Icon size={16} stroke={1.5} />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-primary-green-900 leading-snug group-hover:text-primary-green-700 transition-colors duration-150">
-                        {article.title}
-                      </h3>
-                      <p className="mt-1 text-xs font-semibold text-primary-green-800">
-                        {article.subtitle}
-                      </p>
-                    </div>
+                    <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-brand transition-colors duration-150">
+                      {article.title}
+                    </h3>
+                    <p className="text-xs font-mono text-brand">
+                      {article.subtitle}
+                    </p>
                   </div>
 
-                  {/* Summary */}
-                  <p className="mt-4 text-sm text-neutral-purple-800 leading-relaxed font-normal">
+                  <p className="text-sm font-normal text-muted-foreground leading-relaxed">
                     {article.description}
                   </p>
                 </div>
 
-                {/* Read More Transition Action */}
-                <div className="mt-6 pt-4 border-t border-neutral-purple-200 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold font-mono text-primary-green-700 group-hover:text-primary-green-900 transition-colors duration-150">
-                    <span>Read more</span>
-                    <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-150" />
+                <div className="pt-3 border-t border-border flex items-center justify-between text-xs font-mono text-brand">
+                  <span className="inline-flex items-center gap-1">
+                    <span>Review Guide</span>
+                    <IconArrowRight
+                      size={13}
+                      stroke={1.5}
+                      className="group-hover:translate-x-0.5 transition-transform duration-150"
+                    />
                   </span>
-                  <span className="text-[11px] font-mono text-neutral-purple-500">
-                    Article #{article.id}
-                  </span>
+                  <span className="text-subtle">#{article.id}</span>
                 </div>
               </a>
             );
@@ -141,4 +126,3 @@ export function LearnBasicsSection() {
     </section>
   );
 }
-

@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Cpu, Users, Wallet, Activity, ShieldCheck } from "lucide-react";
+import {
+  IconCpu,
+  IconBuildingCommunity,
+  IconCoins,
+  IconActivity,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 
 interface Slide {
   id: string;
@@ -10,33 +16,36 @@ interface Slide {
   title: string;
   caption: string;
   image: string;
-  icon: typeof Cpu;
+  icon: typeof IconCpu;
 }
 
 const SLIDES: Slide[] = [
   {
     id: "telemetry",
-    tag: "Edge IoT Telemetry",
-    title: "Automated Piezometer Telemetry",
-    caption: "Monitoring water tables in real time without manual tampering.",
-    image: "/images/farm1.png",
-    icon: Cpu,
+    tag: "Ground Telemetry",
+    title: "Continuous Field Piezometers",
+    caption:
+      "Perforated PVC tubes log soil water recession down to -15 cm without manual tampering or paperwork.",
+    image: "/images/farm1.webp",
+    icon: IconCpu,
   },
   {
     id: "aggregation",
-    tag: "Smallholder Aggregation",
-    title: "Cooperative Aggregation",
-    caption: "Unlocking accredited carbon finance for Nigerian smallholders.",
-    image: "/images/farm2.png",
-    icon: Users,
+    tag: "Union Governance",
+    title: "Smallholder Cohort Aggregation",
+    caption:
+      "Bundling contiguous 1-hectare rice parcels into registry-scale cohorts solves prohibitive audit costs.",
+    image: "/images/farm2.webp",
+    icon: IconBuildingCommunity,
   },
   {
     id: "disbursal",
-    tag: "Access Bank Sandbox",
-    title: "Direct Dividend Disbursal",
-    caption: "Fast, transparent proceeds routed to cooperative and farmer wallets.",
-    image: "/images/farm3.png",
-    icon: Wallet,
+    tag: "Direct Settlement",
+    title: "Transparent Carbon Proceeds",
+    caption:
+      "Automated 70/15/15 smart contracts disburse NGN dividends directly to verified farmer bank accounts.",
+    image: "/images/farm3.webp",
+    icon: IconCoins,
   },
 ];
 
@@ -44,12 +53,10 @@ export function AuthCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Next slide handler
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
   }, []);
 
-  // Timed 2.5 second auto-rotation interval with hover pause & reduced motion check
   useEffect(() => {
     if (isPaused) return;
 
@@ -61,30 +68,30 @@ export function AuthCarousel() {
         return;
       }
       nextSlide();
-    }, 2500);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between overflow-hidden bg-primary-green-700 text-white select-none"
+      className="relative w-full h-full flex flex-col justify-between overflow-hidden bg-chrome text-brand-foreground select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       role="region"
-      aria-label="CarbonTensor Key Capabilities Carousel"
+      aria-label="CarbonTensor Platform Capabilities Carousel"
     >
-      {/* Background Images with 400ms cross-fade */}
+      {/* Background Images with Cross-Fade */}
       <div className="absolute inset-0 z-0">
         {SLIDES.map((slide, index) => {
           const isActive = index === currentIndex;
           return (
             <div
               key={slide.id}
-              className="absolute inset-0 bg-neutral-purple-200/20"
+              className="absolute inset-0 bg-chrome"
               style={{
                 opacity: isActive ? 1 : 0,
-                transition: "opacity 400ms cubic-bezier(0.22, 1, 0.36, 1)",
+                transition: "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1)",
                 zIndex: isActive ? 1 : 0,
               }}
               aria-hidden={!isActive}
@@ -97,9 +104,9 @@ export function AuthCarousel() {
                 className="object-cover"
                 sizes="50vw"
               />
-              {/* Solid Green Brand Gradient Overlays */}
-              <div className="absolute inset-0 bg-primary-green-900/65 mix-blend-multiply" />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary-green-900 via-primary-green-900/40 to-transparent" />
+              {/* Forest Green Tonal Gradient Overlays (Zero Backdrop Blur) */}
+              <div className="absolute inset-0 bg-chrome/75 mix-blend-multiply" />
+              <div className="absolute inset-0 bg-gradient-to-t from-chrome via-chrome/50 to-transparent" />
             </div>
           );
         })}
@@ -108,21 +115,21 @@ export function AuthCarousel() {
       {/* Top Header Identity */}
       <div className="relative z-10 p-8 sm:p-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded bg-primary-green-600 border border-primary-green-400 flex items-center justify-center text-white shadow-xs">
-            <Activity className="w-5 h-5 text-primary-green-100" />
+          <div className="w-8 h-8 rounded-control bg-brand border border-white/20 flex items-center justify-center text-brand-foreground">
+            <IconActivity size={18} stroke={1.5} />
           </div>
           <div>
-            <span className="font-extrabold text-xl tracking-tight text-white block">
+            <span className="font-medium text-lg tracking-tight text-white block">
               CarbonTensor
             </span>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-primary-green-200 font-bold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/70">
               MRV &amp; Dividend Disbursal
             </span>
           </div>
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-primary-green-800/80 border border-primary-green-600/70 text-xs font-mono text-primary-green-200 backdrop-blur-xs">
-          <span className="w-2 h-2 rounded-full bg-primary-green-400 animate-pulse" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-pill bg-white/10 border border-white/20 text-xs font-mono text-white/90">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
           <span>Argungu Cluster, Kebbi</span>
         </div>
       </div>
@@ -130,7 +137,7 @@ export function AuthCarousel() {
       {/* Bottom Content: Captions & Slide Indicators */}
       <div className="relative z-10 p-8 sm:p-12 flex flex-col space-y-6">
         {/* Caption Container */}
-        <div className="min-h-[140px] flex flex-col justify-end">
+        <div className="min-h-[130px] flex flex-col justify-end">
           {SLIDES.map((slide, index) => {
             const isActive = index === currentIndex;
             const Icon = slide.icon;
@@ -139,18 +146,18 @@ export function AuthCarousel() {
             return (
               <div
                 key={slide.id}
-                className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300"
+                className="space-y-3 animate-in fade-in duration-200"
               >
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-primary-green-800/90 border border-primary-green-600 text-xs font-mono font-semibold text-primary-green-100">
-                  <Icon className="w-3.5 h-3.5 text-accent-orange-500" />
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill bg-white/10 border border-white/20 text-xs font-mono font-medium text-white">
+                  <Icon size={14} stroke={1.5} className="text-accent" />
                   <span>{slide.tag}</span>
                 </div>
 
-                <h2 className="text-2xl font-bold text-white tracking-tight leading-tight">
+                <h2 className="text-2xl font-medium text-white tracking-tight leading-[1.2]">
                   {slide.title}
                 </h2>
 
-                <p className="text-base text-neutral-100/90 leading-relaxed font-normal max-w-lg">
+                <p className="text-sm text-white/80 leading-relaxed font-normal max-w-lg">
                   {slide.caption}
                 </p>
               </div>
@@ -159,7 +166,7 @@ export function AuthCarousel() {
         </div>
 
         {/* Progress Bar Indicators */}
-        <div className="pt-4 border-t border-primary-green-600/60 flex items-center justify-between gap-4">
+        <div className="pt-4 border-t border-white/15 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 flex-1 max-w-xs">
             {SLIDES.map((slide, index) => {
               const isActive = index === currentIndex;
@@ -168,15 +175,13 @@ export function AuthCarousel() {
                   key={slide.id}
                   type="button"
                   onClick={() => setCurrentIndex(index)}
-                  className="flex-1 py-2 group focus:outline-none"
+                  className="flex-1 py-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-control"
                   aria-label={`Jump to slide ${index + 1}: ${slide.title}`}
                   aria-current={isActive ? "true" : undefined}
                 >
                   <div
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? "bg-accent-orange-500 w-full"
-                        : "bg-primary-green-600/60 group-hover:bg-primary-green-500"
+                    className={`h-1 rounded-pill transition-all duration-200 ${
+                      isActive ? "bg-accent w-full" : "bg-white/30 group-hover:bg-white/50"
                     }`}
                   />
                 </button>
@@ -184,9 +189,9 @@ export function AuthCarousel() {
             })}
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-primary-green-200">
-            <ShieldCheck className="w-3.5 h-3.5 text-primary-green-400" />
-            <span>2.5s Cycle • Hover to pause</span>
+          <div className="flex items-center gap-1.5 text-xs font-mono text-white/70">
+            <IconShieldCheck size={14} stroke={1.5} className="text-brand-muted" />
+            <span>Hover to pause</span>
           </div>
         </div>
       </div>

@@ -9,6 +9,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        subtle: "var(--subtle)",
+        border: "var(--border)",
+        brand: {
+          DEFAULT: "var(--brand)",
+          hover: "var(--brand-hover)",
+          muted: "var(--brand-muted)",
+          foreground: "var(--brand-foreground)",
+        },
+        chrome: "var(--chrome)",
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          muted: "var(--accent-muted)",
+          foreground: "var(--accent-foreground)",
+        },
+        status: {
+          success: {
+            bg: "var(--status-success-bg)",
+            fg: "var(--status-success-fg)",
+            text: "var(--status-success-fg)",
+          },
+          warning: {
+            bg: "var(--status-warning-bg)",
+            fg: "var(--status-warning-fg)",
+            text: "var(--status-warning-fg)",
+          },
+          error: {
+            bg: "var(--status-error-bg)",
+            fg: "var(--status-error-fg)",
+            text: "var(--status-error-fg)",
+          },
+          info: {
+            bg: "var(--status-info-bg)",
+            fg: "var(--status-info-fg)",
+            text: "var(--status-info-fg)",
+          },
+        },
+        // Retained for existing views during gradual refactor
         "primary-green": {
           50: "#EAF3ED",
           100: "#C9E2D2",
@@ -45,29 +93,11 @@ const config: Config = {
           800: "#2F2A43",
           900: "#161321",
         },
-        status: {
-          success: {
-            bg: "#EAF3ED",
-            text: "#0B4D25",
-          },
-          warning: {
-            bg: "#FDF5E6",
-            text: "#7A4D05",
-          },
-          error: {
-            bg: "#FDF0ED",
-            text: "#7A1C18",
-          },
-          info: {
-            bg: "#EEF4F8",
-            text: "#0B4D25",
-          },
-        },
       },
       fontFamily: {
         sans: [
-          "var(--font-google-sans)",
-          "Google Sans",
+          "var(--font-geist-sans)",
+          "Geist",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -75,6 +105,15 @@ const config: Config = {
           "Roboto",
           "sans-serif",
         ],
+        mono: [
+          "var(--font-geist-mono)",
+          "Geist Mono",
+          "monospace",
+        ],
+      },
+      borderRadius: {
+        control: "var(--radius-control)",
+        card: "var(--radius-card)",
       },
     },
   },
@@ -82,4 +121,3 @@ const config: Config = {
 };
 
 export default config;
-

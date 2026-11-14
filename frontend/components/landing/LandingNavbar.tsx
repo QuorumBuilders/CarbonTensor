@@ -1,61 +1,94 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X, Activity } from "lucide-react";
+import { IconLeaf, IconArrowRight, IconMenu2, IconX } from "@tabler/icons-react";
 
 export function LandingNavbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 16);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navLinks = [
-    { label: "How it works", href: "#how-it-works" },
-    { label: "Learn", href: "#learn" },
-    { label: "White paper", href: "#white-paper" },
-    { label: "About", href: "#about" },
+    { label: "AWD Agronomy", href: "#awd-explainer" },
+    { label: "Architecture", href: "#how-it-works" },
+    { label: "70/15/15 Split", href: "#payout-split" },
+    { label: "Governance & FAQ", href: "#governance" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-neutral-purple-200">
+    <header
+      className={`sticky top-0 z-40 w-full transition-colors duration-fast ${
+        isScrolled
+          ? "bg-card border-b border-border shadow-xs"
+          : "bg-background/80 border-b border-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-16 sm:h-18">
           
-          {/* Brand Identity with small pill badge AWD MRV Layer */}
+          {/* Brand Identity */}
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded bg-primary-green-700 flex items-center justify-center text-white shadow-xs">
-                <Activity className="w-4 h-4 text-primary-green-100" />
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-control"
+            >
+              <div className="w-8 h-8 rounded-control bg-brand flex items-center justify-center text-brand-foreground transition-colors group-hover:bg-brand-hover">
+                <IconLeaf size={18} stroke={1.5} />
               </div>
-              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors duration-150">
+              <span className="font-medium text-base sm:text-lg tracking-tight text-foreground">
                 CarbonTensor
               </span>
             </Link>
 
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold tracking-wider uppercase bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
+            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-pill text-[10px] font-mono font-medium tracking-wider uppercase bg-brand-muted text-brand border border-border">
               AWD MRV Layer
             </span>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-purple-900">
+          <nav
+            aria-label="Main Navigation"
+            className="hidden md:flex items-center gap-7 text-xs font-medium text-muted-foreground"
+          >
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="hover:text-primary-green-700 border-b border-transparent hover:border-primary-green-300 transition-all duration-150 py-1"
+                className="hover:text-foreground transition-colors duration-fast py-1"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Desktop Right CTA: Single Bold Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop Right CTAs */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
-              href="/auth/register"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-xs hover:shadow-sm"
+              href="/auth/login"
+              className="h-9 px-3.5 rounded-control text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-fast flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
-              <span>Register</span>
-              <ArrowRight className="w-4 h-4" />
+              Sign In
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="group h-9 px-4 rounded-control text-xs font-medium text-brand-foreground bg-brand hover:bg-brand-hover active:bg-brand transition-colors duration-fast flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+            >
+              <span>Open Portal</span>
+              <IconArrowRight
+                size={14}
+                stroke={1.5}
+                className="group-hover:translate-x-0.5 transition-transform duration-fast"
+              />
             </Link>
           </div>
 
@@ -64,14 +97,14 @@ export function LandingNavbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md text-neutral-purple-800 hover:text-primary-green-900 hover:bg-neutral-purple-100 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-green-600"
+              className="p-2 rounded-control text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <IconX size={20} stroke={1.5} />
               ) : (
-                <Menu className="w-6 h-6" />
+                <IconMenu2 size={20} stroke={1.5} />
               )}
             </button>
           </div>
@@ -79,30 +112,38 @@ export function LandingNavbar() {
         </div>
       </div>
 
-      {/* Mobile Accessible Drawer / Sheet */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-neutral-purple-200 bg-white px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-150 shadow-lg">
-          <nav className="flex flex-col space-y-3 pt-2 text-base font-semibold text-neutral-purple-900">
+        <div className="md:hidden border-b border-border bg-card px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-fast">
+          <nav className="flex flex-col space-y-1 pt-1 text-sm font-medium text-foreground">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-2 rounded-md hover:bg-neutral-purple-50 hover:text-primary-green-700 transition-colors duration-150"
+                className="px-3 py-2.5 rounded-control hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-fast min-h-[44px] flex items-center"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="pt-2 border-t border-neutral-purple-200 flex flex-col gap-2">
+          <div className="pt-3 border-t border-border flex flex-col gap-2">
             <Link
-              href="/auth/register"
+              href="/auth/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 transition-all duration-150 shadow-sm"
+              className="w-full h-10 rounded-control text-xs font-medium text-center flex items-center justify-center border border-border text-foreground hover:bg-muted transition-colors"
             >
-              <span>Register</span>
-              <ArrowRight className="w-4 h-4" />
+              Sign In to Account
+            </Link>
+
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full h-10 rounded-control text-xs font-medium text-center flex items-center justify-center gap-1.5 bg-brand text-brand-foreground hover:bg-brand-hover transition-colors"
+            >
+              <span>Open Portal</span>
+              <IconArrowRight size={14} stroke={1.5} />
             </Link>
           </div>
         </div>

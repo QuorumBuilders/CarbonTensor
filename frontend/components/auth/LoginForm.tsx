@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
+import {
+  IconMail,
+  IconLock,
+  IconEye,
+  IconEyeOff,
+  IconAlertCircle,
+  IconArrowRight,
+  IconCheck,
+} from "@tabler/icons-react";
 import { api } from "@/lib/api/endpoints";
 import { DEMO_PERSONAS, setStoredSession } from "@/lib/mock-data";
 import type { PersonaRole } from "@/types";
@@ -33,7 +41,6 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      // Determine effective persona from email or active selection
       const emailLower = email.toLowerCase();
       let effectiveRole: PersonaRole = selectedPersona;
       if (
@@ -52,90 +59,88 @@ export function LoginForm() {
         effectiveRole = "cooperative";
       }
 
-      // Store mock user session in localStorage (carbontensor_session) matching PR #9 DRF spec
       setStoredSession(effectiveRole);
 
-      // Best effort API call (falls back seamlessly to mock)
       try {
         await api.auth.login({ email, password });
       } catch {
-        // Proceed with stored session
+        // Mock fallback session
       }
 
-      // Redirect dynamically based on persona destination route
       const destination = DEMO_PERSONAS[effectiveRole].destination;
       router.push(destination);
     } catch {
-      setError("Invalid credentials. Please verify your email or use a demo quick-fill.");
+      setError("Invalid credentials. Please verify your email or select a demo preset.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Demo Quick-Fill Bar */}
-      <div className="p-3 bg-primary-green-50/70 border border-primary-green-200 rounded-lg">
-        <div className="flex items-center justify-between gap-2 mb-2">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary-green-900 flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-primary-green-600" />
-            Rapid Judging Presets
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Demo Fast Presets Bar */}
+      <div className="p-3 bg-muted/60 border border-border rounded-control space-y-2">
+        <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+          <span className="font-medium text-foreground flex items-center gap-1.5">
+            <IconCheck size={14} stroke={1.5} className="text-brand" />
+            Evaluation Presets
           </span>
-          <span className="text-xs font-mono text-primary-green-700">1-click demo fill</span>
+          <span className="text-subtle">1-click demo fill</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
           <button
             type="button"
             onClick={() => handleQuickFill("cooperative")}
-            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+            className={`text-xs font-mono font-medium py-1.5 px-2 rounded-control border text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
               selectedPersona === "cooperative" && email === DEMO_PERSONAS.cooperative.email
-                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
-                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+                ? "bg-brand text-brand-foreground border-brand"
+                : "bg-card text-foreground border-border hover:bg-muted"
             }`}
           >
-            [Demo: Cooperative Admin]
+            [Coop Admin]
           </button>
           <button
             type="button"
             onClick={() => handleQuickFill("staff")}
-            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+            className={`text-xs font-mono font-medium py-1.5 px-2 rounded-control border text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
               selectedPersona === "staff" && email === DEMO_PERSONAS.staff.email
-                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
-                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+                ? "bg-brand text-brand-foreground border-brand"
+                : "bg-card text-foreground border-border hover:bg-muted"
             }`}
           >
-            [Demo: Field Verifier]
+            [Field Verifier]
           </button>
           <button
             type="button"
             onClick={() => handleQuickFill("farmer")}
-            className={`text-xs font-medium py-1 px-2.5 rounded-md border transition-colors duration-150 ${
+            className={`text-xs font-mono font-medium py-1.5 px-2 rounded-control border text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
               selectedPersona === "farmer" && email === DEMO_PERSONAS.farmer.email
-                ? "bg-primary-green-700 text-white border-primary-green-700 shadow-xs"
-                : "bg-white text-primary-green-800 border-primary-green-300 hover:bg-primary-green-100 hover:border-primary-green-500"
+                ? "bg-brand text-brand-foreground border-brand"
+                : "bg-card text-foreground border-border hover:bg-muted"
             }`}
           >
-            [Demo: Smallholder Farmer]
+            [Farmer Wallet]
           </button>
         </div>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-md text-xs font-mono flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-3 bg-status-error-bg text-status-error-fg border border-status-error-fg/30 rounded-control text-xs font-mono flex items-center gap-2">
+          <IconAlertCircle size={15} stroke={1.5} className="shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Email Field */}
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-neutral-800 mb-2">
-          Email Address
+      <div className="space-y-1.5">
+        <label htmlFor="email" className="block text-xs font-mono font-medium text-foreground">
+          Work or Cooperative Email
         </label>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-purple-500">
-            <Mail className="w-4 h-4" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
+            <IconMail size={16} stroke={1.5} />
           </div>
           <input
             id="email"
@@ -143,32 +148,29 @@ export function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="coop@carbontensor.org"
-            className="w-full h-11 pl-10 pr-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+            placeholder="admin@kebbigreenrice.org"
+            className="w-full h-10 pl-9 pr-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
           />
         </div>
       </div>
 
       {/* Password Field */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <label htmlFor="password" className="block text-sm font-medium text-neutral-800">
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label htmlFor="password" className="block text-xs font-mono font-medium text-foreground">
             Password
           </label>
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("In sandbox demo mode, please use any password or quick-fill.");
-            }}
-            className="text-xs font-mono text-accent-orange-600 hover:text-accent-orange-700 hover:underline"
+          <button
+            type="button"
+            onClick={() => alert("In sandbox demo mode, any password or quick-fill button will authenticate.")}
+            className="text-xs font-mono text-muted-foreground hover:text-brand focus-visible:outline-none focus-visible:underline"
           >
             Forgot password?
-          </Link>
+          </button>
         </div>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-purple-500">
-            <Lock className="w-4 h-4" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
+            <IconLock size={16} stroke={1.5} />
           </div>
           <input
             id="password"
@@ -176,16 +178,16 @@ export function LoginForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full h-11 pl-10 pr-10 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+            placeholder="••••••••••••"
+            className="w-full h-10 pl-9 pr-9 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-neutral-purple-500 hover:text-neutral-purple-800"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus-visible:outline-none"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {showPassword ? <IconEyeOff size={16} stroke={1.5} /> : <IconEye size={16} stroke={1.5} />}
           </button>
         </div>
       </div>
@@ -197,37 +199,36 @@ export function LoginForm() {
           type="checkbox"
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          className="h-4 w-4 rounded border-neutral-purple-300 text-primary-green-700 focus:ring-primary-green-600"
+          className="h-4 w-4 rounded-control border-border text-brand focus:ring-brand"
         />
-        <label htmlFor="remember-me" className="ml-2.5 block text-xs font-mono text-neutral-purple-700 select-none">
-          Remember session credentials on this device
+        <label htmlFor="remember-me" className="ml-2 block text-xs font-mono text-muted-foreground select-none">
+          Keep me signed in for 30 days
         </label>
       </div>
-
-      {/* Single Crisp Consent Line */}
-      <p className="text-xs text-neutral-purple-600 leading-relaxed font-normal">
-        By continuing, you agree to CarbonTensor AWD telemetry monitoring and cooperative dividend rules.
-      </p>
 
       {/* Submit Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 px-4 rounded-md text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
+        className="w-full h-10 px-4 rounded-control text-sm font-medium text-brand-foreground bg-brand hover:bg-brand-hover active:bg-brand disabled:opacity-50 transition-colors duration-150 flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       >
         <span>{loading ? "Authenticating..." : "Sign In to Portal"}</span>
-        <ArrowRight className="w-4 h-4" />
+        <IconArrowRight
+          size={16}
+          stroke={1.5}
+          className="group-hover:translate-x-0.5 transition-transform duration-150"
+        />
       </button>
 
       {/* Switch to Register */}
-      <div className="pt-4 border-t border-neutral-purple-200 text-center">
-        <p className="text-sm text-neutral-purple-700">
-          New to CarbonTensor?{" "}
+      <div className="pt-3 border-t border-border text-center">
+        <p className="text-xs font-mono text-muted-foreground">
+          Don&apos;t have an account?{" "}
           <Link
             href="/auth/register"
-            className="font-semibold text-primary-green-700 hover:text-primary-green-900 hover:underline"
+            className="text-brand font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-control"
           >
-            Register your plot or cooperative
+            Register a cooperative plot
           </Link>
         </p>
       </div>

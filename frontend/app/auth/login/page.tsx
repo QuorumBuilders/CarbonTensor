@@ -3,15 +3,16 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Sign In | CarbonTensor Portal",
-  description: "Sign in to access your Nigerian rice cooperative AWD MRV telemetry and carbon dividend portal.",
+  title: "Sign In | CarbonTensor MRV Portal",
+  description:
+    "Access real-time AWD water level telemetry, inspect flagged sensor anomalies, and manage seasonal carbon dividend disbursements for the Kebbi State cohort.",
 };
 
 export default function LoginPage() {
   return (
     <AuthLayout
-      title="Welcome to CarbonTensor"
-      subtitle="Sign in to your cooperative or verifier account to access real-time AWD telemetry, soil sensor checks, and carbon dividend ledgers."
+      title="Sign in to the CarbonTensor MRV Portal"
+      subtitle="Access real-time AWD water level telemetry, inspect flagged sensor anomalies, and manage seasonal carbon dividend disbursements for the Kebbi State cohort."
     >
       <LoginForm />
     </AuthLayout>

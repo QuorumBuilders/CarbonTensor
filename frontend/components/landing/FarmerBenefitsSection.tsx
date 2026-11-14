@@ -1,114 +1,121 @@
-import { Wallet, FileCheck2, Droplets, Info, CheckCircle2 } from "lucide-react";
+import {
+  IconDeviceMobile,
+  IconCoins,
+  IconDroplet,
+  IconCircleCheck,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 
 export function FarmerBenefitsSection() {
   const benefits = [
     {
-      icon: Wallet,
-      badge: "Direct Earnings",
-      title: "Your share of carbon proceeds",
-      subtitle: "Payments directly to your bank account.",
+      badge: "Feature Phone Access",
+      title: "USSD *384# & SMS Water Alerts",
+      subtitle: "No smartphone or internet data required.",
       description:
-        "Carbon proceeds earned from verified methane reductions are deposited directly into your bank account or cooperative mobile wallet via Access Bank Sandbox. Every transaction is transparently accounted for, with zero hidden intermediary cuts.",
-      highlight: "Direct bank disbursal via Access Bank",
+        "Field telemetry automatically dispatches local language SMS and USSD notifications to basic handsets when a plot reaches the -15 cm safe drainage mark, letting farmers know exactly when to open canal gates.",
+      highlight: "USSD *384# interactive farmer prompts",
+      icon: IconDeviceMobile,
     },
     {
-      icon: FileCheck2,
-      badge: "Simplified Operations",
-      title: "Less paperwork",
-      subtitle: "Sensors replace repetitive manual field visits.",
+      badge: "Zero Capital Barrier",
+      title: "Zero Upfront Hardware Fee",
+      subtitle: "Piezometers deployed via cooperative cohorts.",
       description:
-        "In-situ water tubes log water level fluctuations automatically every day. Farmers don't need to fill out tedious paper records or wait for third-party inspectors to conduct invasive, manual field visits before their plots are verified.",
-      highlight: "Automated telemetry replaces physical audits",
+        "Perforated PVC sensor tubes and solar-powered transmitters are provisioned through cooperative aggregation. Farmers incur zero out-of-pocket hardware or calibration costs to join the verified carbon cohort.",
+      highlight: "100% cooperative-sponsored hardware",
+      icon: IconCoins,
     },
     {
-      icon: Droplets,
-      badge: "Agronomic Value",
-      title: "Better water use",
-      subtitle: "Reduced irrigation cuts pumping costs and protects crops.",
+      badge: "Operational Efficiency",
+      title: "Up to 30% Irrigation Fuel Savings",
+      subtitle: "Reduced pumping lowers seasonal expenses.",
       description:
-        "Periodic drainage conserves up to 30% of irrigation water, substantially lowering diesel pump fuel expenses. Healthier aerated root zones support strong tillering and grain filling throughout the growing season.",
-      highlight: "Up to 30% irrigation fuel savings",
+        "Periodic field drainage significantly decreases diesel pump run-time while enhancing oxygen diffusion to root systems. Documented trials show stronger tillering without grain yield penalties.",
+      highlight: "Direct operational expense reduction",
+      icon: IconDroplet,
     },
   ];
 
   return (
-    <section id="benefits" className="py-16 sm:py-20 lg:py-24 bg-neutral-purple-50 border-b border-neutral-purple-200">
+    <section
+      id="benefits"
+      className="py-16 sm:py-20 lg:py-24 bg-card border-b border-border"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+        
         {/* Section Header */}
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white text-xs font-semibold text-primary-green-800 mb-3 border border-neutral-purple-200">
-            <span className="w-2 h-2 rounded-full bg-primary-green-500" />
-            <span>Smallholder Prosperity</span>
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill bg-muted text-xs font-mono font-medium text-foreground border border-border">
+            <IconDroplet size={14} stroke={1.5} className="text-accent" />
+            <span>Smallholder Economics</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
-            Built around the farmer.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-foreground leading-[1.2]">
+            Tangible agronomic savings
+            <br className="hidden sm:inline" /> and direct carbon income.
           </h2>
 
-          <p className="mt-3 text-base sm:text-lg text-neutral-purple-800 leading-relaxed font-normal">
-            CarbonTensor turns climate-smart water management into tangible economic gains, reduced labor, and lower operational expenses for smallholder rice growers.
+          <p className="text-base sm:text-lg font-normal text-muted-foreground leading-relaxed">
+            Designed specifically for smallholder rice farmers in Northern Nigeria with zero hardware cost, feature-phone alerts, and automated bank settlements.
           </p>
         </div>
 
         {/* 3 Benefits Cards */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
               <div
                 key={benefit.title}
-                className="rounded-xl border border-neutral-purple-200 bg-white p-6 sm:p-7 shadow-xs hover:border-primary-green-300 transition-colors duration-150 flex flex-col justify-between"
+                className="rounded-card border border-border bg-background p-6 sm:p-7 flex flex-col justify-between space-y-6"
               >
-                <div>
-                  {/* Badge & Icon */}
-                  <div className="flex items-center justify-between pb-4 border-b border-neutral-purple-200">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <span className="text-[10px] font-mono font-medium uppercase tracking-wider px-2 py-0.5 rounded-pill bg-muted text-muted-foreground border border-border">
                       {benefit.badge}
                     </span>
-                    <div className="w-9 h-9 rounded-lg bg-primary-green-50 border border-primary-green-200 flex items-center justify-center text-primary-green-700">
-                      <Icon className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-control bg-card border border-border flex items-center justify-center text-brand">
+                      <Icon size={16} stroke={1.5} />
                     </div>
                   </div>
 
-                  {/* Title & Subtitle */}
-                  <div className="mt-5">
-                    <h3 className="text-lg sm:text-xl font-bold text-primary-green-900 leading-snug">
+                  <div className="space-y-1">
+                    <h3 className="text-base sm:text-lg font-medium text-foreground leading-snug">
                       {benefit.title}
                     </h3>
-                    <p className="mt-1 text-xs font-semibold text-primary-green-700">
+                    <p className="text-xs font-mono text-brand">
                       {benefit.subtitle}
                     </p>
                   </div>
 
-                  {/* Description */}
-                  <p className="mt-4 text-sm text-neutral-purple-800 leading-relaxed font-normal">
+                  <p className="text-sm font-normal text-muted-foreground leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>
 
-                {/* Card Footer Feature Pill */}
-                <div className="mt-6 pt-4 border-t border-neutral-purple-200">
-                  <div className="flex items-center gap-2 text-xs font-mono text-primary-green-800">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-primary-green-600 shrink-0" />
-                    <span>{benefit.highlight}</span>
-                  </div>
+                <div className="pt-3 border-t border-border flex items-center gap-2 text-xs font-mono text-brand">
+                  <IconCircleCheck size={14} stroke={1.5} className="shrink-0" />
+                  <span>{benefit.highlight}</span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Ghana Citation & Methodology Disclaimer Callout */}
-        <div className="mt-10 rounded-xl border border-neutral-purple-300 bg-white p-5 sm:p-6 shadow-xs">
-          <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-primary-green-700 shrink-0 mt-0.5" />
-            <div className="text-xs sm:text-sm text-neutral-purple-800 leading-relaxed font-normal">
-              <strong className="text-primary-green-900 font-semibold">Agronomic Citation & Field Reality Note: </strong>
-              Field studies (including UNDP Ghana, April 2026) report approximately ~30% rice yield improvement alongside substantial water savings under disciplined Alternate Wetting and Drying regimes.
-              <span className="block mt-1 text-xs font-mono text-neutral-purple-600">
-                Disclaimer: Actual agricultural yield results across Nigerian rice basins (e.g., Kano, Kebbi, Niger) may vary depending on local soil characteristics, hydrology, weather fluctuations, and rice varietal genetics.
-              </span>
+        {/* Field Reality Disclaimer Callout */}
+        <div className="mt-8 rounded-card border border-border bg-muted/40 p-5 sm:p-6">
+          <div className="flex items-start gap-3.5">
+            <div className="w-8 h-8 rounded-control bg-card border border-border flex items-center justify-center text-foreground shrink-0 mt-0.5">
+              <IconInfoCircle size={18} stroke={1.5} className="text-accent" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium text-foreground">
+                Agronomic Field Citation & Local Hydrology Note
+              </h3>
+              <p className="text-xs sm:text-sm font-normal text-muted-foreground leading-relaxed">
+                Peer-reviewed research and international field trials across West African river basins confirm up to 30% irrigation water savings under disciplined AWD regimes. Actual yield outcomes in the Kebbi/Argungu cluster depend on local soil permeability, irrigation canal infrastructure, and weather variability.
+              </p>
             </div>
           </div>
         </div>

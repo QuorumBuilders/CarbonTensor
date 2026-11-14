@@ -3,15 +3,16 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
 export const metadata: Metadata = {
-  title: "Register Account | CarbonTensor",
-  description: "Register your smallholder rice plot or cooperative union for verified AWD carbon finance in Nigeria.",
+  title: "Register | Nigerian AWD Carbon Cohort",
+  description:
+    "Onboard smallholder rice paddies or register your cooperative union to start logging water levels and earning verified carbon revenue.",
 };
 
 export default function RegisterPage() {
   return (
     <AuthLayout
-      title="Join the AWD MRV Network"
-      subtitle="Register your rice farming plot or onboard your cooperative union to start measuring water levels and earning verified carbon dividends."
+      title="Register for the Nigerian AWD Carbon Cohort"
+      subtitle="Onboard smallholder rice paddies or register your cooperative union to start logging water levels and earning verified carbon revenue."
     >
       <RegisterForm />
     </AuthLayout>

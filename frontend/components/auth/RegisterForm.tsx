@@ -3,7 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, UserCheck, Building2, AlertCircle } from "lucide-react";
+import {
+  IconUser,
+  IconBuildingCommunity,
+  IconAlertCircle,
+  IconArrowRight,
+} from "@tabler/icons-react";
 import { api } from "@/lib/api/endpoints";
 
 type AccountType = "farmer" | "cooperative";
@@ -20,15 +25,18 @@ export function RegisterForm() {
   const [farmerPhone, setFarmerPhone] = useState("");
   const [idType, setIdType] = useState<"NIN" | "VOTER_ID">("NIN");
   const [idNumber, setIdNumber] = useState("");
+  const [coopAffiliation, setCoopAffiliation] = useState("Kebbi Green Rice Growers Union");
+  const [plotArea, setPlotArea] = useState("1.5");
   const [farmerPassword, setFarmerPassword] = useState("");
   const [farmerConfirmPassword, setFarmerConfirmPassword] = useState("");
 
   // Cooperative State
   const [coopName, setCoopName] = useState("");
   const [regNumber, setRegNumber] = useState("");
+  const [clusterLga, setClusterLga] = useState("Argungu / Rima River Basin");
   const [contactEmail, setContactEmail] = useState("");
   const [coopPhone, setCoopPhone] = useState("");
-  const [coopAddress, setCoopAddress] = useState("");
+  const [bankAccount, setBankAccount] = useState("");
   const [coopPassword, setCoopPassword] = useState("");
   const [coopConfirmPassword, setCoopConfirmPassword] = useState("");
 
@@ -56,7 +64,7 @@ export function RegisterForm() {
         });
         router.push("/dashboard");
       } catch {
-        setError("Registration could not be completed. Please check your information.");
+        setError("Registration could not be completed. Please verify your information.");
       } finally {
         setLoading(false);
       }
@@ -73,7 +81,7 @@ export function RegisterForm() {
           registration_number: regNumber,
           contact_email: contactEmail,
           phone: coopPhone,
-          address: coopAddress,
+          address: clusterLga,
           password: coopPassword,
         });
         router.push("/dashboard");
@@ -86,23 +94,23 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Account Type Toggle */}
-      <div className="grid grid-cols-2 gap-2 p-1.5 bg-neutral-purple-100 rounded-lg border border-neutral-purple-200">
+      <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted rounded-control border border-border font-mono text-xs">
         <button
           type="button"
           onClick={() => {
             setAccountType("farmer");
             setError(null);
           }}
-          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-semibold transition-all duration-150 ${
+          className={`flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-control font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             accountType === "farmer"
-              ? "bg-white text-primary-green-900 shadow-xs border border-neutral-purple-200"
-              : "text-neutral-purple-700 hover:text-neutral-purple-900"
+              ? "bg-card text-foreground border border-border"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <UserCheck className="w-4 h-4 text-primary-green-700" />
-          <span>[Join as Farmer]</span>
+          <IconUser size={14} stroke={1.5} className="text-brand" />
+          <span>Smallholder Farmer</span>
         </button>
 
         <button
@@ -111,33 +119,33 @@ export function RegisterForm() {
             setAccountType("cooperative");
             setError(null);
           }}
-          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-semibold transition-all duration-150 ${
+          className={`flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-control font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             accountType === "cooperative"
-              ? "bg-white text-primary-green-900 shadow-xs border border-neutral-purple-200"
-              : "text-neutral-purple-700 hover:text-neutral-purple-900"
+              ? "bg-card text-foreground border border-border"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Building2 className="w-4 h-4 text-primary-green-700" />
-          <span>[Register Cooperative]</span>
+          <IconBuildingCommunity size={14} stroke={1.5} className="text-brand" />
+          <span>Cooperative Union</span>
         </button>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <div className="p-3 bg-status-error-bg text-status-error-text border border-status-error-text/20 rounded-md text-xs font-mono flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-3 bg-status-error-bg text-status-error-fg border border-status-error-fg/30 rounded-control text-xs font-mono flex items-center gap-2">
+          <IconAlertCircle size={15} stroke={1.5} className="shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Main Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         {accountType === "farmer" ? (
           // ==================== Farmer Form Fields ====================
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   First Name
                 </label>
                 <input
@@ -146,11 +154,11 @@ export function RegisterForm() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Aminu"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   Last Name
                 </label>
                 <input
@@ -159,14 +167,14 @@ export function RegisterForm() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Bello"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                Phone Number
+            <div className="space-y-1">
+              <label className="block text-xs font-mono font-medium text-foreground">
+                Mobile Phone (For USSD *384# &amp; SMS)
               </label>
               <input
                 type="tel"
@@ -174,42 +182,72 @@ export function RegisterForm() {
                 value={farmerPhone}
                 onChange={(e) => setFarmerPhone(e.target.value)}
                 placeholder="+234 802 345 6789"
-                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   ID Type
                 </label>
                 <select
                   value={idType}
                   onChange={(e) => setIdType(e.target.value as "NIN" | "VOTER_ID")}
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  className="w-full h-9 px-2 text-sm rounded-control border border-border bg-background text-foreground focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 >
                   <option value="NIN">NIN</option>
                   <option value="VOTER_ID">Voter ID</option>
                 </select>
               </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                  Identity Number
+              <div className="sm:col-span-2 space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Identity Number (as on Bank Account)
                 </label>
                 <input
                   type="text"
                   required
                   value={idNumber}
                   onChange={(e) => setIdNumber(e.target.value)}
-                  placeholder="NIN-98765432101"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  placeholder="23489102931"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Cooperative Affiliation
+                </label>
+                <select
+                  value={coopAffiliation}
+                  onChange={(e) => setCoopAffiliation(e.target.value)}
+                  className="w-full h-9 px-2 text-xs rounded-control border border-border bg-background text-foreground focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
+                >
+                  <option value="Kebbi Green Rice Growers Union">Kebbi Green Rice Union</option>
+                  <option value="Argungu Rima River Basin Cluster">Argungu Rima Cluster</option>
+                  <option value="RIFAN Kebbi State Chapter">RIFAN Kebbi Chapter</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Plot Area Estimate (ha)
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={plotArea}
+                  onChange={(e) => setPlotArea(e.target.value)}
+                  placeholder="1.5"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono tabular-nums"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   Password
                 </label>
                 <input
@@ -217,12 +255,12 @@ export function RegisterForm() {
                   required
                   value={farmerPassword}
                   onChange={(e) => setFarmerPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  placeholder="••••••••••••"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   Confirm Password
                 </label>
                 <input
@@ -230,8 +268,8 @@ export function RegisterForm() {
                   required
                   value={farmerConfirmPassword}
                   onChange={(e) => setFarmerConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  placeholder="••••••••••••"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
             </div>
@@ -239,8 +277,8 @@ export function RegisterForm() {
         ) : (
           // ==================== Cooperative Form Fields ====================
           <>
-            <div>
-              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+            <div className="space-y-1">
+              <label className="block text-xs font-mono font-medium text-foreground">
                 Cooperative Union Name
               </label>
               <input
@@ -249,14 +287,14 @@ export function RegisterForm() {
                 value={coopName}
                 onChange={(e) => setCoopName(e.target.value)}
                 placeholder="Kebbi Green Rice Growers Cooperative Union"
-                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                  Registration Number
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Registration Number (CAC / Ministry)
                 </label>
                 <input
                   type="text"
@@ -264,12 +302,41 @@ export function RegisterForm() {
                   value={regNumber}
                   onChange={(e) => setRegNumber(e.target.value)}
                   placeholder="KGG-COOP-2024-NG-049"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                  Contact Phone
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Operating Cluster &amp; LGA
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={clusterLga}
+                  onChange={(e) => setClusterLga(e.target.value)}
+                  placeholder="Argungu / Rima River Basin"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Official Contact Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="admin@kebbigreenrice.org"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
+                  Primary Phone
                 </label>
                 <input
                   type="tel"
@@ -277,42 +344,28 @@ export function RegisterForm() {
                   value={coopPhone}
                   onChange={(e) => setCoopPhone(e.target.value)}
                   placeholder="+234 803 123 4567"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                Official Contact Email
-              </label>
-              <input
-                type="email"
-                required
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="info@kebbigreenrice.org"
-                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-neutral-800 mb-1.5">
-                Cooperative Head Office Address
+            <div className="space-y-1">
+              <label className="block text-xs font-mono font-medium text-foreground">
+                Access Bank Settlement Account Number
               </label>
               <input
                 type="text"
                 required
-                value={coopAddress}
-                onChange={(e) => setCoopAddress(e.target.value)}
-                placeholder="Argungu Cluster, Rima River Basin, Kebbi State, Nigeria"
-                className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                value={bankAccount}
+                onChange={(e) => setBankAccount(e.target.value)}
+                placeholder="0123456789 (Access Bank NGN)"
+                className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono tabular-nums"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   Password
                 </label>
                 <input
@@ -320,12 +373,12 @@ export function RegisterForm() {
                   required
                   value={coopPassword}
                   onChange={(e) => setCoopPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  placeholder="••••••••••••"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-800 mb-1.5">
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-medium text-foreground">
                   Confirm Password
                 </label>
                 <input
@@ -333,16 +386,16 @@ export function RegisterForm() {
                   required
                   value={coopConfirmPassword}
                   onChange={(e) => setCoopConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-11 px-3.5 text-base rounded-md border border-neutral-purple-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-accent-orange-500 focus:ring-1 focus:ring-accent-orange-500 transition-colors duration-150"
+                  placeholder="••••••••••••"
+                  className="w-full h-9 px-3 text-sm rounded-control border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand transition-colors duration-150 font-mono"
                 />
               </div>
             </div>
           </>
         )}
 
-        {/* Single Crisp Consent Line */}
-        <p className="text-xs text-neutral-purple-600 leading-relaxed font-normal pt-1">
+        {/* Consent Line */}
+        <p className="text-[11px] font-mono text-subtle leading-relaxed pt-1">
           By continuing, you agree to CarbonTensor AWD telemetry monitoring and cooperative dividend rules.
         </p>
 
@@ -350,19 +403,29 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-11 px-4 rounded-md text-base font-semibold text-white bg-accent-orange-500 hover:bg-accent-orange-600 active:bg-accent-orange-700 disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2 shadow-xs hover:shadow-sm"
+          className="w-full h-10 px-4 rounded-control text-sm font-medium text-brand-foreground bg-brand hover:bg-brand-hover active:bg-brand disabled:opacity-50 transition-colors duration-150 flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          <span>{loading ? "Creating Account..." : "Create Account"}</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>
+            {loading
+              ? "Submitting Application..."
+              : accountType === "farmer"
+              ? "Submit Farmer Registration"
+              : "Submit Cooperative Application"}
+          </span>
+          <IconArrowRight
+            size={16}
+            stroke={1.5}
+            className="group-hover:translate-x-0.5 transition-transform duration-150"
+          />
         </button>
 
         {/* Switch to Login */}
-        <div className="pt-4 border-t border-neutral-purple-200 text-center">
-          <p className="text-sm text-neutral-purple-700">
+        <div className="pt-3 border-t border-border text-center">
+          <p className="text-xs font-mono text-muted-foreground">
             Already registered on CarbonTensor?{" "}
             <Link
               href="/auth/login"
-              className="font-semibold text-primary-green-700 hover:text-primary-green-900 hover:underline"
+              className="text-brand font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-control"
             >
               Sign In to Portal
             </Link>

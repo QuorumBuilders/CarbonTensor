@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, ShieldCheck, ArrowLeft } from "lucide-react";
+import { IconActivity, IconShieldCheck, IconArrowLeft } from "@tabler/icons-react";
 import { AuthCarousel } from "./AuthCarousel";
 
 interface AuthLayoutProps {
@@ -10,64 +10,64 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-white">
-      {/* Left Column: Visual & Thematic Carousel (50% width on lg screens, hidden on mobile) */}
+    <div className="min-h-screen flex flex-col lg:flex-row bg-background text-foreground">
+      {/* Left Column: Visual & Thematic Carousel (50% on lg screens, hidden on mobile) */}
       <aside className="hidden lg:flex lg:w-1/2 relative min-h-screen">
         <AuthCarousel />
       </aside>
 
       {/* Right Column: Form Canvas (100% on mobile, 50% on lg) */}
-      <main className="w-full lg:w-1/2 min-h-screen flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 bg-neutral-purple-50/60 border-l border-neutral-purple-200">
+      <main className="w-full lg:w-1/2 min-h-screen flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 bg-background border-l border-border">
         
         {/* Top Header Row with Logo & Return to Home */}
-        <div className="flex items-center justify-between pb-8 border-b border-neutral-purple-200">
+        <div className="flex items-center justify-between pb-6 border-b border-border">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded bg-primary-green-700 flex items-center justify-center text-white shadow-xs">
-              <Activity className="w-4 h-4 text-primary-green-100" />
+            <div className="w-8 h-8 rounded-control bg-brand flex items-center justify-center text-brand-foreground border border-brand/40">
+              <IconActivity size={18} stroke={1.5} />
             </div>
-            <div>
-              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary-green-900 group-hover:text-primary-green-700 transition-colors duration-150">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-lg tracking-tight text-foreground group-hover:text-brand transition-colors duration-150">
                 CarbonTensor
               </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary-green-50 text-primary-green-800 border border-primary-green-200">
-                AWD MRV Layer
+              <span className="hidden sm:inline-block text-[10px] font-mono font-medium uppercase tracking-wider px-2 py-0.5 rounded-pill bg-brand-muted text-brand border border-brand/30">
+                AWD MRV
               </span>
             </div>
           </Link>
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-neutral-purple-700 hover:text-primary-green-800 transition-colors duration-150"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-foreground transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-control"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <IconArrowLeft size={14} stroke={1.5} />
             <span>Return to Landing</span>
           </Link>
         </div>
 
         {/* Center Content: Title, Subtitle, and Form */}
-        <div className="py-8 sm:py-12 max-w-lg w-full mx-auto">
-          <div className="mb-8">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
+        <div className="py-8 sm:py-10 max-w-lg w-full mx-auto">
+          <div className="mb-6 space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-foreground leading-[1.2]">
               {title}
             </h1>
-            <p className="mt-2 text-base text-neutral-purple-800 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base font-normal text-muted-foreground leading-relaxed">
               {subtitle}
             </p>
           </div>
 
-          {/* Form Container */}
-          <div className="bg-white rounded-xl border border-neutral-purple-200 p-6 sm:p-8 shadow-xs">
+          {/* Form Container (Clean 8px card, flat hairline border, no shadow) */}
+          <div className="bg-card rounded-card border border-border p-6 sm:p-8">
             {children}
           </div>
         </div>
 
         {/* Bottom Integrity Notice & Simulated Sandbox Badge */}
-        <div className="pt-6 border-t border-neutral-purple-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-purple-600 font-mono">
+        <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground font-mono">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-primary-green-600" />
+            <IconShieldCheck size={14} stroke={1.5} className="text-brand shrink-0" />
             <span>Access Bank Sandbox (Simulated Settlement)</span>
           </div>
-          <div>
+          <div className="text-subtle">
             <span>© 2026 CarbonTensor • Kebbi State AWD Cohort</span>
           </div>
         </div>

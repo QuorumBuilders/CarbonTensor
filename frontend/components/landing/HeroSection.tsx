@@ -18,7 +18,7 @@ const photoCards: PhotoCard[] = [
     location: "Kano River Irrigation Scheme",
     badge: "In-Situ Sensor",
     caption: "Perforated field tube logs water table drop to safe -15 cm threshold before re-flooding.",
-    image: "/images/farm1.png",
+    image: "/images/farm1.webp",
   },
   {
     id: "farm-2",
@@ -26,7 +26,7 @@ const photoCards: PhotoCard[] = [
     location: "Kebbi Rice Farming Belt",
     badge: "Plot Registry",
     caption: "Smallholder paddies mapped into cooperative cohorts for synchronized water control.",
-    image: "/images/farm2.png",
+    image: "/images/farm2.webp",
   },
   {
     id: "farm-3",
@@ -34,7 +34,7 @@ const photoCards: PhotoCard[] = [
     location: "Niger River Basin",
     badge: "AWD Drying Cycle",
     caption: "Aerating the soil lets oxygen reach roots, breaking anaerobic methane formation.",
-    image: "/images/farm3.png",
+    image: "/images/farm3.webp",
   },
   {
     id: "farm-4",
@@ -42,7 +42,7 @@ const photoCards: PhotoCard[] = [
     location: "Hadejia Valley, Jigawa",
     badge: "Water Saving",
     caption: "Irrigation restored to shallow 5 cm standing water, conserving up to 30% water volume.",
-    image: "/images/farm4.png",
+    image: "/images/farm4.webp",
   },
   {
     id: "farm-5",
@@ -50,7 +50,7 @@ const photoCards: PhotoCard[] = [
     location: "Wushishi Cooperative, Niger",
     badge: "Farmer Governance",
     caption: "Cooperative members reviewing water schedules and automated carbon dividend allocations.",
-    image: "/images/farm5.png",
+    image: "/images/farm5.webp",
   },
   {
     id: "farm-6",
@@ -58,7 +58,7 @@ const photoCards: PhotoCard[] = [
     location: "Kadawa Irrigation Scheme",
     badge: "Yield & Carbon",
     caption: "Healthy tillering and grain filling achieved under disciplined wetting and drying cycles.",
-    image: "/images/farm6.png",
+    image: "/images/farm6.webp",
   },
 ];
 

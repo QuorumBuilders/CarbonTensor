@@ -19,15 +19,15 @@ const SLIDES: Slide[] = [
     tag: "Edge IoT Telemetry",
     title: "Automated Piezometer Telemetry",
     caption: "Monitoring water tables in real time without manual tampering.",
-    image: "/images/farm1.png",
+    image: "/images/farm1.webp",
     icon: Cpu,
   },
   {
     id: "aggregation",
     tag: "Smallholder Aggregation",
     title: "Cooperative Aggregation",
-    caption: "Unlocking accredited carbon finance for Nigerian smallholders.",
-    image: "/images/farm2.png",
+    caption: "Aggregating smallholder plots to meet accredited carbon registry scale.",
+    image: "/images/farm2.webp",
     icon: Users,
   },
   {
@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
     tag: "Access Bank Sandbox",
     title: "Direct Dividend Disbursal",
     caption: "Fast, transparent proceeds routed to cooperative and farmer wallets.",
-    image: "/images/farm3.png",
+    image: "/images/farm3.webp",
     icon: Wallet,
   },
 ];

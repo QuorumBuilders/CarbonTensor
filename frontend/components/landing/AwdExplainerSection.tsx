@@ -1,132 +1,264 @@
-import { Droplets, ArrowDown, RefreshCw, Lightbulb, CheckCircle2 } from "lucide-react";
+import {
+  IconDroplet,
+  IconDropletOff,
+  IconPlant,
+  IconFlame,
+  IconCircleCheck,
+  IconAlertTriangle,
+  IconRefresh,
+  IconArrowDown,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 
 export function AwdExplainerSection() {
   const steps = [
     {
-      number: "1",
-      name: "Flood",
-      heading: "Water the field as usual.",
+      step: "01",
+      title: "Shallow Flood",
+      level: "+5.0 cm",
+      condition: "Standing Water",
       description:
-        "At early crop establishment, the field is flooded with approximately 5 cm of standing water to support root growth and suppress weeds.",
-      waterLevel: "+5 cm",
-      waterState: "Standing water",
-      icon: Droplets,
+        "Field is flooded to shallow depth during early crop establishment to support root anchorage and suppress competing weeds.",
+      icon: IconDroplet,
     },
     {
-      number: "2",
-      name: "Dry",
-      heading: "Let the water level drop for a few days.",
+      step: "02",
+      title: "Controlled Aeration",
+      level: "-15.0 cm",
+      condition: "Pani Pipe Threshold",
       description:
-        "Irrigation is paused. The water level recedes naturally through percolation and evaporation until it reaches 15 cm below the soil surface.",
-      waterLevel: "-15 cm",
-      waterState: "Soil aerated",
-      icon: ArrowDown,
+        "Irrigation is paused. Water recedes via natural percolation until the perforated field pipe confirms root-zone oxygenation.",
+      icon: IconArrowDown,
     },
     {
-      number: "3",
-      name: "Re-flood",
-      heading: "Water the field again, then repeat.",
+      step: "03",
+      title: "Timed Re-flood",
+      level: "+5.0 cm",
+      condition: "Cycle Reset",
       description:
-        "When the pani pipe sensor confirms -15 cm, the field is re-flooded to shallow depth. The cycle repeats until the rice flowering stage.",
-      waterLevel: "+5 cm",
-      waterState: "Cycle reset",
-      icon: RefreshCw,
+        "IoT telemetry triggers an automated cooperative irrigation alert before root moisture stress, resetting the verified cycle.",
+      icon: IconRefresh,
     },
   ];
 
   return (
-    <section id="awd-explainer" className="py-16 lg:py-24 bg-neutral-purple-50 border-b border-neutral-purple-200">
+    <section
+      id="awd-explainer"
+      className="py-16 sm:py-20 lg:py-24 bg-background border-b border-border"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white text-xs font-semibold text-primary-green-800 mb-3 border border-neutral-purple-200">
-            <span className="w-2 h-2 rounded-full bg-primary-green-500" />
-            <span>Agronomic Practice Explained</span>
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill bg-muted text-xs font-mono font-medium text-foreground border border-border">
+            <IconPlant size={14} stroke={1.5} className="text-accent" />
+            <span>Agronomic Method</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
-            Alternate Wetting and Drying (AWD): dry the field, avoid the methane.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-foreground leading-[1.2]">
+            Aerating paddy soil stops methane formation
+            <br className="hidden sm:inline" /> without reducing rice yield.
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-neutral-purple-800 leading-relaxed font-normal">
-            AWD means the field is not kept flooded all the time. It is drained for a period, then watered again.
+          <p className="text-base sm:text-lg font-normal text-muted-foreground leading-relaxed">
+            Continuous flooding keeps paddy soil in an oxygen-depleted state where microbes release methane gas. Alternate Wetting and Drying (AWD) breaks this cycle through planned field drainage down to the root zone.
           </p>
         </div>
 
-        {/* 3 Step Sequence Cards */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {steps.map((step) => {
-            const Icon = step.icon;
+        {/* Side-by-Side Agronomic Comparison */}
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+          
+          {/* Card 1: Continuous Flooding (Baseline) */}
+          <div className="rounded-card border border-border bg-card p-6 sm:p-7 flex flex-col justify-between space-y-6">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-status-error-fg" />
+                  <span className="text-xs font-mono font-medium uppercase tracking-wider text-muted-foreground">
+                    Continuous Flooding (Baseline)
+                  </span>
+                </div>
+                <span className="px-2 py-0.5 rounded-pill text-[10px] font-mono font-medium bg-status-error-bg text-status-error-fg border border-border">
+                  ANAEROBIC STATE
+                </span>
+              </div>
+
+              {/* Water Level Gauge Schematic */}
+              <div className="p-4 rounded-control bg-background border border-border space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-muted-foreground">Field Water Table</span>
+                  <span className="tabular-nums font-medium text-status-error-fg">
+                    +5.0 cm (Submerged)
+                  </span>
+                </div>
+                {/* Visual Depth Bar */}
+                <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="h-6 rounded-control bg-status-error-bg/60 border border-status-error-fg/30 flex items-center justify-between px-3 text-status-error-fg">
+                    <span>+5.0 cm Standing Flood</span>
+                    <span className="tabular-nums">+5 cm</span>
+                  </div>
+                  <div className="flex items-center justify-between px-1 text-[10px] text-subtle">
+                    <span>Soil Surface Reference</span>
+                    <span className="tabular-nums">0 cm</span>
+                  </div>
+                  <div className="h-8 rounded-control bg-muted/60 border border-border flex items-center justify-between px-3 text-muted-foreground">
+                    <span>Subsoil Layer (Oxygen blocked)</span>
+                    <span className="text-status-error-fg flex items-center gap-1">
+                      <IconFlame size={12} stroke={1.5} /> CH₄ Formed
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-sm font-medium text-foreground">
+                  Biological Condition: Anaerobic decomposition
+                </div>
+                <p className="text-sm font-normal text-muted-foreground leading-relaxed">
+                  Stagnant floodwater prevents atmospheric oxygen from reaching topsoil organic matter, triggering constant methane (CH₄) gas release from methanogenic bacteria.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 border-t border-border text-xs font-mono">
+                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                  <span>Irrigation Expense:</span>
+                  <span className="text-status-error-fg font-medium">Excess diesel pumping</span>
+                </div>
+                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                  <span>Carbon Credit Status:</span>
+                  <span className="text-status-error-fg font-medium">0% (Ineligible)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-border flex items-center gap-2 text-xs text-subtle font-mono">
+              <IconAlertTriangle size={15} stroke={1.5} className="text-status-error-fg shrink-0" />
+              <span>Accounts for ~10% of global agricultural methane emissions.</span>
+            </div>
+          </div>
+
+          {/* Card 2: Safe AWD Aeration (Verified Practice) */}
+          <div className="rounded-card border border-brand/40 bg-brand-muted/20 p-6 sm:p-7 flex flex-col justify-between space-y-6">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-brand" />
+                  <span className="text-xs font-mono font-medium uppercase tracking-wider text-foreground">
+                    Safe AWD Aeration (Verified)
+                  </span>
+                </div>
+                <span className="px-2 py-0.5 rounded-pill text-[10px] font-mono font-medium bg-status-success-bg text-status-success-fg border border-border">
+                  AEROBIC ROOT ZONE
+                </span>
+              </div>
+
+              {/* Water Level Gauge Schematic */}
+              <div className="p-4 rounded-control bg-background border border-border space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-muted-foreground">Field Water Table</span>
+                  <span className="tabular-nums font-medium text-brand">
+                    -15.0 cm (Subsurface)
+                  </span>
+                </div>
+                {/* Visual Depth Bar */}
+                <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="h-6 rounded-control bg-brand-muted/40 border border-brand/30 flex items-center justify-between px-3 text-brand">
+                    <span>Oxygen Diffusing into Topsoil</span>
+                    <span className="tabular-nums text-foreground">Aerated</span>
+                  </div>
+                  <div className="flex items-center justify-between px-1 text-[10px] text-subtle">
+                    <span>Soil Surface Reference</span>
+                    <span className="tabular-nums">0 cm</span>
+                  </div>
+                  <div className="h-8 rounded-control bg-status-success-bg/40 border border-status-success-fg/30 flex items-center justify-between px-3 text-status-success-fg">
+                    <span>Percolated Water Table</span>
+                    <span className="tabular-nums font-medium">-15.0 cm threshold</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-sm font-medium text-foreground">
+                  Biological Condition: Oxygenated root zone
+                </div>
+                <p className="text-sm font-normal text-muted-foreground leading-relaxed">
+                  The water table recedes through natural percolation and evaporation to -15 cm below ground, halting methanogenesis while protecting vital root capillary moisture.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 border-t border-border text-xs font-mono">
+                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                  <span>Irrigation Expense:</span>
+                  <span className="text-brand font-medium">-30% fuel & water pump usage</span>
+                </div>
+                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                  <span>Carbon Credit Status:</span>
+                  <span className="text-brand font-medium">Eligible (AMS-III.H certified)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-border flex items-center gap-2 text-xs text-brand font-mono">
+              <IconCircleCheck size={15} stroke={1.5} className="text-brand shrink-0" />
+              <span>30% to 50% verified reduction in net seasonal methane emissions.</span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Rotational 3-Step Sequence */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {steps.map((item) => {
+            const Icon = item.icon;
             return (
               <div
-                key={step.number}
-                className="rounded-xl border border-neutral-purple-200 bg-white p-6 sm:p-7 shadow-xs hover:border-primary-green-300 transition-colors duration-150 flex flex-col justify-between relative"
+                key={item.step}
+                className="rounded-card border border-border bg-card p-5 space-y-3"
               >
-                <div>
-                  {/* Step Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-neutral-purple-200">
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-7 h-7 rounded-full bg-primary-green-700 text-white font-mono font-bold text-xs flex items-center justify-center">
-                        {step.number}
-                      </span>
-                      <span className="font-bold text-sm uppercase tracking-wider text-primary-green-800 font-mono">
-                        Step {step.number}: {step.name}
-                      </span>
-                    </span>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-medium text-subtle">
+                    Phase {item.step}
+                  </span>
+                  <span className="font-mono text-xs font-medium px-2 py-0.5 rounded-pill bg-muted border border-border text-foreground tabular-nums">
+                    {item.level}
+                  </span>
+                </div>
 
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary-green-50 text-primary-green-800 border border-primary-green-200 tabular-nums">
-                      {step.waterLevel}
-                    </span>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-control bg-muted border border-border flex items-center justify-center text-foreground shrink-0">
+                    <Icon size={16} stroke={1.5} />
                   </div>
-
-                  {/* Icon & Heading */}
-                  <div className="mt-5 flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary-green-50 border border-primary-green-200 flex items-center justify-center text-primary-green-700 shrink-0 mt-0.5">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="text-lg font-bold text-primary-green-900 leading-snug">
-                      {step.heading}
+                  <div>
+                    <h3 className="text-sm font-medium text-foreground">
+                      {item.title}
                     </h3>
+                    <p className="text-[11px] font-mono text-muted-foreground">
+                      {item.condition}
+                    </p>
                   </div>
-
-                  {/* Detail Text */}
-                  <p className="mt-4 text-sm text-neutral-purple-800 leading-relaxed font-normal">
-                    {step.description}
-                  </p>
                 </div>
 
-                {/* Status Bar */}
-                <div className="mt-6 pt-4 border-t border-neutral-purple-200 flex items-center justify-between text-xs font-mono text-neutral-purple-700">
-                  <span>Soil condition:</span>
-                  <span className="font-semibold text-primary-green-800">{step.waterState}</span>
-                </div>
+                <p className="text-xs font-normal text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             );
           })}
         </div>
 
-        {/* Why it works Callout Banner */}
-        <div className="mt-10 rounded-xl border border-primary-green-200 bg-primary-green-50/80 p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="w-12 h-12 rounded-lg bg-primary-green-700 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Lightbulb className="w-6 h-6 text-primary-green-100" />
+        {/* Biological Invariant Callout Banner */}
+        <div className="mt-8 rounded-card border border-border bg-muted/40 p-5 sm:p-6">
+          <div className="flex items-start gap-3.5">
+            <div className="w-8 h-8 rounded-control bg-card border border-border flex items-center justify-center text-foreground shrink-0 mt-0.5">
+              <IconInfoCircle size={18} stroke={1.5} className="text-accent" />
             </div>
-
-            <div className="flex-1">
-              <h3 className="text-lg sm:text-xl font-extrabold text-primary-green-900">
-                Why it works: Less time under water means less methane.
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium text-foreground">
+                The Agronomic Invariant: Why rice yield does not decrease
               </h3>
-              <p className="mt-1 text-sm text-primary-green-800 leading-relaxed">
-                Methane is produced only when soils remain strictly anaerobic (deprived of oxygen). When farmers let the water drop to -15 cm, oxygen penetrates the topsoil and shuts off the methanogen bacteria. Rice roots still have access to capillary moisture in the subsoil, maintaining grain yield while cutting methane emissions by up to 50%.
+              <p className="text-xs sm:text-sm font-normal text-muted-foreground leading-relaxed">
+                Methanogenic bacteria cannot survive in the presence of oxygen, shutting down methane creation during the dry phase. Rice roots easily reach capillary water held in the subsoil below 15 cm. Agronomic trials consistently confirm equal or improved grain yields alongside stronger root anchorage.
               </p>
-            </div>
-
-            <div className="sm:self-center shrink-0">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono font-bold bg-white text-primary-green-900 border border-primary-green-200 shadow-xs">
-                <CheckCircle2 className="w-4 h-4 text-primary-green-600" />
-                Preserves Crop Yield
-              </span>
             </div>
           </div>
         </div>
@@ -135,4 +267,3 @@ export function AwdExplainerSection() {
     </section>
   );
 }
-

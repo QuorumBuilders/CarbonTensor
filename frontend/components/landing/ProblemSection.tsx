@@ -1,102 +1,124 @@
-import { Droplets, CircleDollarSign, Users, AlertTriangle } from "lucide-react";
+import {
+  IconUsers,
+  IconScale,
+  IconAlertTriangle,
+  IconCircleCheck,
+  IconBuildingCommunity,
+} from "@tabler/icons-react";
 
 export function ProblemSection() {
-  const problemCards = [
-    {
-      step: "01",
-      tag: "Anaerobic Decomposition",
-      icon: Droplets,
-      title: "Flooded fields release methane",
-      description:
-        "When rice paddies stay continuously flooded with water, oxygen cannot penetrate the soil. Microorganisms known as methanogens thrive in this anaerobic environment, breaking down organic matter and releasing potent methane (CH₄) gas directly into the atmosphere.",
-      takeaway: "Continuous submersion drives ~12% of global ag methane.",
-    },
-    {
-      step: "02",
-      tag: "Unrewarded Practice",
-      icon: CircleDollarSign,
-      title: "Farmers control the water, but are not paid for it",
-      description:
-        "Smallholders make the daily effort to open bunds, fuel pumps, and manage water. Alternate Wetting and Drying (AWD) cuts methane significantly, yet farmers bear the operational risks and labor without receiving any share of carbon proceeds.",
-      takeaway: "No financial mechanism currently rewards water stewardship.",
-    },
-    {
-      step: "03",
-      tag: "Auditing Friction",
-      icon: Users,
-      title: "One farm is too small to certify",
-      description:
-        "The average smallholder plot in Northern Nigeria is 1 to 2 hectares. Individual verification site visits, legal audits, and registry fees cost thousands of dollars per farm. Aggregating plots into cooperatives is the only way to make certification financially viable.",
-      takeaway: "Cooperative aggregation unlocks institutional registry scale.",
-    },
-  ];
-
   return (
-    <section id="problem" className="py-16 lg:py-24 bg-white border-b border-neutral-purple-200">
+    <section
+      id="problem"
+      className="py-16 sm:py-20 lg:py-24 bg-card border-b border-border"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-purple-100 text-xs font-semibold text-neutral-purple-900 mb-3 border border-neutral-purple-200">
-            <AlertTriangle className="w-3.5 h-3.5 text-accent-orange-500" />
-            <span>The Challenge in Smallholder Rice</span>
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-pill bg-muted text-xs font-mono font-medium text-foreground border border-border">
+            <IconScale size={14} stroke={1.5} className="text-accent" />
+            <span>Aggregation Economics</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-green-900 tracking-tight leading-tight">
-            Flooded fields from Nigerian rice farms contribute to climate change.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-foreground leading-[1.2]">
+            Cooperative aggregation makes smallholder audits financially viable.
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-neutral-purple-800 leading-relaxed font-normal">
-            Continuous flooding in paddy fields creates anaerobic conditions that produce methane. Smallholder farmers manage the water daily, but high individual certification costs have kept carbon rewards out of reach.
+          <p className="text-base sm:text-lg font-normal text-muted-foreground leading-relaxed">
+            The typical rice parcel in Northern Nigeria is 1 to 2 hectares. High individual verification and legal costs make standalone certification impossible without cooperative pooling.
           </p>
         </div>
 
-        {/* 3 Problem Cards */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {problemCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <div
-                key={card.step}
-                className="rounded-xl border border-neutral-purple-200 bg-white p-6 sm:p-7 shadow-xs hover:border-primary-green-300 transition-colors duration-150 flex flex-col justify-between"
-              >
-                <div>
-                  {/* Card Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-neutral-purple-200">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-neutral-purple-100 text-neutral-purple-800">
-                      {card.tag}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-neutral-purple-500">
-                      {card.step}
-                    </span>
-                  </div>
+        {/* Aggregation Economics Comparison Grid */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+          
+          {/* Card 1: Standalone 1-2 ha Smallholder (Fails Threshold) */}
+          <div className="rounded-card border border-border bg-background p-6 sm:p-7 flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <span className="text-xs font-mono font-medium uppercase tracking-wider text-status-error-fg">
+                  Standalone Smallholder Model
+                </span>
+                <span className="px-2 py-0.5 rounded-pill text-[10px] font-mono font-medium bg-status-error-bg text-status-error-fg border border-border">
+                  PROHIBITIVE AUDIT COST
+                </span>
+              </div>
 
-                  {/* Icon & Title */}
-                  <div className="mt-5 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary-green-50 border border-primary-green-200 flex items-center justify-center text-primary-green-700 shrink-0">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-primary-green-900 leading-snug">
-                      {card.title}
-                    </h3>
-                  </div>
-
-                  {/* Narrative Body */}
-                  <p className="mt-4 text-sm text-neutral-purple-800 leading-relaxed font-normal">
-                    {card.description}
-                  </p>
+              <div className="space-y-2">
+                <div className="text-lg font-medium text-foreground">
+                  Individual parcels cannot absorb registry fees
                 </div>
+                <p className="text-sm font-normal text-muted-foreground leading-relaxed">
+                  Third-party verification site visits by accredited VVBs, legal boundary validation, and registry issuance fees routinely cost thousands of dollars per farm—far exceeding the carbon revenue of a 1-hectare paddy.
+                </p>
+              </div>
 
-                {/* Key Takeaway */}
-                <div className="mt-6 pt-4 border-t border-neutral-purple-200">
-                  <div className="text-xs font-mono text-primary-green-800 bg-primary-green-50/60 p-2.5 rounded border border-primary-green-100">
-                    <span className="font-bold">Fact: </span>
-                    {card.takeaway}
-                  </div>
+              <div className="space-y-2 pt-2 text-xs font-mono">
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">Individual Farm Size:</span>
+                  <span className="tabular-nums font-medium text-foreground">1.0 – 2.0 ha</span>
+                </div>
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">Standalone Audit Visit:</span>
+                  <span className="font-medium text-status-error-fg">$3,000 – $8,000 / farm</span>
+                </div>
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">Economic Feasibility:</span>
+                  <span className="font-medium text-status-error-fg">Deficit (Locked Out)</span>
                 </div>
               </div>
-            );
-          })}
+            </div>
+
+            <div className="pt-3 border-t border-border flex items-center gap-2 text-xs text-subtle font-mono">
+              <IconAlertTriangle size={15} stroke={1.5} className="text-status-error-fg shrink-0" />
+              <span>Farmers bear drainage labor with zero dividend eligibility.</span>
+            </div>
+          </div>
+
+          {/* Card 2: Cooperative Union Aggregation (CarbonTensor Model) */}
+          <div className="rounded-card border border-brand/40 bg-brand-muted/20 p-6 sm:p-7 flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <span className="text-xs font-mono font-medium uppercase tracking-wider text-brand">
+                  CarbonTensor Cooperative Cohort
+                </span>
+                <span className="px-2 py-0.5 rounded-pill text-[10px] font-mono font-medium bg-status-success-bg text-status-success-fg border border-border">
+                  REGISTRY-SCALE POOLING
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-lg font-medium text-foreground">
+                  Bundling contiguous plots into an institutional audit pool
+                </div>
+                <p className="text-sm font-normal text-muted-foreground leading-relaxed">
+                  By aggregating hundreds of smallholders under existing cooperative unions like RIFAN, verification costs are distributed across thousands of hectares. Stationary IoT sensors and satellite radar provide verifiable group evidence.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-2 text-xs font-mono">
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">Union Aggregated Scale:</span>
+                  <span className="tabular-nums font-medium text-brand">380 Plots • 3,420 ha (est.)</span>
+                </div>
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">MRV Verification Audit:</span>
+                  <span className="font-medium text-foreground">Single Pooled Cohort Audit</span>
+                </div>
+                <div className="p-2.5 rounded-control bg-card border border-border flex items-center justify-between">
+                  <span className="text-muted-foreground">Direct Farmer Dividend:</span>
+                  <span className="tabular-nums font-medium text-brand">70% Bank Settlement (NGN)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-border flex items-center gap-2 text-xs text-brand font-mono">
+              <IconCircleCheck size={15} stroke={1.5} className="text-brand shrink-0" />
+              <span>Full compliance with Article 6 and UNFCCC AMS-III.H rules.</span>
+            </div>
+          </div>
+
         </div>
 
       </div>

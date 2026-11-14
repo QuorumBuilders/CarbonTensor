@@ -1,5 +1,18 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
 
 export const metadata: Metadata = {
   title: "CarbonTensor | Scalable AWD Methane Avoidance & Payout Layer",
@@ -28,8 +41,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased scroll-smooth" data-scroll-behavior="smooth">
-      <body className="min-h-full flex flex-col font-sans bg-white text-primary-green-900 selection:bg-primary-green-100 selection:text-primary-green-900">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
+      data-scroll-behavior="smooth"
+    >
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-brand-muted selection:text-brand">
         {children}
       </body>
     </html>
